@@ -8,18 +8,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.potyvideo.slider.library.Animations.DescriptionAnimation;
+import com.potyvideo.slider.library.SliderLayout;
+import com.potyvideo.slider.library.SliderTypes.BaseSliderView;
+import com.potyvideo.slider.library.SliderTypes.TextSliderView;
+
+import java.util.HashMap;
+
+import app.com.thecentaurusmall.MainActivity;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.home.viewmodels.DirectoryViewModel;
-import technolifestyle.com.imageslider.FlipperLayout;
-import technolifestyle.com.imageslider.FlipperView;
 
-public class DirectoryFragment extends Fragment {
+public class DirectoryFragment extends Fragment implements
+        BaseSliderView.OnSliderClickListener
+{
 
     private DirectoryViewModel mViewModel;
+    private SliderLayout mFeaturedSlider;
+
     public static DirectoryFragment newInstance() {
         return new DirectoryFragment();
     }
@@ -40,39 +53,61 @@ public class DirectoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FlipperLayout flipperLayout = (FlipperLayout) view.findViewById(R.id.flipper_layout);
-        int num_of_pages = 3;
-        for (int i = 0; i < num_of_pages; i++) {
-            FlipperView sliderView = new FlipperView(getContext());
+        mFeaturedSlider = (SliderLayout) view.findViewById(R.id.slider);
 
-            switch (i) {
-                case 0:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-                    break;
-                case 1:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/218983/pexels-photo-218983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-                    break;
-                case 2:
-                    sliderView.setImageUrl("https://images.pexels.com/photos/747964/pexels-photo-747964.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260");
-                    break;
 
-            }
-            sliderView // Use one of setImageUrl() or setImageDrawable() functions, otherwise IllegalStateException will be thrown
-                    .setImageScaleType(ImageView.ScaleType.CENTER_CROP) //You can use any ScaleType
-                    .setDescription("Description")
-                    .setOnFlipperClickListener(new FlipperView.OnFlipperClickListener() {
-                        @Override
-                        public void onFlipperClick(FlipperView flipperView) {
-                            //Handle View Click here
-                        }
-                    });
-            flipperLayout.setScrollTimeInSec(5); //setting up scroll time, by default it's 3 seconds
-            flipperLayout.getScrollTimeInSec(); //returns the scroll time in sec
-//            flipperLayout.getCurrentPagePosition(); //returns the current position of pager
-            flipperLayout.addFlipperView(sliderView);
+
+        HashMap<String, String> url_maps = new HashMap<String, String>();
+        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Big Bang Theory", "https://media.comicbook.com/2017/04/big-bang-theory-cast-kaley-cuoco-jim-parsons-992959.png");
+        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+        url_maps.put("Game of Thrones", "https://ksassets.timeincuk.net/wp/uploads/sites/55/2017/08/2017_GameOfThrones_HBO_220817-920x584.jpg");
+
+        for (String name : url_maps.keySet()) {
+            TextSliderView textSliderView = new TextSliderView(getContext());
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .empty(android.R.color.darker_gray)
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                    .setOnSliderClickListener(this)
+            ;
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra", name);
+
+            mFeaturedSlider.addSlider(textSliderView);
         }
+        mFeaturedSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mFeaturedSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mFeaturedSlider.setCustomAnimation(new DescriptionAnimation());
+        mFeaturedSlider.setDuration(5000);
+        mFeaturedSlider.startAutoCycle();
     }
 
+    @Override
+    public void onStop() {
+        mFeaturedSlider.stopAutoCycle();
+        super.onStop();
+
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+        Toast.makeText(getContext(), slider.getBundle().get("extra") + "", Toast.LENGTH_SHORT).show();
+    }
+
+//    @Override
+//    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//    }
+//
+//    @Override
+//    public void onPageSelected(int position) {
+//        Log.d("Slider Demo", "Page Changed: " + position);
+//    }
 
 }
 

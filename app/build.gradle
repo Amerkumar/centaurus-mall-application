@@ -43,8 +43,8 @@ dependencies {
     // for lottie
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
-    // for landing page slider
-    implementation 'com.github.technolifestyle:imageslider:1.5.6'
+
+    implementation 'com.github.HamidrezaAmz:AndroidImageSlider:v1.0.3'
 
 
 
