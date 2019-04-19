@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
-    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
-//        mDrawerLayout = findViewById(R.id.drawer_layout);
         mAppBarLayout = findViewById(R.id.appBar);
         mToolbar = findViewById(R.id.toolbar);
         mNavController = Navigation.findNavController(MainActivity.this,
@@ -44,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
         Set<Integer> topLevelDestinationsSet = new HashSet<>(Arrays.asList(
                 R.id.homeViewPagerFragment,
-                R.id.indoorMapFragment
+                R.id.indoorMapFragment,
+                R.id.parkingFragment,
+                R.id.shareOnboardingFragment
         ));
         mAppBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinationsSet)
-                .setDrawerLayout(mDrawerLayout)
                 .build();
 
         NavigationUI.setupWithNavController(mBottomNavigationView, mNavController);

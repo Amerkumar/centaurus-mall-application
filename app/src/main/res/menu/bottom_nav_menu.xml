@@ -15,7 +15,7 @@
         android:title="Parking"
         />
     <item
-        android:id="@+id/locationSharingFragment"
+        android:id="@+id/shareOnboardingFragment"
         android:icon="@drawable/ic_share"
         android:title="Share"
         />

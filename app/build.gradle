@@ -25,6 +25,7 @@ dependencies {
 
 
     def nav_version = "2.1.0-alpha02"
+    def lottieVersion = "3.0.0"
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -38,6 +39,15 @@ dependencies {
     // For Kotlin use navigation-fragment-ktx
     implementation "androidx.navigation:navigation-ui:$nav_version"
     // For Kotlin use navigation-ui-ktx
+
+    // for lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // for landing page slider
+    implementation 'com.github.technolifestyle:imageslider:1.5.6'
+
+
+
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

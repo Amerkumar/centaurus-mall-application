@@ -15,4 +15,14 @@
         android:name="app.com.thecentaurusmall.map.IndoorMapFragment"
         android:label="indoor_map_fragment"
         tools:layout="@layout/indoor_map_fragment" />
+    <fragment
+        android:id="@+id/parkingFragment"
+        android:name="app.com.thecentaurusmall.parking.ParkingFragment"
+        android:label="parking_fragment"
+        tools:layout="@layout/parking_fragment" />
+    <fragment
+        android:id="@+id/shareOnboardingFragment"
+        android:name="app.com.thecentaurusmall.share.ShareOnboardingFragment"
+        android:label="share_onboarding_fragment"
+        tools:layout="@layout/share_onboarding_fragment" />
 </navigation>
