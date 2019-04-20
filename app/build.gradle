@@ -51,13 +51,23 @@ dependencies {
 
     implementation 'com.github.HamidrezaAmz:AndroidImageSlider:v1.0.3'
 
-    implementation ("io.mapwize.indoormaps:MapwizeForMapbox:2.1.5") {
-        transitive = true
-    }
+//    implementation ("io.mapwize.indoormaps:MapwizeForMapbox:2.1.5") {
+//        transitive = true
+//    }
+//
+//
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
 
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
 
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+
+    // sub scale image view
+//    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+
+
+    // ia location
+    implementation 'com.indooratlas.android:indooratlas-android-sdk:3.0.0-beta-1037'
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

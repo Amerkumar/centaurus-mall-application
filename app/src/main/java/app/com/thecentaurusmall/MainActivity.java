@@ -20,7 +20,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MainActivity extends AppCompatActivity {
+import app.com.thecentaurusmall.map.FloorSelectionDialog;
+import app.com.thecentaurusmall.map.IndoorMapFragment;
+
+public class MainActivity extends AppCompatActivity implements
+        FloorSelectionDialog.FloorSelectDialogListener{
 
     NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
@@ -61,5 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void showToolbar() {
         mAppBarLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDialogFloorClick(int which) {
+        IndoorMapFragment indoorMapFragment = (IndoorMapFragment) getSupportFragmentManager().
+                findFragmentById(R.id.indoorMapFragment);
+        indoorMapFragment.onDialogFloorClick(which);
+
+
     }
 }
