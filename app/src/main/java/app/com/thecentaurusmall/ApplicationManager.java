@@ -10,7 +10,7 @@ public class ApplicationManager extends Application {
     public void onCreate() {
         super.onCreate();
 
-        AccountManager.start(this, "7ebdfe23cb2d5f74");
+        AccountManager.start(this, "7b9ead04354c17aa66dca69ec6e6e32b");
         
     }
 }

@@ -56,6 +56,9 @@ dependencies {
     }
 
 
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
+
+
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
