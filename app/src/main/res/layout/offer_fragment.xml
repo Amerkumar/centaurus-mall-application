@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.OfferFragment">
+    android:orientation="vertical"
+    tools:context=".home.OfferFragment"
 
-    <TextView
+    >
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Offer" />
+        android:scrollbars="none"
+        >
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+
+            <include layout="@layout/offer_item" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

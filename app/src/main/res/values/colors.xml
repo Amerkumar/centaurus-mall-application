@@ -12,5 +12,6 @@
   <color name="colorDineCard">#FBAD2F</color>
   <color name="colorEntertainmentCard">#ED2B2B</color>
   <color name="colorServicesCard">#06576A</color>
-
+    <color name="colorEventCalenderButton">#00BCD4</color>
+  <color name="colorEventItemDate">#FF5722</color>
 </resources>
