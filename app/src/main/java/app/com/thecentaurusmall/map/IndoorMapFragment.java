@@ -1,21 +1,26 @@
 package app.com.thecentaurusmall.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -23,6 +28,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -64,6 +70,8 @@ import java.util.List;
 
 import app.com.thecentaurusmall.MainActivity;
 import app.com.thecentaurusmall.R;
+import app.com.thecentaurusmall.Utils.Utils;
+import okhttp3.internal.Util;
 
 public class IndoorMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -92,6 +100,7 @@ public class IndoorMapFragment extends Fragment implements
     private Target mLoadTarget;
     private View rootView;
     private List<Polyline> mPolylines;
+    private LatLng mUserLocation;
 
     public static IndoorMapFragment newInstance() {
         return new IndoorMapFragment();
@@ -116,82 +125,97 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.indoor_map_fragment, container, false);
-        mapView = rootView.findViewById(R.id.map);
+        if (rootView == null) {
 
-        mapView.onCreate(savedInstanceState);
-        try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        floorButton = rootView.findViewById(R.id.floor_material_button);
+            rootView = inflater.inflate(R.layout.indoor_map_fragment, container, false);
 
-        floorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            mapView = rootView.findViewById(R.id.map);
+
+            mapView.onCreate(savedInstanceState);
+            try {
+                MapsInitializer.initialize(getActivity().getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            floorButton = rootView.findViewById(R.id.floor_material_button);
+
+            floorButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                FloorSelectionDialog floorSelectionDialog = new FloorSelectionDialog();
 ////                floorSelectionDialog.setDialogFloorClickListener(this);
 //               floorSelectionDialog.show(getActivity().getSupportFragmentManager(), "floors");
-                CharSequence[] floors = new CharSequence[]{
-                        "Auto Floor (Enabled By Default)",
-                        "Fourth Floor",
-                        "Third Floor",
-                        "Second Floor",
-                        "First Floor",
-                        "Ground Floor"};
+                    CharSequence[] floors = new CharSequence[]{
+                            "Auto Floor (Enabled By Default)",
+                            "Fourth Floor",
+                            "Third Floor",
+                            "Second Floor",
+                            "First Floor",
+                            "Ground Floor"};
 
-                // Use the Builder class for convenient dialog construction
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Floor")
-                        .setItems(floors, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                               onDialogFloorClick(which);
-                            }
-                        })
-               .show()
-                ;
+                    // Use the Builder class for convenient dialog construction
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Floor")
+                            .setItems(floors, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    onDialogFloorClick(which);
+                                }
+                            })
+                            .show()
+                    ;
 
-            }
-        });
-
-        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.floating_action_button);
-        fabFlag = true;
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.d(IndoorMapFragment.class.getSimpleName(), "FAB");
-                // if true
-                // it means user want to close the location detection
-                // enabled by default
-                if (fabFlag) {
-                    Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
-                            getActivity().getTheme());
-                    Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
-                    newDrawable.mutate().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
-                    floatingActionButton.setImageDrawable(newDrawable);
-                    stopLocationUpdates();
-                    fabFlag = false;
                 }
-                // if false
-                // it means user want to enable the location
+            });
 
-                else {
-                    Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
-                            getActivity().getTheme());
-                    Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
-                    newDrawable.mutate().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-                    floatingActionButton.setImageDrawable(newDrawable);
-                    startLocationUpdates();
-                    fabFlag = true;
+            FloatingActionButton floatingActionButton = rootView.findViewById(R.id.floating_action_button);
+            fabFlag = true;
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if (mUserLocation != null) {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 19.0f));
+                    } else {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.707991, 73.050229), 16.0f));
+                    }
+
+//                    Log.d(IndoorMapFragment.class.getSimpleName(), "FAB");
+//                    // if true
+//                    // it means user want to close the location detection
+//                    // enabled by default
+//                    if (fabFlag) {
+//                        Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
+//                                getActivity().getTheme());
+//                        Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
+//                        newDrawable.mutate().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
+//                        floatingActionButton.setImageDrawable(newDrawable);
+//                        stopLocationUpdates();
+//                        fabFlag = false;
+//                    }
+//                    // if false
+//                    // it means user want to enable the location
+//
+//                    else {
+//                        Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
+//                                getActivity().getTheme());
+//                        Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
+//                        newDrawable.mutate().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+//                        floatingActionButton.setImageDrawable(newDrawable);
+//                        startLocationUpdates();
+//                        fabFlag = true;
+//                    }
+
+
+
+
                 }
-            }
-        });
-
+            });
+        }
         return rootView;
     }
 
@@ -253,16 +277,37 @@ public class IndoorMapFragment extends Fragment implements
     }
 
 
-
-
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+
+        googleMap.getUiSettings().setCompassEnabled(true);
+        ViewGroup parent = (ViewGroup) mapView.findViewById(Integer.parseInt("1")).getParent();
+        View compassButton = parent.getChildAt(4);
+        /* now set position compass */
+//        int padding = (int) Utils.convertDpToPixel(8, getContext());
+//        compassButton.setPadding(padding, padding, padding, padding);
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) compassButton.getLayoutParams();
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_START, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_END);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+        Resources r = getContext().getResources();
+        rlp.setMargins(0, (int) Utils.convertDpToPixel(112.0f, getContext()),0, 0); // 160 la truc y , 30 la  truc x
+//        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, r.getDisplayMetrics());
+//        rlp.((int)Utils.convertDpToPixel(160,getContext()));
+        compassButton.setLayoutParams(rlp);
+
         mMap = googleMap;
 
+        mMap.setPadding(64,64,64,64);
+
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng centaurus = new LatLng(33.707991, 73.050229
+        );
+        mMap.addMarker(new MarkerOptions().position(centaurus).title("The Centaurus Mall"));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centaurus, 16.0f));
     }
 
     @Override
@@ -395,6 +440,20 @@ public class IndoorMapFragment extends Fragment implements
     }
 
 
+    private void showMyLocation() {
+        if (mCircle != null && mHeadingMarker != null) {
+            mCircle.setVisible(true);
+            mHeadingMarker.setVisible(true);
+        }
+    }
+
+    private void hideMyLocation() {
+        if (mCircle != null && mHeadingMarker != null) {
+            mCircle.setVisible(false);
+            mHeadingMarker.setVisible(false);
+        }
+    }
+
 
     private int mFloor;
 
@@ -419,6 +478,7 @@ public class IndoorMapFragment extends Fragment implements
             }
 
             final LatLng center = new LatLng(location.getLatitude(), location.getLongitude());
+            mUserLocation = center;
 
             final int newFloor = location.getFloorLevel();
             if (mFloor != newFloor) {
@@ -496,6 +556,8 @@ public class IndoorMapFragment extends Fragment implements
         if (mWayfindingDestination != null) {
             mIALocationManager.requestWayfindingUpdates(mWayfindingDestination, mWayfindingListener);
         }
+
+        showMyLocation();
     }
 
 
@@ -508,6 +570,8 @@ public class IndoorMapFragment extends Fragment implements
         if (mWayfindingDestination != null) {
             mIALocationManager.removeWayfindingUpdates();
         }
+
+        hideMyLocation();
     }
 
 

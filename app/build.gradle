@@ -31,6 +31,7 @@ dependencies {
 
     def nav_version = "2.1.0-alpha02"
     def lottieVersion = "3.0.0"
+    def archLifecycleVersion = '1.1.1'
 
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
@@ -59,7 +60,6 @@ dependencies {
 //    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:7.3.2'
 
 
-
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
     // sub scale image view
@@ -72,6 +72,11 @@ dependencies {
 
     // picasso library
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

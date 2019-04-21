@@ -28,7 +28,7 @@
         app:icon="@drawable/ic_layers"
         app:iconTint="@android:color/black"
         android:backgroundTint="@android:color/white"
-        android:text="4"
+        android:text="A"
         android:textColor="@android:color/black"
         app:iconGravity="textStart"
         android:textSize="20sp"
@@ -53,7 +53,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:tint="@android:color/holo_red_dark"
+        android:tint="@color/colorAccent"
         app:borderWidth="0dp"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
