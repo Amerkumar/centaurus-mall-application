@@ -26,4 +26,29 @@ public class Utils {
     public static float convertPixelsToDp(float px, Context context){
         return px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
+
+
+    public static String floorNumberToName(int floor) {
+        String floorName = null;
+        switch (floor) {
+            case 0:
+                floorName = "Ground Floor";
+                break;
+            case 1:
+                floorName = "First Floor";
+                break;
+            case 2:
+                floorName = "Second Floor";
+                break;
+            case 3:
+                floorName = "Third Floor";
+                break;
+            case 4:
+                floorName = "Fourth Floor";
+                break;
+        }
+
+        return floorName;
+    }
+
 }

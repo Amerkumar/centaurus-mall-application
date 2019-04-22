@@ -7,11 +7,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,23 +50,23 @@ public class MainRepository {
                     return;
                 }
 
+                int rank = 1;
                 List<PointOfInterest> pointOfInterests = new ArrayList<>();
                 for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
                     if (documentSnapshot.exists()) {
 
                         try {
 
-                            HashMap<String, Double> geoPoint  = (HashMap<String, Double>) documentSnapshot.get("_geoloc");
-
+                            HashMap<String, Double> geoPoint = (HashMap<String, Double>) documentSnapshot.get("_geoloc");
                             LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
                             PointOfInterest pointOfInterest = new PointOfInterest(
-                                    documentSnapshot.getId(),
+                                    rank, documentSnapshot.getId(),
                                     documentSnapshot.getString("name"),
                                     documentSnapshot.getString("category"),
                                     latLng,
                                     (Long) documentSnapshot.get("floor_num"));
                             pointOfInterests.add(pointOfInterest);
-
+                            rank++;
                         } catch (NullPointerException el) {
                             el.printStackTrace();
                         } catch (ClassCastException cle) {

@@ -358,8 +358,7 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-
-        ((MainActivity) getActivity()).hideToolbar();
+//        ((MainActivity) getActivity()).hideToolbar();
         mapView.onResume();
 
     }
@@ -367,7 +366,7 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
-        ((MainActivity) getActivity()).showToolbar();
+//        ((MainActivity) getActivity()).showToolbar();
         mapView.onPause();
     }
 

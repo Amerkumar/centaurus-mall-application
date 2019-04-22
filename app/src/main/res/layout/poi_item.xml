@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="app.com.thecentaurusmall.map.PointOfInterestAdapter.Listener" />
+
+        <variable
+            name="model"
+            type="app.com.thecentaurusmall.model.PointOfInterest" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="@{view -> listener.onPointOfInterestClicked(model)}"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        >
+
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="8dp"-->
+        <!--android:text="@{`#` + model}"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:textSize="22sp"/>-->
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location"
+            android:layout_weight="1"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="8"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{model.name}"
+                android:textSize="20sp"
+                android:textColor="@android:color/black"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@{model.floorNumberToName(model.floor_num)}"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</layout>

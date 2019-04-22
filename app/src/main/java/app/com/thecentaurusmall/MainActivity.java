@@ -1,9 +1,12 @@
 package app.com.thecentaurusmall;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,7 +27,8 @@ import app.com.thecentaurusmall.map.FloorSelectionDialog;
 import app.com.thecentaurusmall.map.IndoorMapFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        FloorSelectionDialog.FloorSelectDialogListener{
+    NavController.OnDestinationChangedListener
+{
 
     NavController mNavController;
     private AppBarConfiguration mAppBarConfiguration;
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationUI.setupWithNavController(mBottomNavigationView, mNavController);
         NavigationUI.setupWithNavController(mToolbar, mNavController, mAppBarConfiguration);
 
+        mNavController.addOnDestinationChangedListener(this);
+
     }
 
 
@@ -68,11 +74,23 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDialogFloorClick(int which) {
-        IndoorMapFragment indoorMapFragment = (IndoorMapFragment) getSupportFragmentManager().
-                findFragmentById(R.id.indoorMapFragment);
-        indoorMapFragment.onDialogFloorClick(which);
-
-
+    public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+        switch (destination.getId()) {
+            case R.id.homeViewPagerFragment:
+                showToolbar();
+                break;
+            case R.id.indoorMapFragment:
+                hideToolbar();
+                break;
+            case R.id.pointOfInterestFragment:
+                hideToolbar();
+                break;
+            case R.id.parkingFragment:
+                hideToolbar();
+                break;
+            case R.id.shareOnboardingFragment:
+                hideToolbar();
+                break;
+        }
     }
 }
