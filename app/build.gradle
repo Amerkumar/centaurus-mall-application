@@ -79,9 +79,20 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
 
 
+    // firebase core
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+
+
+    // firebase firestore
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
+
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 }
+
+
+apply plugin: 'com.google.gms.google-services'

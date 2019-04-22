@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -138,6 +140,11 @@ public class IndoorMapFragment extends Fragment implements
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+
+
+            TextView indoorSearchBarTextView = rootView.findViewById(R.id.poi_search_bar_textview);
+            indoorSearchBarTextView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment));
 
             floorButton = rootView.findViewById(R.id.floor_material_button);
 
@@ -274,6 +281,7 @@ public class IndoorMapFragment extends Fragment implements
         if (fabFlag) {
             startLocationUpdates();
         }
+
     }
 
 
@@ -344,11 +352,13 @@ public class IndoorMapFragment extends Fragment implements
     public void onStart() {
         super.onStart();
         mapView.onStart();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
         ((MainActivity) getActivity()).hideToolbar();
         mapView.onResume();
 

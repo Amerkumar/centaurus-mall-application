@@ -25,4 +25,9 @@
         android:name="app.com.thecentaurusmall.share.ShareOnboardingFragment"
         android:label="share_onboarding_fragment"
         tools:layout="@layout/share_onboarding_fragment" />
+    <fragment
+        android:id="@+id/pointOfInterestFragment"
+        android:name="app.com.thecentaurusmall.map.PointOfInterestFragment"
+        android:label="point_of_interest_fragment"
+        tools:layout="@layout/point_of_interest_fragment" />
 </navigation>
