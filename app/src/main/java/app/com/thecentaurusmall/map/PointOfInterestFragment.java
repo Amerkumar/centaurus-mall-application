@@ -42,6 +42,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             .setOrderForModel(PointOfInterest.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
             .build();
     private List<PointOfInterest> mPointOfInterestModels;
+    private SharedViewModel sharedViewModel;
 
     public static PointOfInterestFragment newInstance() {
         return new PointOfInterestFragment();
@@ -62,8 +63,13 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
         mAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR, poiModel -> {
-            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
+
+            sharedViewModel.select(poiModel);
+            Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot()).navigateUp();
+//            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });
 
         mAdapter.addCallback(this);
@@ -110,7 +116,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             @Override
             public void onChanged(List<PointOfInterest> pointOfInterests) {
                 mPointOfInterestModels = pointOfInterests;
-                Log.d(PointOfInterestFragment.class.getSimpleName(), String.valueOf(pointOfInterests.size()));
+//                Log.d(PointOfInterestFragment.class.getSimpleName(), String.valueOf(pointOfInterests.size()));
                 mAdapter.edit()
                         .replaceAll(pointOfInterests)
                         .commit();

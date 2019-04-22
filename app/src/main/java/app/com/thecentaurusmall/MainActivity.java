@@ -73,23 +73,36 @@ public class MainActivity extends AppCompatActivity implements
         mAppBarLayout.setVisibility(View.VISIBLE);
     }
 
+    public void hideBottomNavigationView() {
+        mBottomNavigationView.setVisibility(View.GONE);
+    }
+
+    public void showBottomNavigationView() {
+        mBottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
         switch (destination.getId()) {
             case R.id.homeViewPagerFragment:
                 showToolbar();
+                showBottomNavigationView();
                 break;
             case R.id.indoorMapFragment:
                 hideToolbar();
+                showBottomNavigationView();
                 break;
             case R.id.pointOfInterestFragment:
                 hideToolbar();
+                hideBottomNavigationView();
                 break;
             case R.id.parkingFragment:
                 hideToolbar();
+                showBottomNavigationView();
                 break;
             case R.id.shareOnboardingFragment:
                 hideToolbar();
+                showBottomNavigationView();
                 break;
         }
     }

@@ -6,4 +6,5 @@
     <string name="directory_fragment">Directory</string>
     <string name="offers_fragment">Offers</string>
     <string name="events_fragment">Events</string>
+    <string name="poi_search_bar_hint">Try Toilets, ATMs and Shops</string>
 </resources>

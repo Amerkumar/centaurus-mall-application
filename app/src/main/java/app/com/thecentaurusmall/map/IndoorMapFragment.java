@@ -7,30 +7,25 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -67,13 +62,12 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
-import java.util.Deque;
 import java.util.List;
 
-import app.com.thecentaurusmall.MainActivity;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
-import okhttp3.internal.Util;
+import app.com.thecentaurusmall.databinding.IndoorMapFragmentBinding;
+import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class IndoorMapFragment extends Fragment implements
         OnMapReadyCallback,
@@ -86,7 +80,7 @@ public class IndoorMapFragment extends Fragment implements
 
     private static final String TAG = IndoorMapFragment.class.getSimpleName();
     private static final int PERMISSIONS_REQUEST_LOCATION = 1;
-    private IndoorMapViewModel mViewModel;
+    private SharedViewModel mViewModel;
     private GoogleMap mMap;
     private MapView mapView;
     private Circle mCircle;
@@ -103,6 +97,12 @@ public class IndoorMapFragment extends Fragment implements
     private View rootView;
     private List<Polyline> mPolylines;
     private LatLng mUserLocation;
+    private TextView mIndoorSearchBarTextView;
+    private PointOfInterest mSelectedPoi;
+    private ImageView mIndoorSearchBarClearImageView;
+    private View mIndoorPoiSearchBar;
+    private ImageView mIndoorSearchBarDirectionsImageView;
+    private IndoorMapFragmentBinding mIndoorMapFragmentBinding;
 
     public static IndoorMapFragment newInstance() {
         return new IndoorMapFragment();
@@ -129,31 +129,59 @@ public class IndoorMapFragment extends Fragment implements
                              @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
 
-
-            rootView = inflater.inflate(R.layout.indoor_map_fragment, container, false);
-
-            mapView = rootView.findViewById(R.id.map);
-
-            mapView.onCreate(savedInstanceState);
-            try {
-                MapsInitializer.initialize(getActivity().getApplicationContext());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            mIndoorMapFragmentBinding = IndoorMapFragmentBinding.inflate(inflater, container, false);
 
 
 
-            TextView indoorSearchBarTextView = rootView.findViewById(R.id.poi_search_bar_textview);
-            indoorSearchBarTextView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment));
+                mapView = mIndoorMapFragmentBinding.map;
 
-            floorButton = rootView.findViewById(R.id.floor_material_button);
+                mapView.onCreate(savedInstanceState);
+                try {
+                    MapsInitializer.initialize(getActivity().getApplicationContext());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-            floorButton.setOnClickListener(new View.OnClickListener() {
+
+            mIndoorMapFragmentBinding
+                    .poiSearchBarTextview.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment));
+
+            mIndoorMapFragmentBinding
+                    .poiSearchBarClearImageview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                FloorSelectionDialog floorSelectionDialog = new FloorSelectionDialog();
-////                floorSelectionDialog.setDialogFloorClickListener(this);
-//               floorSelectionDialog.show(getActivity().getSupportFragmentManager(), "floors");
+                    mIndoorMapFragmentBinding
+                            .poiSearchBarTextview.setText(getString(R.string.poi_search_bar_hint));
+                    mSelectedPoi = null;
+                    mIndoorMapFragmentBinding
+                            .poiSearchBarClearImageview.setVisibility(View.GONE);
+                }
+            });
+
+
+            mIndoorMapFragmentBinding
+                    .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
+                    mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
+                }
+            });
+
+            mIndoorMapFragmentBinding
+                    .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
+                    mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
+                }
+            });
+
+
+            mIndoorMapFragmentBinding.floorMaterialButton
+                    .setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     CharSequence[] floors = new CharSequence[]{
                             "Auto Floor (Enabled By Default)",
                             "Fourth Floor",
@@ -178,52 +206,18 @@ public class IndoorMapFragment extends Fragment implements
                 }
             });
 
-            FloatingActionButton floatingActionButton = rootView.findViewById(R.id.floating_action_button);
-            fabFlag = true;
-            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            mIndoorMapFragmentBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     if (mUserLocation != null) {
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 19.0f));
                     } else {
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.707991, 73.050229), 16.0f));
                     }
-
-//                    Log.d(IndoorMapFragment.class.getSimpleName(), "FAB");
-//                    // if true
-//                    // it means user want to close the location detection
-//                    // enabled by default
-//                    if (fabFlag) {
-//                        Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
-//                                getActivity().getTheme());
-//                        Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
-//                        newDrawable.mutate().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_ATOP);
-//                        floatingActionButton.setImageDrawable(newDrawable);
-//                        stopLocationUpdates();
-//                        fabFlag = false;
-//                    }
-//                    // if false
-//                    // it means user want to enable the location
-//
-//                    else {
-//                        Drawable myFabSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_my_location,
-//                                getActivity().getTheme());
-//                        Drawable newDrawable = myFabSrc.getConstantState().newDrawable();
-//                        newDrawable.mutate().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-//                        floatingActionButton.setImageDrawable(newDrawable);
-//                        startLocationUpdates();
-//                        fabFlag = true;
-//                    }
-
-
-
-
                 }
             });
         }
-        return rootView;
+        return mIndoorMapFragmentBinding.getRoot();
     }
 
     @Override
@@ -271,17 +265,21 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(IndoorMapViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         // TODO: Use the ViewModel
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
         mapView.getMapAsync(this);
-
-        if (fabFlag) {
-            startLocationUpdates();
-        }
-
+        SharedViewModel model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        model.getSelected().observe(this, new Observer<PointOfInterest>() {
+            @Override
+            public void onChanged(PointOfInterest pointOfInterest) {
+                mSelectedPoi = pointOfInterest;
+                mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
+                mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
@@ -360,6 +358,7 @@ public class IndoorMapFragment extends Fragment implements
         super.onResume();
 //        ((MainActivity) getActivity()).hideToolbar();
         mapView.onResume();
+        startLocationUpdates();
 
     }
 
@@ -368,6 +367,7 @@ public class IndoorMapFragment extends Fragment implements
         super.onPause();
 //        ((MainActivity) getActivity()).showToolbar();
         mapView.onPause();
+        stopLocationUpdates();
     }
 
 
@@ -532,22 +532,22 @@ public class IndoorMapFragment extends Fragment implements
     public void onDialogFloorClick(int which) {
         switch (which) {
             case 0:
-                floorButton.setText("A");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("A");
                 break;
             case 1:
-                floorButton.setText("4");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("4");
                 break;
             case 2:
-                floorButton.setText("3");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("3");
                 break;
             case 3:
-                floorButton.setText("2");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("2");
                 break;
             case 4:
-                floorButton.setText("1");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
                 break;
             case 5:
-                floorButton.setText("G");
+                mIndoorMapFragmentBinding.floorMaterialButton.setText("G");
                 break;
 
         }
