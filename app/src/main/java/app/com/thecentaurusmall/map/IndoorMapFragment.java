@@ -159,14 +159,25 @@ public class IndoorMapFragment extends Fragment implements
             });
 
 
+            // Directions toolbar must be shown here
+            // 1.Search Bar must be gone
+            // 2.If search bar text field is not empty then transfer it to directions bar destination
+            // 3.Put my location in from field in directions bar
+            // 4.Put Navigate Button
+
+
             mIndoorMapFragmentBinding
                     .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
+                    if (mSelectedPoi.getName() != null) {
+                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(mSelectedPoi.getName());
+                    }
                     mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
                 }
             });
+
 
             mIndoorMapFragmentBinding
                     .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +185,14 @@ public class IndoorMapFragment extends Fragment implements
                 public void onClick(View v) {
                     mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
                     mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
+                }
+            });
+
+            mIndoorMapFragmentBinding
+                    .poiDirectionsFrom.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment);
                 }
             });
 
@@ -200,8 +219,7 @@ public class IndoorMapFragment extends Fragment implements
                                     onDialogFloorClick(which);
                                 }
                             })
-                            .show()
-                    ;
+                            .show();
 
                 }
             });
