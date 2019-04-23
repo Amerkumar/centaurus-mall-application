@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -67,7 +66,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
 
         mAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR, poiModel -> {
 
-            sharedViewModel.select(poiModel);
+            sharedViewModel.searchBarPoi(poiModel);
             Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot()).navigateUp();
 //            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });

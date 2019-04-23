@@ -43,7 +43,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationListener;
@@ -71,8 +70,7 @@ import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class IndoorMapFragment extends Fragment implements
         OnMapReadyCallback,
-        FloorSelectionDialog.FloorSelectDialogListener
-{
+        FloorSelectionDialog.FloorSelectDialogListener {
 
     /* used to decide when bitmap should be downscaled */
     private static final int MAX_DIMENSION = 2048;
@@ -104,6 +102,13 @@ public class IndoorMapFragment extends Fragment implements
     private ImageView mIndoorSearchBarDirectionsImageView;
     private IndoorMapFragmentBinding mIndoorMapFragmentBinding;
 
+
+    private static final int TYPE_SEARCH_BAR_POI = 0;
+    private static final int TYPE_DIRECTION_BAR_FROM_POI = 1;
+    private static final int TYPE_DIRECTION_BAR_TO_POI = 2;
+    private static final int TYPE_NONE = 3;
+    private SharedViewModel msharedViewModel;
+
     public static IndoorMapFragment newInstance() {
         return new IndoorMapFragment();
     }
@@ -112,16 +117,10 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
         // instantiate IALocationManager
         mIALocationManager = IALocationManager.create(getContext());
-
         // disable indoor-outdoor detection (assume we're indoors)
         mIALocationManager.lockIndoors(true);
-
-
     }
 
     @Override
@@ -131,98 +130,40 @@ public class IndoorMapFragment extends Fragment implements
 
             mIndoorMapFragmentBinding = IndoorMapFragmentBinding.inflate(inflater, container, false);
 
-
-
-                mapView = mIndoorMapFragmentBinding.map;
-
-                mapView.onCreate(savedInstanceState);
-                try {
-                    MapsInitializer.initialize(getActivity().getApplicationContext());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            mIndoorMapFragmentBinding
-                    .poiSearchBarTextview.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment));
-
-            mIndoorMapFragmentBinding
-                    .poiSearchBarClearImageview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIndoorMapFragmentBinding
-                            .poiSearchBarTextview.setText(getString(R.string.poi_search_bar_hint));
-                    mSelectedPoi = null;
-                    mIndoorMapFragmentBinding
-                            .poiSearchBarClearImageview.setVisibility(View.GONE);
-                }
-            });
-
-
-            // Directions toolbar must be shown here
-            // 1.Search Bar must be gone
-            // 2.If search bar text field is not empty then transfer it to directions bar destination
-            // 3.Put my location in from field in directions bar
-            // 4.Put Navigate Button
-
-
-            mIndoorMapFragmentBinding
-                    .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
-                    if (mSelectedPoi.getName() != null) {
-                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(mSelectedPoi.getName());
-                    }
-                    mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
-                }
-            });
-
-
-            mIndoorMapFragmentBinding
-                    .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
-                    mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
-                }
-            });
-
-            mIndoorMapFragmentBinding
-                    .poiDirectionsFrom.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Navigation.createNavigateOnClickListener(R.id.pointOfInterestFragment);
-                }
-            });
-
+            mapView = mIndoorMapFragmentBinding.map;
+            mapView.onCreate(savedInstanceState);
+            try {
+                MapsInitializer.initialize(getActivity().getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             mIndoorMapFragmentBinding.floorMaterialButton
                     .setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CharSequence[] floors = new CharSequence[]{
-                            "Auto Floor (Enabled By Default)",
-                            "Fourth Floor",
-                            "Third Floor",
-                            "Second Floor",
-                            "First Floor",
-                            "Ground Floor"};
+                        @Override
+                        public void onClick(View v) {
+                            CharSequence[] floors = new CharSequence[]{
+                                    "Auto Floor (Enabled By Default)",
+                                    "Fourth Floor",
+                                    "Third Floor",
+                                    "Second Floor",
+                                    "First Floor",
+                                    "Ground Floor"};
 
-                    // Use the Builder class for convenient dialog construction
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Floor")
-                            .setItems(floors, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // The 'which' argument contains the index position
-                                    // of the selected item
-                                    onDialogFloorClick(which);
-                                }
-                            })
-                            .show();
+                            // Use the Builder class for convenient dialog construction
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Floor")
+                                    .setItems(floors, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // The 'which' argument contains the index position
+                                            // of the selected item
+                                            onDialogFloorClick(which);
+                                        }
+                                    })
+                                    .show();
 
-                }
-            });
+                        }
+                    });
 
             mIndoorMapFragmentBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -289,15 +230,110 @@ public class IndoorMapFragment extends Fragment implements
 //        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
         mapView.getMapAsync(this);
-        SharedViewModel model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-        model.getSelected().observe(this, new Observer<PointOfInterest>() {
+        msharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+//        This is for search bar poi here
+        msharedViewModel.getSelectedSearchBarPoi().observe(this, new Observer<PointOfInterest>() {
             @Override
             public void onChanged(PointOfInterest pointOfInterest) {
+
+                switch (msharedViewModel.getSelectedFieldPoiCode().getValue()) {
+                    case TYPE_SEARCH_BAR_POI:
+                        mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
+                        mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
+                        break;
+                    case TYPE_DIRECTION_BAR_FROM_POI:
+                        mIndoorMapFragmentBinding.poiDirectionsFrom.setText(pointOfInterest.getName());
+                        break;
+                    case TYPE_DIRECTION_BAR_TO_POI:
+                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(pointOfInterest.getName());
+                        break;
+                    case TYPE_NONE:
+                        break;
+                }
                 mSelectedPoi = pointOfInterest;
-                mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
-                mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
             }
         });
+
+        //            Point of Interest Search Bar TextView
+        mIndoorMapFragmentBinding
+                .poiSearchBarTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msharedViewModel.setSelectedFieldPoiCode(TYPE_SEARCH_BAR_POI);
+                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+            }
+        });
+
+        mIndoorMapFragmentBinding
+                .poiSearchBarClearImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mIndoorMapFragmentBinding
+                        .poiSearchBarTextview.setText(getString(R.string.poi_search_bar_hint));
+                mSelectedPoi = null;
+                mIndoorMapFragmentBinding
+                        .poiSearchBarClearImageview.setVisibility(View.GONE);
+                msharedViewModel.setSelectedFieldPoiCode(TYPE_NONE);
+            }
+        });
+
+
+        // Directions toolbar must be shown here
+        // 1.Search Bar must be gone
+        // 2.If search bar text field is not empty then transfer it to directions bar destination
+        // 3.Put my location in from field in directions bar
+        // 4.Put Navigate Button
+
+
+        mIndoorMapFragmentBinding
+                .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
+                if (mSelectedPoi != null) {
+                    mIndoorMapFragmentBinding.poiDirectionsTo.setText(mSelectedPoi.getName());
+                }
+                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        mIndoorMapFragmentBinding
+                .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mIndoorMapFragmentBinding
+                .poiDirectionsFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_FROM_POI);
+                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+            }
+        });
+
+
+        mIndoorMapFragmentBinding
+                .poiDirectionsTo.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_TO_POI);
+                        Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+                    }
+                }
+        );
+
+//        This is for directions bar from poi here
+
+//        This is for directions bar to poi here
+
     }
 
 
@@ -318,14 +354,14 @@ public class IndoorMapFragment extends Fragment implements
         rlp.addRule(RelativeLayout.ALIGN_PARENT_END);
         rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
         Resources r = getContext().getResources();
-        rlp.setMargins(0, (int) Utils.convertDpToPixel(112.0f, getContext()),0, 0); // 160 la truc y , 30 la  truc x
+        rlp.setMargins(0, (int) Utils.convertDpToPixel(112.0f, getContext()), 0, 0); // 160 la truc y , 30 la  truc x
 //        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, r.getDisplayMetrics());
 //        rlp.((int)Utils.convertDpToPixel(160,getContext()));
         compassButton.setLayoutParams(rlp);
 
         mMap = googleMap;
 
-        mMap.setPadding(64,64,64,64);
+        mMap.setPadding(64, 64, 64, 64);
 
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng centaurus = new LatLng(33.707991, 73.050229
@@ -355,7 +391,6 @@ public class IndoorMapFragment extends Fragment implements
             // permissions this app might request.
         }
     }
-
 
 
     @Override
@@ -636,7 +671,7 @@ public class IndoorMapFragment extends Fragment implements
         }
 
         final String url = floorPlan.getUrl();
-        Log.d(TAG, "loading floor plan bitmap from "+url);
+        Log.d(TAG, "loading floor plan bitmap from " + url);
 
         mLoadTarget = new Target() {
 
@@ -661,7 +696,6 @@ public class IndoorMapFragment extends Fragment implements
                 // N/A
             }
         };
-
 
 
         RequestCreator request =
