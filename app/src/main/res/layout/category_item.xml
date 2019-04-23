@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="app.com.thecentaurusmall.map.PointOfInterestAdapter.Listener" />
+
+        <variable
+            name="model"
+            type="app.com.thecentaurusmall.model.PointOfInterest" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/category_item_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <ru.nikartm.support.ImageBadgeView
+            android:id="@+id/category_item_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_shopping_cart"
+            app:ibv_badgeColor="#FF9800"
+            app:ibv_badgeLimitValue="false"
+            app:ibv_badgeTextColor="@android:color/black"
+            app:ibv_badgeTextSize="12sp"
+            app:ibv_badgeTextStyle="bold"
+            app:ibv_badgeValue="10"
+            app:ibv_fixedBadgeRadius="12dp" />
+
+        <TextView
+            android:id="@+id/category_item_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="Others"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="16sp" />
+    </LinearLayout>
+</layout>

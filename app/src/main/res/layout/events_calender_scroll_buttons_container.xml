@@ -1,83 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbars="none"
+    android:background="@android:color/white"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <com.google.android.material.button.MaterialButton
+        app:singleLine="true"
+        app:singleSelection="true"
+        android:layout_margin="8dp"
+        >
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_margin="8dp"
-            app:cornerRadius="16dp"
             android:text="Last Month"
-            android:backgroundTint="@color/colorEventCalenderButton"
+            app:chipBackgroundColor="@color/chip_state_list_color"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:padding="8dp"
             />
 
-
-        <com.google.android.material.button.MaterialButton
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_margin="8dp"
-            app:cornerRadius="16dp"
             android:text="Last Week"
-            android:backgroundTint="@color/colorEventCalenderButton"
+            app:chipBackgroundColor="@color/chip_state_list_color"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:padding="8dp"
             />
 
-        <com.google.android.material.button.MaterialButton
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_margin="8dp"
-            app:cornerRadius="16dp"
             android:text="Today"
-            android:backgroundTint="@color/colorEventCalenderButton"
+            app:chipBackgroundColor="@color/chip_state_list_color"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:padding="8dp"
             />
 
-        <com.google.android.material.button.MaterialButton
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_margin="8dp"
-            app:cornerRadius="16dp"
             android:text="Next Week"
-            android:backgroundTint="@color/colorEventCalenderButton"
+            app:chipBackgroundColor="@color/chip_state_list_color"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:padding="8dp"
             />
 
-        <com.google.android.material.button.MaterialButton
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_margin="8dp"
-            app:cornerRadius="16dp"
             android:text="Next Month"
-            android:backgroundTint="@color/colorEventCalenderButton"
+            app:chipBackgroundColor="@color/chip_state_list_color"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:padding="8dp"
             />
-    </LinearLayout>
-
+    </com.google.android.material.chip.ChipGroup>
 </HorizontalScrollView>

@@ -51,6 +51,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_directions"
+                android:visibility="gone"
                 />
 
 

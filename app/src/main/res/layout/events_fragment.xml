@@ -11,7 +11,8 @@
         layout="@layout/events_calender_scroll_buttons_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+
+        />
 
 
     <ScrollView
@@ -23,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <include layout="@layout/event_item" />
 
             <include layout="@layout/event_item" />

@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -57,6 +58,7 @@ import com.indooratlas.android.sdk.IAWayfindingRequest;
 import com.indooratlas.android.sdk.resources.IAFloorPlan;
 import com.indooratlas.android.sdk.resources.IALatLng;
 import com.indooratlas.android.sdk.resources.IALocationListenerSupport;
+import com.indooratlas.android.sdk.resources.IAVenue;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
@@ -361,6 +363,20 @@ public class IndoorMapFragment extends Fragment implements
 
         mMap = googleMap;
 
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = mMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.map_style));
+
+            if (!success) {
+                Log.e("MapsActivityRaw", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("MapsActivityRaw", "Can't find style.", e);
+        }
+
         mMap.setPadding(64, 64, 64, 64);
 
         // Add a marker in Sydney, Australia, and move the camera.
@@ -585,25 +601,43 @@ public class IndoorMapFragment extends Fragment implements
     public void onDialogFloorClick(int which) {
         switch (which) {
             case 0:
+                mIALocationManager.unlockFloor();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("A");
                 break;
             case 1:
+                mIALocationManager.lockFloor(4);
+           //     setFloorPlanManually();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("4");
                 break;
             case 2:
+                mIALocationManager.lockFloor(3);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("3");
                 break;
             case 3:
+                mIALocationManager.lockFloor(2);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("2");
                 break;
             case 4:
+                mIALocationManager.lockFloor(1);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
                 break;
             case 5:
+                mIALocationManager.lockFloor(0);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("G");
                 break;
 
         }
+    }
+
+    private void setFloorPlanManually() {
+        mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
+        if (mGroundOverlay != null) {
+            mGroundOverlay.remove();
+            mGroundOverlay = null;
+        }
+
+//        IAFloorPlan iaFloorPlan =  new IAFloorPlan();
+//        iaFloorPlan.
     }
 
     private void startLocationUpdates() {
