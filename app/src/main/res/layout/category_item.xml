@@ -5,11 +5,11 @@
 
         <variable
             name="listener"
-            type="app.com.thecentaurusmall.map.PointOfInterestAdapter.Listener" />
+            type="app.com.thecentaurusmall.map.CategoryAdapter.Listener" />
 
         <variable
             name="model"
-            type="app.com.thecentaurusmall.model.PointOfInterest" />
+            type="app.com.thecentaurusmall.model.Category" />
 
     </data>
 
@@ -34,7 +34,7 @@
             app:ibv_badgeTextColor="@android:color/black"
             app:ibv_badgeTextSize="12sp"
             app:ibv_badgeTextStyle="bold"
-            app:ibv_badgeValue="10"
+            app:ibv_badgeValue="@{model.count}"
             app:ibv_fixedBadgeRadius="12dp" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Others"
+            android:text="@{model.name}"
             android:textColor="@color/colorPrimaryText"
             android:textSize="16sp" />
     </LinearLayout>
