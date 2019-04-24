@@ -1,14 +1,9 @@
-package app.com.thecentaurusmall.map;
-
-import android.view.View;
-import android.widget.TextView;
+package app.com.thecentaurusmall.poi;
 
 import androidx.annotation.NonNull;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
-
-import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.databinding.PoiItemBinding;
 import app.com.thecentaurusmall.model.PointOfInterest;
 

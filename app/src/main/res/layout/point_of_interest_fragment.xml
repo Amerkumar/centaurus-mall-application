@@ -74,7 +74,3 @@
 
 </layout>
 
-
-    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="?attr/actionBarSize"--><!--android:orientation="horizontal"--><!--&gt;-->
-
-    <!--<com.google.android.material.textfield.TextInputEditText--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:hint="Search here"--><!--android:textSize="20sp"--><!--android:textColor="@android:color/black"--><!--android:background="@android:color/transparent"--><!--android:paddingStart="16dp"--><!--android:paddingEnd="16dp"--><!--android:paddingTop="8dp"--><!--android:paddingBottom="8dp"--><!--/>--><!--</LinearLayout>-->

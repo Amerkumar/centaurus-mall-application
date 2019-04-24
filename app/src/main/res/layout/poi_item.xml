@@ -5,7 +5,7 @@
 
         <variable
             name="listener"
-            type="app.com.thecentaurusmall.map.PointOfInterestAdapter.Listener" />
+            type="app.com.thecentaurusmall.poi.PointOfInterestAdapter.Listener" />
 
         <variable
             name="model"

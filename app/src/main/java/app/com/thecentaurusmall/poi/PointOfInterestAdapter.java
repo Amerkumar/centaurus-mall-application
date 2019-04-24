@@ -1,4 +1,4 @@
-package app.com.thecentaurusmall.map;
+package app.com.thecentaurusmall.poi;
 
 import android.content.Context;
 import android.view.LayoutInflater;
