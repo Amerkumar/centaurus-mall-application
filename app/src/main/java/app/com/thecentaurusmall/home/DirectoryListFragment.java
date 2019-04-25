@@ -1,28 +1,28 @@
 package app.com.thecentaurusmall.home;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -79,9 +79,31 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
 
         mCategoryAdapter = new CategoryAdapter(getContext(), COMPARATOR_CATEGORY, categoryModel -> {
             Snackbar.make(mDirectoryListFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
+            mDirectoryListFragmentBinding.poiEditText.setText(categoryModel.getName());
         });
 
-//        mCategoryAdapter.addCallback(this);
+        mDirectoryListFragmentBinding.poiEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mPointOfInterestModels != null) {
+                    final List<PointOfInterest> filteredModelList = filter(mPointOfInterestModels, s.toString());
+                    mPointOfInterestAdapter.edit()
+                            .replaceAll(filteredModelList)
+                            .commit();
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
             Snackbar.make(mDirectoryListFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
@@ -98,7 +120,6 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
         mDirectoryListFragmentBinding.poiRecyclerView.setAdapter(mPointOfInterestAdapter);
 
 
-
         String directoryTag = DirectoryListFragmentArgs.fromBundle(getArguments()).getDirectoryTag();
 
         mViewModel.getAllPoisByDirectoryTag(directoryTag).observe(this, new Observer<List<PointOfInterest>>() {
@@ -106,7 +127,7 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
             public void onChanged(List<PointOfInterest> pointOfInterests) {
                 mPointOfInterestModels = pointOfInterests;
 
-               mPointOfInterestAdapter.edit()
+                mPointOfInterestAdapter.edit()
                         .replaceAll(pointOfInterests)
                         .commit();
             }
@@ -121,6 +142,21 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
                         .commit();
             }
         });
+    }
+
+    private static List<PointOfInterest> filter(List<PointOfInterest> models, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<PointOfInterest> filteredModelList = new ArrayList<>();
+        for (PointOfInterest model : models) {
+            final String name = model.getName().toLowerCase();
+            final String category = model.getCategory().toLowerCase();
+            final String rank = String.valueOf(model.getRank());
+            if (name.contains(lowerCaseQuery) || category.contains(lowerCaseQuery) || rank.contains(lowerCaseQuery)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
     @Override
