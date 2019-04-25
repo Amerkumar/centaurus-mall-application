@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,9 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +25,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -43,6 +48,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.indooratlas.android.sdk.IALocation;
@@ -57,12 +65,11 @@ import com.indooratlas.android.sdk.IAWayfindingListener;
 import com.indooratlas.android.sdk.IAWayfindingRequest;
 import com.indooratlas.android.sdk.resources.IAFloorPlan;
 import com.indooratlas.android.sdk.resources.IALatLng;
-import com.indooratlas.android.sdk.resources.IALocationListenerSupport;
-import com.indooratlas.android.sdk.resources.IAVenue;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.com.thecentaurusmall.R;
@@ -72,7 +79,9 @@ import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class IndoorMapFragment extends Fragment implements
         OnMapReadyCallback,
-        FloorSelectionDialog.FloorSelectDialogListener {
+        FloorSelectionDialog.FloorSelectDialogListener,
+        IALocationListener,
+        IARegion.Listener {
 
     /* used to decide when bitmap should be downscaled */
     private static final int MAX_DIMENSION = 2048;
@@ -80,6 +89,7 @@ public class IndoorMapFragment extends Fragment implements
 
     private static final String TAG = IndoorMapFragment.class.getSimpleName();
     private static final int PERMISSIONS_REQUEST_LOCATION = 1;
+    private static final int REQUEST_CHECK_SETTINGS = 2;
     private SharedViewModel mViewModel;
     private GoogleMap mMap;
     private MapView mapView;
@@ -95,13 +105,9 @@ public class IndoorMapFragment extends Fragment implements
     private IARoute mCurrentRoute;
     private Target mLoadTarget;
     private View rootView;
-    private List<Polyline> mPolylines;
+    private List<Polyline> mPolylines = new ArrayList<>();
     private LatLng mUserLocation;
-    private TextView mIndoorSearchBarTextView;
     private PointOfInterest mSelectedPoi;
-    private ImageView mIndoorSearchBarClearImageView;
-    private View mIndoorPoiSearchBar;
-    private ImageView mIndoorSearchBarDirectionsImageView;
     private IndoorMapFragmentBinding mIndoorMapFragmentBinding;
 
 
@@ -110,6 +116,7 @@ public class IndoorMapFragment extends Fragment implements
     private static final int TYPE_DIRECTION_BAR_TO_POI = 2;
     private static final int TYPE_NONE = 3;
     private SharedViewModel msharedViewModel;
+    private Marker mDestinationMarker;
 
     public static IndoorMapFragment newInstance() {
         return new IndoorMapFragment();
@@ -119,15 +126,124 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Here, getActivity is the current activity
+        // check for location permission
+        // 1. If Given, On the GPS Location Services
+        // 2. else ask for location permission.
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission has already been granted
+            getLocationSettings();
+        } else {
+            requestPermissions(new String[]{
+
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_WIFI_STATE,
+                            Manifest.permission.CHANGE_WIFI_STATE
+                    },
+                    PERMISSIONS_REQUEST_LOCATION);
+        }
         // instantiate IALocationManager
         mIALocationManager = IALocationManager.create(getContext());
-        // disable indoor-outdoor detection (assume we're indoors)
-        mIALocationManager.lockIndoors(true);
     }
+
+    private LocationRequest createLocationRequest() {
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        return mLocationRequest;
+    }
+
+
+    private void getLocationSettings() {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(createLocationRequest());
+
+
+        SettingsClient client = LocationServices.getSettingsClient(getActivity());
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+
+        task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+                startLocationUpdates();
+            }
+        });
+
+        task.addOnFailureListener(getActivity(), new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(getActivity(),
+                                REQUEST_CHECK_SETTINGS);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_LOCATION: {
+
+                Log.d(TAG, "ON Request Permission Result");
+
+                // If request is cancelled, the result arrays are empty.
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Location Permission")
+                            .setMessage("We need your location for finding your location in The Centaurus Mall.")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestPermissions(
+                                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                                            PERMISSIONS_REQUEST_LOCATION);
+                                }
+                            }).show();
+
+                } else {
+                    //                 Log.d(TAG, "Permission granted");
+                    getLocationSettings();
+
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+
+    /**
+     * Fragment Lifecycle Methods
+     */
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         if (rootView == null) {
 
             mIndoorMapFragmentBinding = IndoorMapFragmentBinding.inflate(inflater, container, false);
@@ -177,6 +293,9 @@ public class IndoorMapFragment extends Fragment implements
                     }
                 }
             });
+            rootView = mIndoorMapFragmentBinding.getRoot();
+
+            mapView.getMapAsync(this);
         }
         return mIndoorMapFragmentBinding.getRoot();
     }
@@ -184,40 +303,6 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                Log.d(IndoorMapFragment.class.getSimpleName(), "Permission for Location");
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{
-
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_WIFI_STATE,
-                                Manifest.permission.CHANGE_WIFI_STATE
-                        },
-                        PERMISSIONS_REQUEST_LOCATION);
-
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            // Permission has already been granted
-        }
 
 
     }
@@ -231,7 +316,6 @@ public class IndoorMapFragment extends Fragment implements
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
-        mapView.getMapAsync(this);
         msharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
 //        This is for search bar poi here
@@ -243,6 +327,7 @@ public class IndoorMapFragment extends Fragment implements
                     case TYPE_SEARCH_BAR_POI:
                         mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
                         mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
+                        onPoiClick(pointOfInterest.get_geoloc());
                         break;
                     case TYPE_DIRECTION_BAR_FROM_POI:
                         mIndoorMapFragmentBinding.poiDirectionsFrom.setText(pointOfInterest.getName());
@@ -263,6 +348,7 @@ public class IndoorMapFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 msharedViewModel.setSelectedFieldPoiCode(TYPE_SEARCH_BAR_POI);
+
                 Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
             }
         });
@@ -278,6 +364,7 @@ public class IndoorMapFragment extends Fragment implements
                 mIndoorMapFragmentBinding
                         .poiSearchBarClearImageview.setVisibility(View.GONE);
                 msharedViewModel.setSelectedFieldPoiCode(TYPE_NONE);
+                clearWayFindingRoute();
             }
         });
 
@@ -382,32 +469,16 @@ public class IndoorMapFragment extends Fragment implements
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng centaurus = new LatLng(33.707991, 73.050229
         );
-        mMap.addMarker(new MarkerOptions().position(centaurus).title("The Centaurus Mall"));
+//        mMap.addMarker(new MarkerOptions().position(centaurus).title("The Centaurus Mall"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centaurus, 16.0f));
     }
 
+
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        mapView.onSaveInstanceState(outState);
     }
-
 
     @Override
     public void onLowMemory() {
@@ -436,7 +507,6 @@ public class IndoorMapFragment extends Fragment implements
         super.onPause();
 //        ((MainActivity) getActivity()).showToolbar();
         mapView.onPause();
-        stopLocationUpdates();
     }
 
 
@@ -450,6 +520,9 @@ public class IndoorMapFragment extends Fragment implements
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        stopLocationUpdates();
+
+        msharedViewModel.setSelectedFieldPoiCode(TYPE_NONE);
         mIALocationManager.destroy();
     }
 
@@ -538,66 +611,19 @@ public class IndoorMapFragment extends Fragment implements
     /**
      * Listener that handles location change events.
      */
-    private IALocationListener mListener = new IALocationListenerSupport() {
-
-
-        /**
-         * Location changed, move marker and camera position.
-         */
-        @Override
-        public void onLocationChanged(IALocation location) {
-
-            Log.d(TAG, "new location received with coordinates: " + location.getLatitude()
-                    + "," + location.getLongitude());
-
-            if (mMap == null) {
-                // location received before map is initialized, ignoring update here
-                return;
-            }
-
-            final LatLng center = new LatLng(location.getLatitude(), location.getLongitude());
-            mUserLocation = center;
-
-            final int newFloor = location.getFloorLevel();
-            if (mFloor != newFloor) {
-                updateRouteVisualization();
-            }
-            mFloor = newFloor;
-
-            showLocationCircle(center, location.getAccuracy());
-
-            // our camera position needs updating if location has significantly changed
-            if (mCameraPositionNeedsUpdating) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 17.5f));
-                mCameraPositionNeedsUpdating = false;
-            }
-        }
-    };
-
-    /**
-     * Listener that changes overlay if needed
-     */
-    private IARegion.Listener mRegionListener = new IARegion.Listener() {
-        @Override
-        public void onEnterRegion(IARegion region) {
-            if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
-                Log.d(TAG, "enter floor plan " + region.getId());
-                mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
-                if (mGroundOverlay != null) {
-                    mGroundOverlay.remove();
-                    mGroundOverlay = null;
-                }
-                mOverlayFloorPlan = region; // overlay will be this (unless error in loading)
-                fetchFloorPlanBitmap(region.getFloorPlan());
-            }
-        }
-
-        @Override
-        public void onExitRegion(IARegion region) {
-        }
-
-    };
-
+//    private IALocationListener mListener = new IALocationListenerSupport() {
+//
+//
+//
+//    };
+//
+//    /**
+//     * Listener that changes overlay if needed
+//     */
+//    private IARegion.Listener mRegionListener = new IARegion.Listener() {
+//
+//
+//    };
     public void onDialogFloorClick(int which) {
         switch (which) {
             case 0:
@@ -606,7 +632,7 @@ public class IndoorMapFragment extends Fragment implements
                 break;
             case 1:
                 mIALocationManager.lockFloor(4);
-           //     setFloorPlanManually();
+                //     setFloorPlanManually();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("4");
                 break;
             case 2:
@@ -629,21 +655,10 @@ public class IndoorMapFragment extends Fragment implements
         }
     }
 
-    private void setFloorPlanManually() {
-        mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
-        if (mGroundOverlay != null) {
-            mGroundOverlay.remove();
-            mGroundOverlay = null;
-        }
-
-//        IAFloorPlan iaFloorPlan =  new IAFloorPlan();
-//        iaFloorPlan.
-    }
-
     private void startLocationUpdates() {
         // start receiving location updates & monitor region changes
-        mIALocationManager.requestLocationUpdates(IALocationRequest.create(), mListener);
-        mIALocationManager.registerRegionListener(mRegionListener);
+        mIALocationManager.requestLocationUpdates(IALocationRequest.create(), this);
+        mIALocationManager.registerRegionListener(this);
         mIALocationManager.registerOrientationListener(
                 // update if heading changes by 1 degrees or more
                 new IAOrientationRequest(1, 0),
@@ -659,8 +674,8 @@ public class IndoorMapFragment extends Fragment implements
 
     private void stopLocationUpdates() {
         // unregister location & region changes
-        mIALocationManager.removeLocationUpdates(mListener);
-        mIALocationManager.unregisterRegionListener(mRegionListener);
+        mIALocationManager.removeLocationUpdates(this);
+        mIALocationManager.unregisterRegionListener(this);
         mIALocationManager.unregisterOrientationListener(mOrientationListener);
 
         if (mWayfindingDestination != null) {
@@ -846,4 +861,93 @@ public class IndoorMapFragment extends Fragment implements
         }
     }
 
+    public void onPoiClick(LatLng point) {
+        if (mMap != null) {
+
+            mWayfindingDestination = new IAWayfindingRequest.Builder()
+                    .withFloor(mFloor)
+                    .withLatitude(point.latitude)
+                    .withLongitude(point.longitude)
+                    .build();
+
+            mIALocationManager.requestWayfindingUpdates(mWayfindingDestination, mWayfindingListener);
+
+            if (mDestinationMarker == null) {
+                mDestinationMarker = mMap.addMarker(new MarkerOptions()
+                        .position(point)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            } else {
+                mDestinationMarker.setPosition(point);
+            }
+            Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLatitude() + ", " +
+                    mWayfindingDestination.getLongitude() + "), floor=" +
+                    mWayfindingDestination.getFloor());
+        }
+    }
+
+    /**
+     * Location changed, move marker and camera position.
+     */
+    @Override
+    public void onLocationChanged(IALocation location) {
+
+        Log.d(TAG, "new location received with coordinates: " + location.getLatitude()
+                + "," + location.getLongitude());
+
+        if (mMap == null) {
+            // location received before map is initialized, ignoring update here
+            return;
+        }
+
+        final LatLng center = new LatLng(location.getLatitude(), location.getLongitude());
+        mUserLocation = center;
+
+        final int newFloor = location.getFloorLevel();
+        if (mWayfindingDestination != null && mFloor != newFloor) {
+            updateRouteVisualization();
+        }
+        mFloor = newFloor;
+
+        showLocationCircle(center, location.getAccuracy());
+
+        // our camera position needs updating if location has significantly changed
+        if (mCameraPositionNeedsUpdating) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(center, 18.0f));
+            mCameraPositionNeedsUpdating = false;
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onEnterRegion(IARegion region) {
+        if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
+            Log.d(TAG, "enter floor plan " + region.getId());
+            mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
+            if (mGroundOverlay != null) {
+                mGroundOverlay.remove();
+                mGroundOverlay = null;
+            }
+            mOverlayFloorPlan = region; // overlay will be this (unless error in loading)
+            fetchFloorPlanBitmap(region.getFloorPlan());
+        }
+    }
+
+    @Override
+    public void onExitRegion(IARegion region) {
+    }
+
+    private void clearWayFindingRoute() {
+
+        mCurrentRoute = null;
+        mWayfindingDestination = null;
+        mDestinationMarker.remove();
+        mDestinationMarker = null;
+        clearRouteVisualization();
+        mIALocationManager.removeWayfindingUpdates();
+
+    }
 }

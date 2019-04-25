@@ -59,12 +59,15 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
     // sub scale image view
 //    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 
 
     // ia location
-    implementation 'com.indooratlas.android:indooratlas-android-sdk:3.0.0-beta-1037'
+//    implementation 'com.indooratlas.android:indooratlas-android-sdk:3.0.0-beta-1037'
+    implementation 'com.indooratlas.android:indooratlas-android-sdk:2.9.2@aar'
 
 
     // picasso library
