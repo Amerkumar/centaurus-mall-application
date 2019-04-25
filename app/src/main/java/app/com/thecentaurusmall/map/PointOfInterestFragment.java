@@ -158,6 +158,54 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
         }
         return filteredModelList;
     }
+    @Override
+    public void onEditStarted() {
+        if (mPointOfInterestFragmentBinding.poiEditProgressBar.getVisibility() != View.VISIBLE) {
+            mPointOfInterestFragmentBinding.poiEditProgressBar.setVisibility(View.VISIBLE);
+            mPointOfInterestFragmentBinding.poiEditProgressBar.setAlpha(0.0f);
+        }
 
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
+
+        mAnimator = ObjectAnimator.ofFloat(mPointOfInterestFragmentBinding.poiEditProgressBar, View.ALPHA, 1.0f);
+        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAnimator.start();
+
+        mPointOfInterestFragmentBinding.poiRecyclerView.animate().alpha(0.5f);
+    }
+
+    @Override
+    public void onEditFinished() {
+        mPointOfInterestFragmentBinding.poiRecyclerView.scrollToPosition(0);
+        mPointOfInterestFragmentBinding.poiRecyclerView.animate().alpha(1.0f);
+
+        if (mAnimator != null) {
+            mAnimator.cancel();
+        }
+
+        mAnimator = ObjectAnimator.ofFloat(mPointOfInterestFragmentBinding.poiEditProgressBar, View.ALPHA, 0.0f);
+        mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        mAnimator.addListener(new AnimatorListenerAdapter() {
+
+            private boolean mCanceled = false;
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                mCanceled = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                if (!mCanceled) {
+                    mPointOfInterestFragmentBinding.poiEditProgressBar.setVisibility(View.GONE);
+                }
+            }
+        });
+        mAnimator.start();
+    }
 
 }

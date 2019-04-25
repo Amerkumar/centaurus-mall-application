@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import app.com.thecentaurusmall.MainRepository;
+import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class DirectoryListViewModel extends AndroidViewModel {
@@ -20,7 +21,12 @@ public class DirectoryListViewModel extends AndroidViewModel {
         this.mainRepository = new MainRepository(application);
     }
 
-    LiveData<List<PointOfInterest>> getAllPoisBy
+    LiveData<List<PointOfInterest>> getAllPoisByDirectoryTag(String directoryTag) {
+        return mainRepository.getAllPoisByDirectoryTag(directoryTag);
+    }
 
+    LiveData<List<Category>> getAllCategories() {
+        return mainRepository.getAllCategories();
+    }
 
 }

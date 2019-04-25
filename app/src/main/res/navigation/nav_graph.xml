@@ -9,12 +9,20 @@
         android:id="@+id/homeViewPagerFragment"
         android:name="app.com.thecentaurusmall.home.HomeViewPagerFragment"
         android:label="The Centaurus Mall"
-        tools:layout="@layout/home_view_pager_fragment" />
+        tools:layout="@layout/home_view_pager_fragment" >
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_directoryListFragment"
+            app:destination="@id/directoryListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/indoorMapFragment"
         android:name="app.com.thecentaurusmall.map.IndoorMapFragment"
         android:label="indoor_map_fragment"
-        tools:layout="@layout/indoor_map_fragment" />
+        tools:layout="@layout/indoor_map_fragment" >
+        <action
+            android:id="@+id/action_indoorMapFragment_to_pointOfInterestFragment"
+            app:destination="@id/pointOfInterestFragment" />
+    </fragment>
     <fragment
         android:id="@+id/parkingFragment"
         android:name="app.com.thecentaurusmall.parking.ParkingFragment"
@@ -30,4 +38,12 @@
         android:name="app.com.thecentaurusmall.map.PointOfInterestFragment"
         android:label="point_of_interest_fragment"
         tools:layout="@layout/point_of_interest_fragment" />
+    <fragment
+        android:id="@+id/directoryListFragment"
+        android:name="app.com.thecentaurusmall.home.DirectoryListFragment"
+        android:label="DirectoryListFragment" >
+        <argument
+            android:name="DirectoryTag"
+            app:argType="string" />
+    </fragment>
 </navigation>

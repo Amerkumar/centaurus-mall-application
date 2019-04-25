@@ -16,15 +16,20 @@ public class PointOfInterest implements SortedListAdapter.ViewModel {
     private String category;
     private LatLng _geoloc;
     private long floor_num;
+    private String directory_tag;
+    private String description;
 
 
-    public PointOfInterest(int rank, String id, String name, String category, LatLng _geoloc, long floor_num) {
+    public PointOfInterest(int rank, String id, String name, String category,
+                           LatLng _geoloc, long floor_num, String directory_tag, String description) {
         this.rank = rank;
         this.id = id;
         this.name = name;
         this.category = category;
         this._geoloc = _geoloc;
         this.floor_num = floor_num;
+        this.directory_tag = directory_tag;
+        this.description = description;
     }
 
     public String getId() {
@@ -55,6 +60,15 @@ public class PointOfInterest implements SortedListAdapter.ViewModel {
     public String floorNumberToName(long floor_num) {
         return Utils.floorNumberToName((int) floor_num);
     }
+
+    public String getDirectory_tag() {
+        return directory_tag;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
 
     @Override
     public <T> boolean isSameModelAs(T item) {

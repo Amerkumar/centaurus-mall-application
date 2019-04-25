@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements
                 showToolbar();
                 showBottomNavigationView();
                 break;
+            case R.id.directoryListFragment:
+                hideToolbar();
+                hideBottomNavigationView();
+                break;
             case R.id.indoorMapFragment:
                 hideToolbar();
                 showBottomNavigationView();
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
                 hideToolbar();
                 showBottomNavigationView();
                 break;
+
         }
     }
 }

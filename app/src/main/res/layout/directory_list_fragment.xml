@@ -55,7 +55,13 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <include layout="@layout/category_item" />
+            <!--<include layout="@layout/category_item" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/poi_recycler_view"
                 android:layout_width="match_parent"

@@ -23,6 +23,7 @@ public class PointOfInterestViewModel extends AndroidViewModel {
         this.mAllPointOfInterest = mainRepository.getAllPois();
     }
 
+//    public void fetchAllPoisByDirectoryTag(String )
     LiveData<List<PointOfInterest>> getAllPois() {
         return mAllPointOfInterest;
     }

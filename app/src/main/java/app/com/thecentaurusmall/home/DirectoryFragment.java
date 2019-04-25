@@ -1,20 +1,21 @@
 package app.com.thecentaurusmall.home;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+
+import com.google.android.material.card.MaterialCardView;
 import com.potyvideo.slider.library.Animations.DescriptionAnimation;
 import com.potyvideo.slider.library.SliderLayout;
 import com.potyvideo.slider.library.SliderTypes.BaseSliderView;
@@ -22,13 +23,11 @@ import com.potyvideo.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
 
-import app.com.thecentaurusmall.MainActivity;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.home.viewmodels.DirectoryViewModel;
 
 public class DirectoryFragment extends Fragment implements
-        BaseSliderView.OnSliderClickListener
-{
+        BaseSliderView.OnSliderClickListener {
 
     private DirectoryViewModel mViewModel;
     private SliderLayout mFeaturedSlider;
@@ -40,22 +39,81 @@ public class DirectoryFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.directory_fragment, container, false);
+
+        View rootView = inflater.inflate(R.layout.directory_fragment, container, false);
+
+//        ImageView backButton = rootView.findViewById(R.id.back_button);
+//
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigateUp();
+//            }
+//        });
+
+        LinearLayout mShopCardViewContainer = rootView.findViewById(R.id.shop_card_view_container);
+        mShopCardViewContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToDirectoryListFragment actionHomeViewPagerFragmentToDirectoryListFragment =
+//                        a
+                Log.d(DirectoryFragment.class.getSimpleName(), "Shop");
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToDirectoryListFragment actionHomeViewPagerFragmentToDirectoryListFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToDirectoryListFragment("Shop");
+                Navigation.findNavController(v).navigate(actionHomeViewPagerFragmentToDirectoryListFragment);
+            }
+        });
+
+        LinearLayout mDineCardViewContainer = rootView.findViewById(R.id.dine_card_view_container);
+        mDineCardViewContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToDirectoryListFragment actionHomeViewPagerFragmentToDirectoryListFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToDirectoryListFragment("Dine");
+                Navigation.findNavController(v).navigate(actionHomeViewPagerFragmentToDirectoryListFragment);
+            }
+        });
+
+        LinearLayout mEntertainmentCardViewContainer = rootView.findViewById(R.id.entertainment_card_view_container);
+        mEntertainmentCardViewContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToDirectoryListFragment actionHomeViewPagerFragmentToDirectoryListFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToDirectoryListFragment("Entertainment");
+                Navigation.findNavController(v).navigate(actionHomeViewPagerFragmentToDirectoryListFragment);
+            }
+        });
+
+        LinearLayout mServicesCardViewContainer = rootView.findViewById(R.id.services_card_view_conatiner);
+        mServicesCardViewContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToDirectoryListFragment actionHomeViewPagerFragmentToDirectoryListFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToDirectoryListFragment("Services");
+                Navigation.findNavController(v).navigate(actionHomeViewPagerFragmentToDirectoryListFragment);
+            }
+        });
+
+        return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+//        Shop and Dine Click Listeners
+
+//        DirectoryFragmentDirection
+
+
         mViewModel = ViewModelProviders.of(this).get(DirectoryViewModel.class);
-        // TODO: Use the ViewModel
+
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         mFeaturedSlider = (SliderLayout) view.findViewById(R.id.slider);
-
-
 
         HashMap<String, String> url_maps = new HashMap<String, String>();
         url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
@@ -86,6 +144,8 @@ public class DirectoryFragment extends Fragment implements
         mFeaturedSlider.setCustomAnimation(new DescriptionAnimation());
         mFeaturedSlider.setDuration(5000);
         mFeaturedSlider.startAutoCycle();
+
+
     }
 
     @Override

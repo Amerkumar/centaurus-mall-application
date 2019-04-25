@@ -1,5 +1,6 @@
 package app.com.thecentaurusmall.home;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.animation.Animator;
@@ -17,14 +18,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Comparator;
+import java.util.List;
 
-import app.com.thecentaurusmall.R;
+import app.com.thecentaurusmall.category.CategoryAdapter;
 import app.com.thecentaurusmall.databinding.DirectoryListFragmentBinding;
+import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.PointOfInterest;
 import app.com.thecentaurusmall.poi.PointOfInterestAdapter;
 
@@ -34,11 +38,19 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
 
     private DirectoryListFragmentBinding mDirectoryListFragmentBinding;
 
-    private static final Comparator<PointOfInterest> COMPARATOR = new SortedListAdapter.ComparatorBuilder<PointOfInterest>()
+
+    private static final Comparator<Category> COMPARATOR_CATEGORY = new SortedListAdapter.ComparatorBuilder<Category>()
+            .setOrderForModel(Category.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
+            .build();
+
+    private static final Comparator<PointOfInterest> COMPARATOR_POI = new SortedListAdapter.ComparatorBuilder<PointOfInterest>()
             .setOrderForModel(PointOfInterest.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
             .build();
-    private PointOfInterestAdapter mAdapter;
+    private PointOfInterestAdapter mPointOfInterestAdapter;
     private Animator mAnimator;
+    private List<PointOfInterest> mPointOfInterestModels;
+    private CategoryAdapter mCategoryAdapter;
+
 
     public static DirectoryListFragment newInstance() {
         return new DirectoryListFragment();
@@ -50,7 +62,12 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
 
 
         mDirectoryListFragmentBinding = DirectoryListFragmentBinding.inflate(inflater, container, false);
-
+        mDirectoryListFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigateUp();
+            }
+        });
         return mDirectoryListFragmentBinding.getRoot();
     }
 
@@ -60,21 +77,50 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
         mViewModel = ViewModelProviders.of(this).get(DirectoryListViewModel.class);
 
 
-        mAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR, poiModel -> {
+        mCategoryAdapter = new CategoryAdapter(getContext(), COMPARATOR_CATEGORY, categoryModel -> {
+            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
+        });
+
+//        mCategoryAdapter.addCallback(this);
+
+        mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
             Snackbar.make(mDirectoryListFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });
 
-        mAdapter.addCallback(this);
+        mPointOfInterestAdapter.addCallback(this);
 
-        mDirectoryListFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
+
+        mDirectoryListFragmentBinding.categoryRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mDirectoryListFragmentBinding.categoryRecyclerView.setAdapter(mCategoryAdapter);
+
+        mDirectoryListFragmentBinding.poiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mDirectoryListFragmentBinding.poiRecyclerView.setAdapter(mPointOfInterestAdapter);
+
+
+
+        String directoryTag = DirectoryListFragmentArgs.fromBundle(getArguments()).getDirectoryTag();
+
+        mViewModel.getAllPoisByDirectoryTag(directoryTag).observe(this, new Observer<List<PointOfInterest>>() {
             @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigateUp();
+            public void onChanged(List<PointOfInterest> pointOfInterests) {
+                mPointOfInterestModels = pointOfInterests;
+
+               mPointOfInterestAdapter.edit()
+                        .replaceAll(pointOfInterests)
+                        .commit();
             }
         });
 
-        mDirectoryListFragmentBinding.poiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mDirectoryListFragmentBinding.poiRecyclerView.setAdapter(mAdapter);
+        mViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(List<Category> categories) {
+                categories.get(0).getName();
+                mCategoryAdapter.edit()
+                        .replaceAll(categories)
+                        .commit();
+            }
+        });
     }
 
     @Override
