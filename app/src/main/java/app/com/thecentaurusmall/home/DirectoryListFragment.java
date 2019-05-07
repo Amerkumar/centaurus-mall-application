@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.category.CategoryAdapter;
 import app.com.thecentaurusmall.databinding.DirectoryListFragmentBinding;
 import app.com.thecentaurusmall.model.Category;
@@ -106,7 +107,8 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
         });
 
         mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
-            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
+            Navigation.findNavController(mDirectoryListFragmentBinding.getRoot()).navigate(R.id.poiDetailFragment);
         });
 
         mPointOfInterestAdapter.addCallback(this);

@@ -45,5 +45,13 @@
         <argument
             android:name="DirectoryTag"
             app:argType="string" />
+        <action
+            android:id="@+id/action_directoryListFragment_to_poiDetailFragment"
+            app:destination="@id/poiDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/poiDetailFragment"
+        android:name="app.com.thecentaurusmall.home.PoiDetailFragment"
+        android:label="POI Detail Fragment"
+        tools:layout="@layout/poi_detail_fragment" />
 </navigation>

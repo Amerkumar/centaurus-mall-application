@@ -14,24 +14,24 @@ import android.view.ViewGroup;
 
 import app.com.thecentaurusmall.R;
 
-public class ShopDetailFragment extends Fragment {
+public class PoiDetailFragment extends Fragment {
 
-    private ShopDetailViewModel mViewModel;
+    private PoiDetailViewModel mViewModel;
 
-    public static ShopDetailFragment newInstance() {
-        return new ShopDetailFragment();
+    public static PoiDetailFragment newInstance() {
+        return new PoiDetailFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.shop_detail_fragment, container, false);
+        return inflater.inflate(R.layout.poi_detail_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(ShopDetailViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(PoiDetailViewModel.class);
         // TODO: Use the ViewModel
     }
 
