@@ -53,5 +53,8 @@
         android:id="@+id/poiDetailFragment"
         android:name="app.com.thecentaurusmall.home.PoiDetailFragment"
         android:label="POI Detail Fragment"
-        tools:layout="@layout/poi_detail_fragment" />
+        tools:layout="@layout/poi_detail_fragment" >
+        <argument android:name="PoiObject"
+            app:argType="app.com.thecentaurusmall.model.PointOfInterest" />
+    </fragment>
 </navigation>

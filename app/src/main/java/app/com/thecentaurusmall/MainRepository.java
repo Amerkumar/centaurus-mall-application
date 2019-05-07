@@ -57,6 +57,7 @@ public class MainRepository {
 
                 int rank = 1;
                 List<PointOfInterest> pointOfInterests = new ArrayList<>();
+                HashMap<String, Category> categoryHashMap = new HashMap<>();
                 for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
                     if (documentSnapshot.exists()) {
 
@@ -74,6 +75,22 @@ public class MainRepository {
                                     documentSnapshot.getString("description")
                                     );
                             pointOfInterests.add(pointOfInterest);
+
+                            // if some category is present in hash map
+                            // then we can increase the category count
+                            String category = documentSnapshot.getString("category");
+                            if (categoryHashMap.containsKey(category)){
+                                Category categoryObj = categoryHashMap.get(category);
+                                categoryObj.incrementCount();
+                                Log.d(TAG, categoryObj.getName() + " " + categoryObj.getCount());
+                            }
+                            // else category is not present in hashmap
+                            else {
+                                categoryHashMap.put(category, new Category(rank,
+                                        category,
+                                        1));
+                            }
+
                             rank++;
                         } catch (NullPointerException el) {
                             el.printStackTrace();
@@ -84,6 +101,7 @@ public class MainRepository {
                     }
                 }
 
+                categoryList.postValue(new ArrayList<>(categoryHashMap.values()));
                 pointOfInterestList.postValue(pointOfInterests);
             }
         });

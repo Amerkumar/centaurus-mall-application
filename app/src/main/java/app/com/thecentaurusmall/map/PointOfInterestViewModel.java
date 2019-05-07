@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import app.com.thecentaurusmall.MainRepository;
+import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class PointOfInterestViewModel extends AndroidViewModel {
@@ -28,4 +29,7 @@ public class PointOfInterestViewModel extends AndroidViewModel {
         return mAllPointOfInterest;
     }
 
+    LiveData<List<Category>> getAllCategoriesByQuickSearch() {
+        return mainRepository.getAllCategories();
+    }
 }

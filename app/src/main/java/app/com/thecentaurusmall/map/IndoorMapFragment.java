@@ -327,7 +327,7 @@ public class IndoorMapFragment extends Fragment implements
                     case TYPE_SEARCH_BAR_POI:
                         mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
                         mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
-                        onPoiClick(pointOfInterest.get_geoloc());
+                        onPoiClick(pointOfInterest);
                         break;
                     case TYPE_DIRECTION_BAR_FROM_POI:
                         mIndoorMapFragmentBinding.poiDirectionsFrom.setText(pointOfInterest.getName());
@@ -540,6 +540,13 @@ public class IndoorMapFragment extends Fragment implements
                 mCurrentRoute = null;
                 mWayfindingDestination = null;
                 mIALocationManager.removeWayfindingUpdates();
+                mIndoorMapFragmentBinding
+                        .poiSearchBarTextview.setText(getString(R.string.poi_search_bar_hint));
+                mSelectedPoi = null;
+                mIndoorMapFragmentBinding
+                        .poiSearchBarClearImageview.setVisibility(View.GONE);
+                msharedViewModel.setSelectedFieldPoiCode(TYPE_NONE);
+                clearWayFindingRoute();
             }
             updateRouteVisualization();
         }
@@ -629,27 +636,44 @@ public class IndoorMapFragment extends Fragment implements
             case 0:
                 mIALocationManager.unlockFloor();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("A");
+//                showMyLocation();
+                mIALocationManager.unregisterRegionListener(this);
+                startLocationUpdates();
                 break;
             case 1:
                 mIALocationManager.lockFloor(4);
-                //     setFloorPlanManually();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("4");
+//                mIALocationManager.removeLocationUpdates(this);
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+                hideMyLocation();
                 break;
             case 2:
                 mIALocationManager.lockFloor(3);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("3");
+//                mIALocationManager.removeLocationUpdates(this);
+
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+                hideMyLocation();
                 break;
             case 3:
                 mIALocationManager.lockFloor(2);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("2");
+//                mIALocationManager.removeLocationUpdates(this);
+
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+                hideMyLocation();
                 break;
             case 4:
                 mIALocationManager.lockFloor(1);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+                hideMyLocation();
                 break;
             case 5:
                 mIALocationManager.lockFloor(0);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("G");
+                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+                hideMyLocation();
                 break;
 
         }
@@ -730,6 +754,7 @@ public class IndoorMapFragment extends Fragment implements
                         + bitmap.getHeight());
                 if (mOverlayFloorPlan != null && floorPlan.getId().equals(mOverlayFloorPlan.getId())) {
                     Log.d(TAG, "showing overlay");
+
                     setupGroundOverlay(floorPlan, bitmap);
                 }
             }
@@ -745,7 +770,6 @@ public class IndoorMapFragment extends Fragment implements
                 // N/A
             }
         };
-
 
         RequestCreator request =
                 Picasso.get().load(url);
@@ -763,7 +787,7 @@ public class IndoorMapFragment extends Fragment implements
     }
 
     private void showInfo(String text) {
-        final Snackbar snackbar = Snackbar.make(rootView.findViewById(android.R.id.content), text,
+        final Snackbar snackbar = Snackbar.make(rootView, text,
                 Snackbar.LENGTH_INDEFINITE);
         snackbar.setAction("Close", new View.OnClickListener() {
             @Override
@@ -835,15 +859,15 @@ public class IndoorMapFragment extends Fragment implements
 
         for (IARoute.Leg leg : mCurrentRoute.getLegs()) {
 
-            if (leg.getEdgeIndex() == null) {
-                // Legs without an edge index are, in practice, the last and first legs of the
-                // route. They connect the destination or current location to the routing graph.
-                // All other legs travel along the edges of the routing graph.
-
-                // Omitting these "artificial edges" in visualization can improve the aesthetics
-                // of the route. Alternatively, they could be visualized with dashed lines.
-                continue;
-            }
+//            if (leg.getEdgeIndex() == null) {
+//                // Legs without an edge index are, in practice, the last and first legs of the
+//                // route. They connect the destination or current location to the routing graph.
+//                // All other legs travel along the edges of the routing graph.
+//
+//                // Omitting these "artificial edges" in visualization can improve the aesthetics
+//                // of the route. Alternatively, they could be visualized with dashed lines.
+//                continue;
+//            }
 
             PolylineOptions opt = new PolylineOptions();
             opt.add(new LatLng(leg.getBegin().getLatitude(), leg.getBegin().getLongitude()));
@@ -861,23 +885,23 @@ public class IndoorMapFragment extends Fragment implements
         }
     }
 
-    public void onPoiClick(LatLng point) {
+    public void onPoiClick(PointOfInterest point) {
         if (mMap != null) {
 
             mWayfindingDestination = new IAWayfindingRequest.Builder()
-                    .withFloor(mFloor)
-                    .withLatitude(point.latitude)
-                    .withLongitude(point.longitude)
+                    .withFloor((int) point.getFloor_num())
+                    .withLatitude(point.get_geoloc().latitude)
+                    .withLongitude(point.get_geoloc().longitude)
                     .build();
 
             mIALocationManager.requestWayfindingUpdates(mWayfindingDestination, mWayfindingListener);
 
             if (mDestinationMarker == null) {
                 mDestinationMarker = mMap.addMarker(new MarkerOptions()
-                        .position(point)
+                        .position(point.get_geoloc())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             } else {
-                mDestinationMarker.setPosition(point);
+                mDestinationMarker.setPosition(point.get_geoloc());
             }
             Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLatitude() + ", " +
                     mWayfindingDestination.getLongitude() + "), floor=" +

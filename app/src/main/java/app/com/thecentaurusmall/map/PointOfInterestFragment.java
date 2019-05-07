@@ -22,27 +22,34 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import app.com.thecentaurusmall.category.CategoryAdapter;
 import app.com.thecentaurusmall.databinding.PointOfInterestFragmentBinding;
+import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.PointOfInterest;
 import app.com.thecentaurusmall.poi.PointOfInterestAdapter;
 
 public class PointOfInterestFragment extends Fragment implements SortedListAdapter.Callback {
 
     private PointOfInterestViewModel mViewModel;
-    private PointOfInterestAdapter mAdapter;
+    private PointOfInterestAdapter mPointOfInterestAdapter;
     private PointOfInterestFragmentBinding mPointOfInterestFragmentBinding;
     private Animator mAnimator;
+    private static final Comparator<Category> COMPARATOR_CATEGORY = new SortedListAdapter.ComparatorBuilder<Category>()
+            .setOrderForModel(Category.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
+            .build();
 
-    private static final Comparator<PointOfInterest> COMPARATOR = new SortedListAdapter.ComparatorBuilder<PointOfInterest>()
+    private static final Comparator<PointOfInterest> COMPARATOR_POI = new SortedListAdapter.ComparatorBuilder<PointOfInterest>()
             .setOrderForModel(PointOfInterest.class, (a, b) -> Integer.signum(a.getRank() - b.getRank()))
             .build();
     private List<PointOfInterest> mPointOfInterestModels;
     private SharedViewModel sharedViewModel;
+    private CategoryAdapter mCategoryAdapter;
 
     public static PointOfInterestFragment newInstance() {
         return new PointOfInterestFragment();
@@ -65,14 +72,19 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
 
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
-        mAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR, poiModel -> {
+        mCategoryAdapter = new CategoryAdapter(getContext(), COMPARATOR_CATEGORY, categoryModel -> {
+            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
+            mPointOfInterestFragmentBinding.poiEditText.setText(categoryModel.getName());
+        });
+
+        mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
 
             sharedViewModel.searchBarPoi(poiModel);
             Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot()).navigateUp();
 //            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });
 
-        mAdapter.addCallback(this);
+        mPointOfInterestAdapter.addCallback(this);
 
         mPointOfInterestFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,35 +93,38 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             }
         });
 
+        mPointOfInterestFragmentBinding.categoryRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        mPointOfInterestFragmentBinding.categoryRecyclerView.setAdapter(mCategoryAdapter);
 
         mPointOfInterestFragmentBinding.poiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mPointOfInterestFragmentBinding.poiRecyclerView.setAdapter(mAdapter);
+        mPointOfInterestFragmentBinding.poiRecyclerView.setAdapter(mPointOfInterestAdapter);
 
 
-        mPointOfInterestFragmentBinding.poiRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (!recyclerView.canScrollVertically(-1)) {
-                    // we have reached the top of the list
-                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Top");
-//                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, 0);
-//                    mPointOfInterestFragmentBinding.toolbar.setElevation(0);
-                } else {
-                    // we are not at the top yet
-
-                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Scroll");
-
-//                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, Utils.convertDpToPixel(64.0f, getContext()));
-//                    mPointOfInterestFragmentBinding.toolbar.setElevation(Utils.convertDpToPixel(8.0f, getContext()));
-
-                }
-            }
-        });
+//        mPointOfInterestFragmentBinding.poiRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                if (!recyclerView.canScrollVertically(-1)) {
+//                    // we have reached the top of the list
+//                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Top");
+////                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, 0);
+////                    mPointOfInterestFragmentBinding.toolbar.setElevation(0);
+//                } else {
+//                    // we are not at the top yet
+//
+//                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Scroll");
+//
+////                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, Utils.convertDpToPixel(64.0f, getContext()));
+////                    mPointOfInterestFragmentBinding.toolbar.setElevation(Utils.convertDpToPixel(8.0f, getContext()));
+//
+//                }
+//            }
+//        });
 
         mViewModel = ViewModelProviders.of(this).get(PointOfInterestViewModel.class);
         mViewModel.getAllPois().observe(this, new Observer<List<PointOfInterest>>() {
@@ -117,12 +132,21 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             public void onChanged(List<PointOfInterest> pointOfInterests) {
                 mPointOfInterestModels = pointOfInterests;
 //                Log.d(PointOfInterestFragment.class.getSimpleName(), String.valueOf(pointOfInterests.size()));
-                mAdapter.edit()
+                mPointOfInterestAdapter.edit()
                         .replaceAll(pointOfInterests)
                         .commit();
             }
         });
 
+        mViewModel.getAllCategoriesByQuickSearch().observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(List<Category> categories) {
+//                categories.get(0).getName();
+                mCategoryAdapter.edit()
+                        .replaceAll(categories)
+                        .commit();
+            }
+        });
 
         mPointOfInterestFragmentBinding.poiEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,7 +157,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 final List<PointOfInterest> filteredModelList = filter(mPointOfInterestModels, s.toString());
-                mAdapter.edit()
+                mPointOfInterestAdapter.edit()
                         .replaceAll(filteredModelList)
                         .commit();
             }
@@ -150,9 +174,10 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
 
         final List<PointOfInterest> filteredModelList = new ArrayList<>();
         for (PointOfInterest model : models) {
-            final String text = model.getName().toLowerCase();
+            final String name = model.getName().toLowerCase();
+            final String category = model.getCategory().toLowerCase();
             final String rank = String.valueOf(model.getRank());
-            if (text.contains(lowerCaseQuery) || rank.contains(lowerCaseQuery)) {
+            if (name.contains(lowerCaseQuery) || category.contains(lowerCaseQuery) || rank.contains(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
         }

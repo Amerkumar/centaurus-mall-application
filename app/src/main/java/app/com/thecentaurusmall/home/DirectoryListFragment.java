@@ -108,7 +108,10 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
 
         mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
 //            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
-            Navigation.findNavController(mDirectoryListFragmentBinding.getRoot()).navigate(R.id.poiDetailFragment);
+            mDirectoryListFragmentBinding.poiEditText.setText("");
+            DirectoryListFragmentDirections.ActionDirectoryListFragmentToPoiDetailFragment actionDirectoryListFragmentToPoiDetailFragment =
+                    DirectoryListFragmentDirections.actionDirectoryListFragmentToPoiDetailFragment(poiModel);
+            Navigation.findNavController(mDirectoryListFragmentBinding.getRoot()).navigate(actionDirectoryListFragmentToPoiDetailFragment);
         });
 
         mPointOfInterestAdapter.addCallback(this);
@@ -138,7 +141,7 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
         mViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(List<Category> categories) {
-                categories.get(0).getName();
+//                categories.get(0).getName();
                 mCategoryAdapter.edit()
                         .replaceAll(categories)
                         .commit();

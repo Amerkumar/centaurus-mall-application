@@ -1,5 +1,8 @@
 package app.com.thecentaurusmall.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
@@ -7,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import app.com.thecentaurusmall.Utils.Utils;
 
-public class PointOfInterest implements SortedListAdapter.ViewModel {
+public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable {
 
 
     private final int rank;
@@ -90,4 +93,45 @@ public class PointOfInterest implements SortedListAdapter.ViewModel {
         }
         return false;
     }
+
+    protected PointOfInterest(Parcel in) {
+        rank = in.readInt();
+        id = in.readString();
+        name = in.readString();
+        category = in.readString();
+        _geoloc = (LatLng) in.readValue(LatLng.class.getClassLoader());
+        floor_num = in.readLong();
+        directory_tag = in.readString();
+        description = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(rank);
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(category);
+        dest.writeValue(_geoloc);
+        dest.writeLong(floor_num);
+        dest.writeString(directory_tag);
+        dest.writeString(description);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<PointOfInterest> CREATOR = new Parcelable.Creator<PointOfInterest>() {
+        @Override
+        public PointOfInterest createFromParcel(Parcel in) {
+            return new PointOfInterest(in);
+        }
+
+        @Override
+        public PointOfInterest[] newArray(int size) {
+            return new PointOfInterest[size];
+        }
+    };
 }
