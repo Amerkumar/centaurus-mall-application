@@ -3,10 +3,13 @@ package app.com.thecentaurusmall;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.ItemKeyedDataSource;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -23,6 +26,7 @@ import javax.annotation.Nullable;
 
 import app.com.thecentaurusmall.category.CategoryAdapter;
 import app.com.thecentaurusmall.model.Category;
+import app.com.thecentaurusmall.model.Offer;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class MainRepository {
@@ -35,7 +39,7 @@ public class MainRepository {
     private MutableLiveData<List<Category>> categoryList = new MutableLiveData<>();
 
 
-    public MainRepository(Application application) {
+    public MainRepository() {
 
         mFirestoredb = FirebaseFirestore.getInstance();
 
@@ -185,4 +189,41 @@ public class MainRepository {
         return categoryList;
     }
 
+
+
+    // get offers by pagination
+    public void getOffersByPagination(final int startRank, final int size,
+                            @NonNull final ItemKeyedDataSource.LoadCallback<Offer> callback){
+
+        String path = "indoors/" + VENUE_ID + "/offers";
+        Query collectionReference = mFirestoredb.collection(path);
+                collectionReference.limit(size)
+                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshots,
+                                @Nullable FirebaseFirestoreException e) {
+
+                if (e != null) {
+                    Log.w("", "exception in fetching from firestore", e);
+                    return;
+                }
+                List<Offer> offersList = new ArrayList<>();
+                for(DocumentSnapshot doc : snapshots.getDocuments()){
+                    offersList.add(doc.toObject(Offer.class));
+                }
+
+                if(offersList.size() == 0){
+                    return;
+                }
+                if(callback instanceof ItemKeyedDataSource.LoadInitialCallback){
+                    //initial load
+                    ((ItemKeyedDataSource.LoadInitialCallback)callback)
+                            .onResult(offersList, 0, offersList.size());
+                }else{
+                    //next pages load
+                    callback.onResult(offersList);
+                }
+            }
+        });
+    }
 }

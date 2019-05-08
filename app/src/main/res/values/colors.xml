@@ -16,4 +16,5 @@
   <color name="colorEventCalenderLightButton">#9DD6F5</color>
 
   <color name="colorEventItemDate">#FF5722</color>
+  <color name="colorOthersOptionsBackground">#333333</color>
 </resources>

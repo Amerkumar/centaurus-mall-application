@@ -18,7 +18,7 @@ public class DirectoryListViewModel extends AndroidViewModel {
 
     public DirectoryListViewModel(@NonNull Application application) {
         super(application);
-        this.mainRepository = new MainRepository(application);
+        this.mainRepository = new MainRepository();
     }
 
     LiveData<List<PointOfInterest>> getAllPoisByDirectoryTag(String directoryTag) {

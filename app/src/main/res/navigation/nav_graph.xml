@@ -57,4 +57,72 @@
         <argument android:name="PoiObject"
             app:argType="app.com.thecentaurusmall.model.PointOfInterest" />
     </fragment>
+    <fragment
+        android:id="@+id/othersOptionsFragment"
+        android:name="app.com.thecentaurusmall.others.othersOptionsFragment"
+        android:label="others_options_fragment"
+        tools:layout="@layout/others_options_fragment" >
+        <action
+            android:id="@+id/action_othersOptionsFragment_to_homeViewPagerFragment"
+            app:destination="@id/homeViewPagerFragment"
+            app:popUpTo="@+id/homeViewPagerFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_othersOptionsFragment_to_servicesFragment"
+            app:destination="@id/servicesFragment" />
+        <action
+            android:id="@+id/action_othersOptionsFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_othersOptionsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/servicesFragment"
+        android:name="app.com.thecentaurusmall.others.ServicesFragment"
+        android:label="services_fragment"
+        tools:layout="@layout/services_fragment" >
+        <action
+            android:id="@+id/action_servicesFragment_to_serviceDetailFragment"
+            app:destination="@id/serviceDetailFragment" />
+        <action
+            android:id="@+id/action_servicesFragment_to_lostAndFoundFragment"
+            app:destination="@id/lostAndFoundFragment" />
+        <action
+            android:id="@+id/action_servicesFragment_to_rideHailingFragment"
+            app:destination="@id/rideHailingFragment" />
+        <action
+            android:id="@+id/action_servicesFragment_to_mallInfoFragment"
+            app:destination="@id/mallInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="app.com.thecentaurusmall.others.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="app.com.thecentaurusmall.others.AccountFragment"
+        android:label="account_fragment"
+        tools:layout="@layout/account_fragment" />
+    <fragment
+        android:id="@+id/serviceDetailFragment"
+        android:name="app.com.thecentaurusmall.others.ServiceDetailFragment"
+        android:label="service_detail_fragment"
+        tools:layout="@layout/service_detail_fragment" />
+    <fragment
+        android:id="@+id/lostAndFoundFragment"
+        android:name="app.com.thecentaurusmall.others.LostAndFoundFragment"
+        android:label="lost_and_found_fragment"
+        tools:layout="@layout/lost_and_found_fragment" />
+    <fragment
+        android:id="@+id/rideHailingFragment"
+        android:name="app.com.thecentaurusmall.others.RideHailingFragment"
+        android:label="ride_hailing_fragment"
+        tools:layout="@layout/ride_hailing_fragment" />
+    <fragment
+        android:id="@+id/mallInfoFragment"
+        android:name="app.com.thecentaurusmall.others.MallInfoFragment"
+        android:label="mall_info_fragment"
+        tools:layout="@layout/mall_info_fragment" />
 </navigation>

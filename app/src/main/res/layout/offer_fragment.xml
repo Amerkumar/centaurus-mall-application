@@ -1,39 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".home.OfferFragment"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    >
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
+        android:orientation="vertical"
+        tools:context=".home.OfferFragment"
+
         >
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:scrollbars="none">
 
-            <include layout="@layout/offer_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/offer_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <include layout="@layout/offer_item" />
+            </androidx.recyclerview.widget.RecyclerView>
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical">-->
 
-            <include layout="@layout/offer_item" />
+                <!--<include layout="@layout/offer_item" />-->
 
-            <include layout="@layout/offer_item" />
+                <!--<include layout="@layout/offer_item" />-->
 
-            <include layout="@layout/offer_item" />
+                <!--<include layout="@layout/offer_item" />-->
 
-            <include layout="@layout/offer_item" />
+                <!--<include layout="@layout/offer_item" />-->
 
-            <include layout="@layout/offer_item" />
-        </LinearLayout>
-    </ScrollView>
+                <!--<include layout="@layout/offer_item" />-->
+
+                <!--<include layout="@layout/offer_item" />-->
+
+                <!--<include layout="@layout/offer_item" />-->
+            <!--</LinearLayout>-->
+        </androidx.core.widget.NestedScrollView>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

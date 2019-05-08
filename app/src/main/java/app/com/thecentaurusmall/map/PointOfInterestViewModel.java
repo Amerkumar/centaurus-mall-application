@@ -20,7 +20,7 @@ public class PointOfInterestViewModel extends AndroidViewModel {
 
     public PointOfInterestViewModel(@NonNull Application application) {
         super(application);
-        this.mainRepository = new MainRepository(application);
+        this.mainRepository = new MainRepository();
         this.mAllPointOfInterest = mainRepository.getAllPois();
     }
 

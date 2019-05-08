@@ -109,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements
                 showBottomNavigationView();
                 break;
 
+            case R.id.othersOptionsFragment:
+            case R.id.servicesFragment:
+            case R.id.accountFragment:
+            case R.id.settingsFragment:
+                hideToolbar();
+                hideBottomNavigationView();
+                break;
+
         }
     }
 }
