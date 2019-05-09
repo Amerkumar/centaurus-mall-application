@@ -17,8 +17,8 @@ public class OfferViewModel extends ViewModel {
 
         config = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(5)
-                .setPageSize(5)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
                 .build();
     }
 

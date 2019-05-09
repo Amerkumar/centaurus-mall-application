@@ -1,6 +1,5 @@
 package app.com.thecentaurusmall;
 
-import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,7 +23,6 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import app.com.thecentaurusmall.category.CategoryAdapter;
 import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.Offer;
 import app.com.thecentaurusmall.model.PointOfInterest;
@@ -77,13 +75,13 @@ public class MainRepository {
                                     (Long) documentSnapshot.get("floor_num"),
                                     documentSnapshot.getString("directory_tag"),
                                     documentSnapshot.getString("description")
-                                    );
+                            );
                             pointOfInterests.add(pointOfInterest);
 
                             // if some category is present in hash map
                             // then we can increase the category count
                             String category = documentSnapshot.getString("category");
-                            if (categoryHashMap.containsKey(category)){
+                            if (categoryHashMap.containsKey(category)) {
                                 Category categoryObj = categoryHashMap.get(category);
                                 categoryObj.incrementCount();
                                 Log.d(TAG, categoryObj.getName() + " " + categoryObj.getCount());
@@ -155,7 +153,7 @@ public class MainRepository {
                             // if some category is present in hash map
                             // then we can increase the category count
                             String category = documentSnapshot.getString("category");
-                            if (categoryHashMap.containsKey(category)){
+                            if (categoryHashMap.containsKey(category)) {
                                 Category categoryObj = categoryHashMap.get(category);
                                 categoryObj.incrementCount();
                                 Log.d(TAG, categoryObj.getName() + " " + categoryObj.getCount());
@@ -190,40 +188,66 @@ public class MainRepository {
     }
 
 
-
     // get offers by pagination
     public void getOffersByPagination(final int startRank, final int size,
-                            @NonNull final ItemKeyedDataSource.LoadCallback<Offer> callback){
+                                      @NonNull final ItemKeyedDataSource.LoadCallback<Offer> callback) {
 
-        String path = "indoors/" + VENUE_ID + "/offers";
+        String path = "indoors/" + VENUE_ID + "/deals";
         Query collectionReference = mFirestoredb.collection(path);
-                collectionReference.limit(size)
-                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot snapshots,
-                                @Nullable FirebaseFirestoreException e) {
+        collectionReference.limit(size)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
 
-                if (e != null) {
-                    Log.w("", "exception in fetching from firestore", e);
-                    return;
-                }
-                List<Offer> offersList = new ArrayList<>();
-                for(DocumentSnapshot doc : snapshots.getDocuments()){
-                    offersList.add(doc.toObject(Offer.class));
-                }
+                        if (e != null) {
+                            Log.w("", "exception in fetching from firestore", e);
+                            return;
+                        }
+                        List<Offer> offersList = new ArrayList<>();
+                        int rank = 1;
+                        Log.d(TAG, String.valueOf(snapshots.size()));
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            HashMap<String, Double> geoPoint = (HashMap<String, Double>) doc.get("_geoloc");
+                            LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
 
-                if(offersList.size() == 0){
-                    return;
-                }
-                if(callback instanceof ItemKeyedDataSource.LoadInitialCallback){
-                    //initial load
-                    ((ItemKeyedDataSource.LoadInitialCallback)callback)
-                            .onResult(offersList, 0, offersList.size());
-                }else{
-                    //next pages load
-                    callback.onResult(offersList);
-                }
-            }
-        });
+
+                            HashMap<String, String> url = (HashMap<String, String>) doc.get("url");
+
+//                            Log.d(TAG, doc.getId());
+//                            Log.d(TAG, doc.getTimestamp("start_date").toString());
+//                            Log.d(TAG, String.valueOf(doc.getLong("floor")));
+                            Log.d(TAG, doc.getString("name"));
+//                            Log.d(TAG, String.valueOf(doc.getLong("percentage")));
+//                            Log.d(TAG, url.get("mdpi"));
+
+                            try {
+                                Offer offer = new Offer(rank, doc.getId(),
+                                        doc.getString("category"), latLng,
+                                        doc.getTimestamp("end_date"), doc.getLong("floor"),
+                                        doc.getString("name"), doc.getLong("percentage"),
+                                        doc.getTimestamp("start_date"), url,
+                                        doc.getString("description"));
+
+                                offersList.add(offer);
+                                rank++;
+                            } catch (NullPointerException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+
+                        if (offersList.size() == 0) {
+                            return;
+                        }
+                        if (callback instanceof ItemKeyedDataSource.LoadInitialCallback) {
+                            //initial load
+                            ((ItemKeyedDataSource.LoadInitialCallback) callback)
+                                    .onResult(offersList, 0, offersList.size());
+                        } else {
+                            //next pages load
+                            callback.onResult(offersList);
+                        }
+                    }
+                });
     }
 }

@@ -9,7 +9,7 @@ import app.com.thecentaurusmall.Utils.Utils;
 
 public class Offer  {
 
-    private final int rank;
+    private int rank;
     private String id;
     private String category;
     private LatLng _geoloc;
