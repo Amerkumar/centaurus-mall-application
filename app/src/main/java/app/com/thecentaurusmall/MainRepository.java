@@ -8,6 +8,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.ItemKeyedDataSource;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -187,6 +193,12 @@ public class MainRepository {
         return categoryList;
     }
 
+    public Query getOffersQuery() {
+        String path = "indoors/" + VENUE_ID + "/deals";
+        Query collectionReference = mFirestoredb.collection(path);
+
+        return collectionReference;
+    }
 
     // get offers by pagination
     public void getOffersByPagination(final int startRank, final int size,
@@ -194,60 +206,104 @@ public class MainRepository {
 
         String path = "indoors/" + VENUE_ID + "/deals";
         Query collectionReference = mFirestoredb.collection(path);
-        collectionReference.limit(size)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot snapshots,
-                                        @Nullable FirebaseFirestoreException e) {
 
-                        if (e != null) {
-                            Log.w("", "exception in fetching from firestore", e);
-                            return;
+        return;
+//        collectionReference
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot snapshots,
+//                                        @Nullable FirebaseFirestoreException e) {
+//
+//                        if (e != null) {
+//                            Log.w("", "exception in fetching from firestore", e);
+//                            return;
+//                        }
+//                        List<Offer> offersList = new ArrayList<>();
+//                        int rank = 1;
+//                        Log.d(TAG, String.valueOf(snapshots.size()));
+//                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+//                            HashMap<String, Double> geoPoint = (HashMap<String, Double>) doc.get("_geoloc");
+//                            LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
+//
+//
+//                            HashMap<String, String> url = (HashMap<String, String>) doc.get("url");
+//
+////                            Log.d(TAG, doc.getId());
+////                            Log.d(TAG, doc.getTimestamp("start_date").toString());
+////                            Log.d(TAG, String.valueOf(doc.getLong("floor")));
+//                            Log.d(TAG, doc.getString("name"));
+////                            Log.d(TAG, String.valueOf(doc.getLong("percentage")));
+////                            Log.d(TAG, url.get("mdpi"));
+//
+//                            try {
+//                                Offer offer = new Offer(rank, doc.getId(),
+//                                        doc.getString("category"), latLng,
+//                                        doc.getTimestamp("end_date"), doc.getLong("floor"),
+//                                        doc.getString("name"), doc.getLong("percentage"),
+//                                        doc.getTimestamp("start_date"), url,
+//                                        doc.getString("description"));
+//
+//                                offersList.add(offer);
+//                                rank++;
+//                            } catch (NullPointerException e1) {
+//                                e1.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                });
+    }
+
+
+    public void addOffersDummyData() {
+
+
+
+//        City city = new City("Los Angeles", "CA", "USA",
+//
+//               false, 5000000L, Arrays.asList("west_coast", "sorcal"));
+
+        String[] brands = {"KFC", "Hardess", "Burger King","Howdy", "Johny Rockets",
+                            "Kim Mun", "Magnum", "OPTP", "Pizza Hut", "Rendevenous",
+                            "TGI Friday", "Tayto"};
+
+
+//        String brand = "test";
+        for (String brand : brands) {
+            String path = "indoors/" + VENUE_ID + "/deals";
+            CollectionReference collectionReference = mFirestoredb.collection(path);
+
+
+            app.com.thecentaurusmall.model.LatLng _geoloc = new app.com.thecentaurusmall.model.LatLng();
+            _geoloc.setLatitude(0.0);
+            _geoloc.setLongitude(0.0);
+
+            Timestamp date = Timestamp.now();
+
+            HashMap<String, String> url = new HashMap<>();
+            url.put("hdpi", "");
+            url.put("ldpi","");
+            url.put("mdpi", "");
+            url.put("xhdpi", "");
+            url.put("xxhdpi", "");
+            url.put("xxxhdpi", "");
+
+            Offer offer = new Offer(1, brand, brand, _geoloc, date, 4,
+                    brand, 30, date, url, brand);
+            collectionReference
+                    .add(offer)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
                         }
-                        List<Offer> offersList = new ArrayList<>();
-                        int rank = 1;
-                        Log.d(TAG, String.valueOf(snapshots.size()));
-                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
-                            HashMap<String, Double> geoPoint = (HashMap<String, Double>) doc.get("_geoloc");
-                            LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
-
-
-                            HashMap<String, String> url = (HashMap<String, String>) doc.get("url");
-
-//                            Log.d(TAG, doc.getId());
-//                            Log.d(TAG, doc.getTimestamp("start_date").toString());
-//                            Log.d(TAG, String.valueOf(doc.getLong("floor")));
-                            Log.d(TAG, doc.getString("name"));
-//                            Log.d(TAG, String.valueOf(doc.getLong("percentage")));
-//                            Log.d(TAG, url.get("mdpi"));
-
-                            try {
-                                Offer offer = new Offer(rank, doc.getId(),
-                                        doc.getString("category"), latLng,
-                                        doc.getTimestamp("end_date"), doc.getLong("floor"),
-                                        doc.getString("name"), doc.getLong("percentage"),
-                                        doc.getTimestamp("start_date"), url,
-                                        doc.getString("description"));
-
-                                offersList.add(offer);
-                                rank++;
-                            } catch (NullPointerException e1) {
-                                e1.printStackTrace();
-                            }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
                         }
+                    });
+        }
 
-                        if (offersList.size() == 0) {
-                            return;
-                        }
-                        if (callback instanceof ItemKeyedDataSource.LoadInitialCallback) {
-                            //initial load
-                            ((ItemKeyedDataSource.LoadInitialCallback) callback)
-                                    .onResult(offersList, 0, offersList.size());
-                        } else {
-                            //next pages load
-                            callback.onResult(offersList);
-                        }
-                    }
-                });
     }
 }

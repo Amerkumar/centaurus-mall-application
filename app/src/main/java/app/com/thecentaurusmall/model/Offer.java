@@ -1,11 +1,8 @@
 package app.com.thecentaurusmall.model;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 
 import java.util.HashMap;
-
-import app.com.thecentaurusmall.Utils.Utils;
 
 public class Offer  {
 
@@ -21,6 +18,10 @@ public class Offer  {
     private HashMap<String, String> url;
     private String description;
 
+
+    public Offer() {
+
+    }
 
     public Offer(int rank, String id, String category, LatLng _geoloc, Timestamp end_date, long floor_num,
                  String name, long percentage, Timestamp start_date, HashMap<String, String> url, String description) {

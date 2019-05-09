@@ -4,26 +4,28 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.PagedList;
 import androidx.paging.RxPagedListBuilder;
 
-import app.com.thecentaurusmall.home.OffersDataSourceFactory;
+import com.google.firebase.firestore.Query;
+
+import app.com.thecentaurusmall.MainRepository;
 import io.reactivex.Observable;
 
 public class OfferViewModel extends ViewModel {
-
-    private OffersDataSourceFactory offersDataSourceFactory;
+//
     private PagedList.Config config;
+    private MainRepository mainRepository;
 
     public OfferViewModel() {
-        offersDataSourceFactory = new OffersDataSourceFactory();
-
-        config = (new PagedList.Config.Builder())
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .build();
+//        offersDataSourceFactory = new OffersDataSourceFactory();
+        mainRepository = new MainRepository();
     }
 
-    public Observable<PagedList> getPagedListObservable() {
-        return new RxPagedListBuilder(offersDataSourceFactory, config).buildObservable();
+    public Query getOffersQuery() {
+        return mainRepository.getOffersQuery();
     }
+
+    public void addDummyOffers(){
+        mainRepository.addOffersDummyData();
+    }
+
 
 }
