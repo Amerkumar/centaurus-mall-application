@@ -26,11 +26,11 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/offer_image_view"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:scaleType="centerCrop"
-                android:src="@drawable/anda" />
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -80,14 +80,15 @@
                     android:background="@color/colorAccent" />
 
                 <TextView
+                    android:id="@+id/days_left_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="25th April 2019 - 7th May 2019"
+                    android:text="3 Days Left"
                     android:textAlignment="viewEnd"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
+                    android:textColor="@android:color/holo_orange_dark"
+                    android:textSize="16sp" />
             </LinearLayout>
 
         </LinearLayout>
