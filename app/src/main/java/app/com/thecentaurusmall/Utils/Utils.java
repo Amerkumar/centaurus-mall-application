@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Utils {
@@ -103,10 +105,18 @@ public class Utils {
         return "ldpi";
     }
 
-    public static String getDealUrlByToken(String folderName, String venueid, String fileName, String density, String token) {
+    public static String getUrlByToken(String folderName, String venueid, String fileName, String density, String token) {
         return BASE_URL + folderName + "%2F" + venueid + "%2F" + fileName.replaceAll(" ", "_").toLowerCase()
                 + "%2Fdrawable-" + density + "%2F" + fileName.replaceAll(" ", "_").toLowerCase() + ".webp?alt=media&token="
                 + token;
     }
 
+    public static Date addOrSubtractDaysFromCurrent(int days) {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, days);
+        dt = c.getTime();
+        return dt;
+    }
 }

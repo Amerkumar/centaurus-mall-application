@@ -21,7 +21,14 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +36,7 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.Offer;
 import app.com.thecentaurusmall.model.PointOfInterest;
@@ -257,11 +265,6 @@ public class MainRepository {
     public void addOffersDummyData() {
 
 
-
-//        City city = new City("Los Angeles", "CA", "USA",
-//
-//               false, 5000000L, Arrays.asList("west_coast", "sorcal"));
-
         String[] brands = {"KFC", "Hardess", "Burger King","Howdy", "Johny Rockets",
                             "Kim Mun", "Magnum", "OPTP", "Pizza Hut", "Rendevenous",
                             "TGI Friday", "Tayto"};
@@ -305,5 +308,56 @@ public class MainRepository {
                     });
         }
 
+    }
+
+    public Query getNextMonthEvents() {
+
+        String path = "indoors/" + VENUE_ID + "/events";
+
+        return  mFirestoredb.collection(path)
+                .whereGreaterThan("start_date", new Date())
+                .whereLessThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(30))
+                .orderBy("start_date")
+                ;
+    }
+
+
+    public Query getNextWeekEvents() {
+
+        String path = "indoors/" + VENUE_ID + "/events";
+
+        return  mFirestoredb.collection(path)
+                .whereGreaterThan("start_date", new Date())
+                .whereLessThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(7))
+                .orderBy("start_date")
+                ;
+    }
+
+    public Query getTodayEvents() {
+
+        String path = "indoors/" + VENUE_ID + "/events";
+
+        return  mFirestoredb.collection(path)
+                .whereEqualTo("start_date", new Date())
+                .orderBy("start_date")
+                ;
+    }
+
+    public Query getLastWeekEvents() {
+
+
+        String path = "indoors/" + VENUE_ID + "/events";
+        return mFirestoredb.collection(path)
+                .whereGreaterThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(-7))
+                .whereLessThan("start_date", new Date());
+
+    }
+
+    public Query getLastMonthEvents() {
+
+        String path = "indoors/" + VENUE_ID + "/events";
+        return mFirestoredb.collection(path)
+                .whereGreaterThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(-30))
+                .whereLessThan("start_date", new Date());
     }
 }

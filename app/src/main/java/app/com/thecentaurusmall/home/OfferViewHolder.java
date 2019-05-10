@@ -45,7 +45,7 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
 //        item.getUrl()
         if (item.getUrl() != null) {
             String token = Utils.getTokenByDensity(item.getUrl(), Utils.getDensityName(mContext));
-            url = Utils.getDealUrlByToken(DEALS_FOLDER, VENUE_ID, item.getName(),
+            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, item.getName(),
                     Utils.getDensityName(mContext), token);
         }
 
