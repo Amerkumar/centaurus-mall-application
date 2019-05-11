@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.firestore.Query;
 
@@ -70,12 +71,11 @@ public class EventsFragment extends Fragment {
         mEventFragmentBinding.datesChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup chipGroup, int i) {
-                Log.d("Chip group listener", String.valueOf(chipGroup.getCheckedChipId()) + i);
-                
+//                Log.d("Chip group listener", String.valueOf(chipGroup.getCheckedChipId()) + i);
                 String message = null;
                 int id = chipGroup.getCheckedChipId();
                 Query baseQuery = null;
-                switch (id) {
+                switch (id % 6) {
                     case 1:
                         message = "Last Month";
                         baseQuery = mViewModel.geLastMonthEvents();

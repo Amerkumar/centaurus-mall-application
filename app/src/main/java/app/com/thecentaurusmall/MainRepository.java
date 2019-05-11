@@ -338,8 +338,8 @@ public class MainRepository {
         String path = "indoors/" + VENUE_ID + "/events";
 
         return  mFirestoredb.collection(path)
-                .whereEqualTo("start_date", new Date())
-                .orderBy("start_date")
+                .whereGreaterThanOrEqualTo("start_date", new Date())
+                .whereLessThanOrEqualTo("start_date", new Date())
                 ;
     }
 
