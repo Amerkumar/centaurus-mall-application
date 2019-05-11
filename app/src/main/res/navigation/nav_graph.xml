@@ -105,7 +105,11 @@
         android:id="@+id/settingsFragment"
         android:name="app.com.thecentaurusmall.others.SettingsFragment"
         android:label="settings_fragment"
-        tools:layout="@layout/settings_fragment" />
+        tools:layout="@layout/settings_fragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/accountFragment"
         android:name="app.com.thecentaurusmall.others.AccountFragment"
@@ -148,4 +152,9 @@
             android:name="EventObj"
             app:argType="app.com.thecentaurusmall.model.Event" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="app.com.thecentaurusmall.others.AboutUsFragment"
+        android:label="about_us_fragment"
+        tools:layout="@layout/about_us_fragment" />
 </navigation>

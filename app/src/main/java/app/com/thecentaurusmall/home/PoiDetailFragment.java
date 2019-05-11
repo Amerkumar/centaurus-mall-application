@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
 import app.com.thecentaurusmall.R;
@@ -46,12 +47,30 @@ public class PoiDetailFragment extends Fragment {
         PointOfInterest pointOfInterest = PoiDetailFragmentArgs.fromBundle(getArguments()).getPoiObject();
 
 //        mPoiDetailFragmentBinding.toolbarPoiDetail.setTitle("Lorem Ipsum");
-        mPoiDetailFragmentBinding.collapsingToolbarLayout.setTitle(pointOfInterest.getName());
-        mPoiDetailFragmentBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+        mPoiDetailFragmentBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
 //        mPoiDetailFragmentBinding.toolbarPoiDetail
 
+        mPoiDetailFragmentBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    mPoiDetailFragmentBinding.collapsingToolbarLayout.setTitle(pointOfInterest.getName());
+                    isShow = true;
+                } else if(isShow) {
+                    mPoiDetailFragmentBinding.collapsingToolbarLayout.setTitle(" ");
+                    //careful there should a space between double quote otherwise it wont work
+                    isShow = false;
+                }
+            }
+        });
+
 //        mPoiDetailFragmentBinding.appBarLayout.
-        mPoiDetailFragmentBinding.toolbarPoiDetail.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mPoiDetailFragmentBinding.toolbarPoiDetail.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white));
 
         mPoiDetailFragmentBinding.toolbarPoiDetail.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

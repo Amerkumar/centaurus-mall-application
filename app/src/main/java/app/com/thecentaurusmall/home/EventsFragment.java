@@ -34,6 +34,8 @@ public class EventsFragment extends Fragment {
     //    private ;
     private PagedList.Config mPagedListConfig;
     private EventsFragmentBinding mEventFragmentBinding;
+    private View mRooView;
+    private FirestorePagingAdapter<Event, EventViewHolder> mPagingAdapter;
 
     public interface Listener {
         void onEventItemClicked(Event eventModel);
@@ -45,8 +47,11 @@ public class EventsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mEventFragmentBinding = EventsFragmentBinding.inflate(inflater, container, false);
-        return mEventFragmentBinding.getRoot();
+        if (mRooView == null) {
+            mEventFragmentBinding = EventsFragmentBinding.inflate(inflater, container, false);
+            mRooView = mEventFragmentBinding.getRoot();
+        }
+        return mRooView;
     }
 
     @Override
@@ -54,68 +59,70 @@ public class EventsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
 
-        mPagedListConfig = new PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(3)
-                .setPageSize(3)
-                .build();
+        if (mPagingAdapter == null) {
+            mPagedListConfig = new PagedList.Config.Builder()
+                    .setEnablePlaceholders(false)
+                    .setInitialLoadSizeHint(3)
+                    .setPageSize(3)
+                    .build();
 
-        mEventFragmentBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mEventFragmentBinding.eventsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        FirestorePagingOptions<Event> options = new FirestorePagingOptions.Builder<Event>()
-                .setLifecycleOwner(EventsFragment.this)
-                .setQuery(mViewModel.getNextWeekEvents(), mPagedListConfig, Event.class)
-                .build();
+            FirestorePagingOptions<Event> options = new FirestorePagingOptions.Builder<Event>()
+                    .setLifecycleOwner(EventsFragment.this)
+                    .setQuery(mViewModel.getNextWeekEvents(), mPagedListConfig, Event.class)
+                    .build();
 
-        setUpAdapter(options);
+            setUpAdapter(options);
 
 
-        // The options for the adapter combine the paging configuration with query information
-        // and application-specific options for lifecycle, etc.
+            // The options for the adapter combine the paging configuration with query information
+            // and application-specific options for lifecycle, etc.
 
-        mEventFragmentBinding.datesChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(ChipGroup chipGroup, int i) {
+            mEventFragmentBinding.datesChipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(ChipGroup chipGroup, int i) {
 //                Log.d("Chip group listener", String.valueOf(chipGroup.getCheckedChipId()) + i);
-                String message = null;
-                int id = chipGroup.getCheckedChipId();
-                Query baseQuery = null;
-                switch (id % 5) {
-                    case 1:
-                        message = "Last Month";
-                        baseQuery = mViewModel.geLastMonthEvents();
-                        break;
-                    case 2:
-                        message = "Last Week";
-                        baseQuery = mViewModel.getLastWeekEvents();
-                        break;
-                    case 3:
-                        message = "Today";
-                        baseQuery = mViewModel.getTodayEvents();
-                        break;
-                    case 4:
-                        message = "Next Week";
-                        baseQuery = mViewModel.getNextWeekEvents();
-                        break;
-                    case 0:
-                        message = "Next Month";
-                        baseQuery = mViewModel.getNextMonthEvents();
-                        break;
-                    default:
-                        baseQuery = mViewModel.getNextWeekEvents();
-                        break;
+                    String message = null;
+                    int id = chipGroup.getCheckedChipId();
+                    Query baseQuery = null;
+                    switch (id % 5) {
+                        case 1:
+                            message = "Last Month";
+                            baseQuery = mViewModel.geLastMonthEvents();
+                            break;
+                        case 2:
+                            message = "Last Week";
+                            baseQuery = mViewModel.getLastWeekEvents();
+                            break;
+                        case 3:
+                            message = "Today";
+                            baseQuery = mViewModel.getTodayEvents();
+                            break;
+                        case 4:
+                            message = "Next Week";
+                            baseQuery = mViewModel.getNextWeekEvents();
+                            break;
+                        case 0:
+                            message = "Next Month";
+                            baseQuery = mViewModel.getNextMonthEvents();
+                            break;
+                        default:
+                            baseQuery = mViewModel.getNextWeekEvents();
+                            break;
+                    }
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    FirestorePagingOptions<Event> options = new FirestorePagingOptions.Builder<Event>()
+                            .setLifecycleOwner(EventsFragment.this)
+                            .setQuery(baseQuery, mPagedListConfig, Event.class)
+                            .build();
+
+                    setUpAdapter(options);
+
                 }
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                FirestorePagingOptions<Event> options = new FirestorePagingOptions.Builder<Event>()
-                        .setLifecycleOwner(EventsFragment.this)
-                        .setQuery(baseQuery, mPagedListConfig, Event.class)
-                        .build();
+            });
 
-                setUpAdapter(options);
-
-            }
-        });
-
+        }
     }
 
 
@@ -130,7 +137,7 @@ public class EventsFragment extends Fragment {
                 Navigation.findNavController(mEventFragmentBinding.getRoot()).navigate(actionHomeViewPagerFragmentToEventDetailFragment);
             }
         };
-        FirestorePagingAdapter<Event, EventViewHolder> mPagingAdapter =
+        mPagingAdapter =
                 new FirestorePagingAdapter<Event, EventViewHolder>(options) {
                     @NonNull
                     @Override

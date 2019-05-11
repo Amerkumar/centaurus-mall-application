@@ -53,7 +53,7 @@ public class othersOptionsFragment extends Fragment {
         });
 //        mOthersOptionsFragmentBinding.home.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.homeViewPagerFragment));
         mOthersOptionsFragmentBinding.services.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.servicesFragment));
-        mOthersOptionsFragmentBinding.account.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.accountFragment));
+//        mOthersOptionsFragmentBinding.account.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.accountFragment));
         mOthersOptionsFragmentBinding.settings.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.settingsFragment));
 //        remove account item if the users is not logged in.
 

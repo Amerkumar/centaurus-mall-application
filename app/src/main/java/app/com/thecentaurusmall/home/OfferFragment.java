@@ -33,6 +33,8 @@ public class OfferFragment extends Fragment {
 
     private OfferFragmentBinding mOfferFragmentBinding;
     private OfferViewModel mViewModel;
+    private FirestorePagingAdapter<Offer, OfferViewHolder> adapter;
+    private View mRootView;
 
     public static OfferFragment newInstance() {
         return new OfferFragment();
@@ -46,8 +48,12 @@ public class OfferFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mOfferFragmentBinding = OfferFragmentBinding.inflate(inflater, container, false);
-        return mOfferFragmentBinding.getRoot();
+        if (mRootView == null) {
+            mOfferFragmentBinding = OfferFragmentBinding.inflate(inflater, container, false);
+            mRootView = mOfferFragmentBinding.getRoot();
+            mOfferFragmentBinding.getRoot();
+        }
+        return mRootView;
     }
 
     @Override
@@ -57,9 +63,11 @@ public class OfferFragment extends Fragment {
 //        mOffersAdapter = new OffersAdapter(getContext());
 
 //        mViewModel.addDummyOffers();
-        mOfferFragmentBinding.offerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        setUpAdapter();
+        if (adapter == null){
+            mOfferFragmentBinding.offerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            setUpAdapter();
+        }
 
     }
 
@@ -102,7 +110,7 @@ public class OfferFragment extends Fragment {
                 .build();
 
 
-        FirestorePagingAdapter<Offer, OfferViewHolder> adapter =
+        adapter =
                 new FirestorePagingAdapter<Offer, OfferViewHolder>(options) {
 
 

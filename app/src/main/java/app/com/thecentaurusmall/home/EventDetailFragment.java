@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
 import app.com.thecentaurusmall.R;
@@ -66,6 +67,39 @@ public class EventDetailFragment extends Fragment {
 //                Navigation.findNavController(v).navigateUp();
 //            }
 //        });
+
+
+        mFragmentEventDetailBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
+//        mPoiDetailFragmentBinding.toolbarPoiDetail
+
+        mFragmentEventDetailBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    mFragmentEventDetailBinding.collapsingToolbarLayout.setTitle(event.getName());
+                    isShow = true;
+                } else if(isShow) {
+                    mFragmentEventDetailBinding.collapsingToolbarLayout.setTitle(" ");
+                    //careful there should a space between double quote otherwise it wont work
+                    isShow = false;
+                }
+            }
+        });
+
+
+        mFragmentEventDetailBinding.toolbarOfferDetail.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white));
+
+        mFragmentEventDetailBinding.toolbarOfferDetail.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigateUp();
+            }
+        });
 
 
         String url = null;

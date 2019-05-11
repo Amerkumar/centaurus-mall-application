@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
 
 import app.com.thecentaurusmall.R;
@@ -51,8 +52,28 @@ public class OfferDetailFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Offer offer = OfferDetailFragmentArgs.fromBundle(getArguments()).getOfferObj();
 
-        mFragmentOfferDetailBinding.collapsingToolbarLayout.setTitle(offer.getName());
-        mFragmentOfferDetailBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+
+        mFragmentOfferDetailBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
+//        mPoiDetailFragmentBinding.toolbarPoiDetail
+
+        mFragmentOfferDetailBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + i == 0) {
+                    mFragmentOfferDetailBinding.collapsingToolbarLayout.setTitle(offer.getName());
+                    isShow = true;
+                } else if(isShow) {
+                    mFragmentOfferDetailBinding.collapsingToolbarLayout.setTitle(" ");
+                    //careful there should a space between double quote otherwise it wont work
+                    isShow = false;
+                }
+            }
+        });
 //        mPoiDetailFragmentBinding.toolbarPoiDetail
 
 //        mPoiDetailFragmentBinding.appBarLayout.

@@ -67,19 +67,19 @@
             <!--/>-->
 
 
-        <TextView
-            android:id="@+id/account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Account"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
-            android:textAlignment="center"
-            android:padding="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/account"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Account"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:padding="16dp"-->
+            <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--/>-->
 
 
         <TextView

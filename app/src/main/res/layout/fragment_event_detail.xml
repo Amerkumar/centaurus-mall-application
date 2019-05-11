@@ -34,12 +34,14 @@
                 <!--android:layout_height="fill_parent"-->
                 <!--android:background="@android:color/holo_green_dark" />-->
 
-                <!--<androidx.appcompat.widget.Toolbar-->
-                    <!--android:id="@+id/toolbar_offer_detail"-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="?attr/actionBarSize"-->
-                    <!--app:layout_collapseMode="pin"-->
-                    <!--app:popupTheme="@style/Widget.Design.CollapsingToolbar" />-->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_offer_detail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    android:background="@android:color/black"
+                    android:alpha="0.5"
+                    app:popupTheme="@style/Widget.Design.CollapsingToolbar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 

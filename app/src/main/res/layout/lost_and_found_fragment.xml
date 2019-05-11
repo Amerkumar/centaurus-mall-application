@@ -41,8 +41,8 @@
                     android:id="@+id/toolbar_services"
                     android:layout_width="fill_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    android:alpha="0.8"
+                    android:background="@android:color/black"
+                    android:alpha="0.5"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Widget.Design.CollapsingToolbar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -64,10 +64,26 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Lost and Found"
-                    android:textSize="24sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/spacing_large"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:text="Lost something in the mall?"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginRight="@dimen/spacing_large"
+                    android:text="Let the mall team help you. Contact Reception for further information."
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@color/colorPrimaryText"
                     />
+
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
