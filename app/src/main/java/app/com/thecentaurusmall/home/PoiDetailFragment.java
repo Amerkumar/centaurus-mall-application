@@ -10,17 +10,22 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.picasso.Picasso;
+
 import app.com.thecentaurusmall.R;
+import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.databinding.PoiDetailFragmentBinding;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class PoiDetailFragment extends Fragment {
 
-    private PoiDetailViewModel mViewModel;
+    private static final String VENUE_ID = "SZfhUYddmjU6nJoX3PqC";
+    private static String DEALS_FOLDER = "deals_thumbnails";
     private PoiDetailFragmentBinding mPoiDetailFragmentBinding;
 
     public static PoiDetailFragment newInstance() {
@@ -56,11 +61,26 @@ public class PoiDetailFragment extends Fragment {
         });
 
 
+        String url = null;
+        if (pointOfInterest.getUrl() != null) {
+            String token = Utils.getTokenByDensity(pointOfInterest.getUrl(), Utils.getDensityName(getContext()));
+            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, pointOfInterest.getName(),
+                    Utils.getDensityName(getContext()), token);
+
+            Log.d("Poi Detail", url);
+            Picasso.get()
+                    .load(url)
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error_placeholder)
+                    .into(mPoiDetailFragmentBinding.image);
+        }
+
+
+
         mPoiDetailFragmentBinding.categoryTextViewPoi.setText(pointOfInterest.getCategory());
         mPoiDetailFragmentBinding.titleTextViewPoi.setText(pointOfInterest.getName());
         mPoiDetailFragmentBinding.contentTextViewPoi.setText(pointOfInterest.getDescription());
 
-        mViewModel = ViewModelProviders.of(this).get(PoiDetailViewModel.class);
         // TODO: Use the ViewModel
     }
 

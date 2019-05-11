@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -25,6 +26,7 @@ import app.com.thecentaurusmall.databinding.EventItemBinding;
 import app.com.thecentaurusmall.databinding.EventsFragmentBinding;
 import app.com.thecentaurusmall.home.viewmodels.EventsViewModel;
 import app.com.thecentaurusmall.model.Event;
+import app.com.thecentaurusmall.model.Offer;
 
 public class EventsFragment extends Fragment {
 
@@ -33,6 +35,9 @@ public class EventsFragment extends Fragment {
     private PagedList.Config mPagedListConfig;
     private EventsFragmentBinding mEventFragmentBinding;
 
+    public interface Listener {
+        void onEventItemClicked(Event eventModel);
+    }
     public static EventsFragment newInstance() {
         return new EventsFragment();
     }
@@ -75,7 +80,7 @@ public class EventsFragment extends Fragment {
                 String message = null;
                 int id = chipGroup.getCheckedChipId();
                 Query baseQuery = null;
-                switch (id % 6) {
+                switch (id % 5) {
                     case 1:
                         message = "Last Month";
                         baseQuery = mViewModel.geLastMonthEvents();
@@ -92,7 +97,7 @@ public class EventsFragment extends Fragment {
                         message = "Next Week";
                         baseQuery = mViewModel.getNextWeekEvents();
                         break;
-                    case 5:
+                    case 0:
                         message = "Next Month";
                         baseQuery = mViewModel.getNextMonthEvents();
                         break;
@@ -117,6 +122,14 @@ public class EventsFragment extends Fragment {
     private void setUpAdapter(FirestorePagingOptions<Event> options) {
 
 
+        Listener onEventItemClick = new Listener() {
+            @Override
+            public void onEventItemClicked(Event eventModel) {
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToEventDetailFragment actionHomeViewPagerFragmentToEventDetailFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToEventDetailFragment(eventModel);
+                Navigation.findNavController(mEventFragmentBinding.getRoot()).navigate(actionHomeViewPagerFragmentToEventDetailFragment);
+            }
+        };
         FirestorePagingAdapter<Event, EventViewHolder> mPagingAdapter =
                 new FirestorePagingAdapter<Event, EventViewHolder>(options) {
                     @NonNull
@@ -125,7 +138,7 @@ public class EventsFragment extends Fragment {
                                                               int viewType) {
                         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
                         final EventItemBinding binding = EventItemBinding.inflate(layoutInflater, parent, false);
-                        return new EventViewHolder(getContext(), binding);
+                        return new EventViewHolder(getContext(), binding, onEventItemClick);
                     }
 
                     @Override

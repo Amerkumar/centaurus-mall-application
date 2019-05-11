@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -31,9 +32,10 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
     private final OfferItemBinding mBinding;
 
 
-    public OfferViewHolder(Context context, OfferItemBinding binding) {
+    public OfferViewHolder(Context context, OfferItemBinding binding, OfferFragment.Listener onOfferItemClickedListener) {
         super(binding.getRoot());
         mContext = context;
+        binding.setListener(onOfferItemClickedListener);
 //        binding.setListener(listener);
         mBinding = binding;
     }
@@ -52,12 +54,16 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
         Log.d("Url", url);
         Picasso.get()
                 .load(url)
-                .placeholder(R.drawable.logo_mapin)
+                .placeholder(R.drawable.loading)
                 .error(R.drawable.error_placeholder)
                 .into(mBinding.offerImageView);
 
         mBinding.daysLeftTextView.setText(String.format("Only %d Days left!", getNumberOfDaysLeft(item.getEnd_date().toDate().toString())));
+
+//        ViewCompat.setTransitionName(mBinding.offerImageView, item.getId());
+
     }
+
 
 
     private long getNumberOfDaysLeft(String endDate) {

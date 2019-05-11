@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="listener"
+            type="app.com.thecentaurusmall.home.OfferFragment.Listener" />
+
+        <variable
             name="model"
             type="app.com.thecentaurusmall.model.Offer" />
 
@@ -15,7 +19,8 @@
         android:layout_height="150dp"
         android:layout_margin="8dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp">
+        app:cardElevation="8dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +28,9 @@
             android:background="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:onClick="@{view -> listener.onOfferItemClicked(model)}"
+            >
 
             <ImageView
                 android:id="@+id/offer_image_view"

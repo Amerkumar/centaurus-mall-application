@@ -4,22 +4,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.FragmentNavigator;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.Query;
 
+import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.databinding.OfferFragmentBinding;
 import app.com.thecentaurusmall.databinding.OfferItemBinding;
 import app.com.thecentaurusmall.home.viewmodels.OfferViewModel;
+import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.Offer;
 
 public class OfferFragment extends Fragment {
@@ -29,6 +36,11 @@ public class OfferFragment extends Fragment {
 
     public static OfferFragment newInstance() {
         return new OfferFragment();
+    }
+
+
+    public interface Listener {
+        void onOfferItemClicked(Offer offerModel);
     }
 
     @Override
@@ -61,6 +73,27 @@ public class OfferFragment extends Fragment {
                 .build();
 
 
+//        FragmentNavigator.Extras extras = new FragmentNavigator.Extras.Builder()
+//                .addSharedElement(, "header_image")
+//                .build();
+//        Navigation.findNavController(view).navigate(R.id.details,
+//                null, // Bundle of args
+//                null, // NavOptions
+//                extras);
+
+        Listener onOfferItemClickedListener = new Listener() {
+            @Override
+            public void onOfferItemClicked(Offer offerModel) {
+
+//                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
+//                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment();
+                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
+                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment(offerModel);
+                Navigation.findNavController(mOfferFragmentBinding.getRoot()).navigate(actionHomeViewPagerFragmentToOfferDetailFragment);
+            }
+        };
+
+
         // The options for the adapter combine the paging configuration with query information
         // and application-specific options for lifecycle, etc.
         FirestorePagingOptions<Offer> options = new FirestorePagingOptions.Builder<Offer>()
@@ -71,6 +104,8 @@ public class OfferFragment extends Fragment {
 
         FirestorePagingAdapter<Offer, OfferViewHolder> adapter =
                 new FirestorePagingAdapter<Offer, OfferViewHolder>(options) {
+
+
                     @NonNull
                     @Override
                     public OfferViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
@@ -79,7 +114,7 @@ public class OfferFragment extends Fragment {
                         final OfferItemBinding binding = OfferItemBinding.inflate(layoutInflater, parent, false);
 //        return new CategoryViewHolder(mContext,binding, mCategoryListener);
 //        View view = layoutInflater.inflate(R.layout.offer_item, parent, false);
-                        return new OfferViewHolder(getContext(), binding);
+                        return new OfferViewHolder(getContext(), binding, onOfferItemClickedListener);
                     }
 
                     @Override
@@ -88,6 +123,7 @@ public class OfferFragment extends Fragment {
                                                     @NonNull Offer model) {
 
                         holder.performBind(model);
+
                     }
 
                     @Override

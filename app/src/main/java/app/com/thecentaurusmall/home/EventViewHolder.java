@@ -31,9 +31,11 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
     private final EventItemBinding mBinding;
 
 
-    public EventViewHolder(Context context, EventItemBinding binding) {
+    public EventViewHolder(Context context, EventItemBinding binding, EventsFragment.Listener onEventItemClick) {
         super(binding.getRoot());
         mContext = context;
+
+        binding.setListener(onEventItemClick);
 //        binding.setListener(listener);
         mBinding = binding;
     }
@@ -51,15 +53,13 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         Log.d("Events", url);
         Picasso.get()
                 .load(url)
-                .placeholder(R.drawable.error_placeholder)
-                .error(R.drawable.logo_mapin)
+                .placeholder(R.drawable.loading_white)
+                .error(R.drawable.error_placeholder)
                 .into(mBinding.eventImageView);
 
 
-        String pattern = "dd MMM yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        mBinding.datesRange.setText(simpleDateFormat.format(item.getStart_date().toDate()) + " - " + simpleDateFormat.format(item.getEnd_date().toDate()));
+        mBinding.datesRange.setText(Utils.timestampToSimpleDateFormat(item.getStart_date().toDate())
+                + " - " + Utils.timestampToSimpleDateFormat(item.getEnd_date().toDate()));
 
     }
 

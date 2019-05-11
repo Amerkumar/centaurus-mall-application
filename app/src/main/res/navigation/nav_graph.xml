@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_homeViewPagerFragment_to_directoryListFragment"
             app:destination="@id/directoryListFragment" />
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_offerDetailFragment"
+            app:destination="@id/offerDetailFragment" />
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/indoorMapFragment"
@@ -125,4 +131,21 @@
         android:name="app.com.thecentaurusmall.others.MallInfoFragment"
         android:label="mall_info_fragment"
         tools:layout="@layout/mall_info_fragment" />
+    <fragment
+        android:id="@+id/offerDetailFragment"
+        android:name="app.com.thecentaurusmall.home.OfferDetailFragment"
+        android:label="fragment_offer_detail"
+        tools:layout="@layout/fragment_offer_detail" >
+        <argument
+            android:name="OfferObj"
+            app:argType="app.com.thecentaurusmall.model.Offer" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="app.com.thecentaurusmall.home.EventDetailFragment"
+        android:label="EventDetailFragment" >
+        <argument
+            android:name="EventObj"
+            app:argType="app.com.thecentaurusmall.model.Event" />
+    </fragment>
 </navigation>

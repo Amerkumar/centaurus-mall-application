@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -118,5 +119,12 @@ public class Utils {
         c.add(Calendar.DATE, days);
         dt = c.getTime();
         return dt;
+    }
+
+    public static String timestampToSimpleDateFormat(Date date) {
+        String pattern = "dd MMM yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String format = simpleDateFormat.format(date);
+        return format;
     }
 }

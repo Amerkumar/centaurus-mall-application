@@ -99,6 +99,8 @@ dependencies {
 
     implementation 'com.github.nikartm:image-support:1.0.5'
 
+//    implementation "com.github.lion4ik:arch-navigation-shared-elements:0.1"
+
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

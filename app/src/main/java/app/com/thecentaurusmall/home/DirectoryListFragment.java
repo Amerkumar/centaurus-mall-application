@@ -179,13 +179,13 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
         mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         mAnimator.start();
 
-        mDirectoryListFragmentBinding.poiRecyclerView.animate().alpha(0.5f);
+        mDirectoryListFragmentBinding.poiRecyclerView.setAlpha(0.5f);
     }
 
     @Override
     public void onEditFinished() {
         mDirectoryListFragmentBinding.poiRecyclerView.scrollToPosition(0);
-        mDirectoryListFragmentBinding.poiRecyclerView.animate().alpha(1.0f);
+        mDirectoryListFragmentBinding.poiRecyclerView.setAlpha(1.0f);
 
         if (mAnimator != null) {
             mAnimator.cancel();

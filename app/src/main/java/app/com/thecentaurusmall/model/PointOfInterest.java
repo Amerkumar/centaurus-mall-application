@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.HashMap;
+
 import app.com.thecentaurusmall.Utils.Utils;
 
 public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable {
@@ -21,10 +23,12 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
     private long floor_num;
     private String directory_tag;
     private String description;
+    private HashMap<String, String> url;
 
 
     public PointOfInterest(int rank, String id, String name, String category,
-                           LatLng _geoloc, long floor_num, String directory_tag, String description) {
+                           LatLng _geoloc, long floor_num, String directory_tag, String description,
+                           HashMap<String,String> url) {
         this.rank = rank;
         this.id = id;
         this.name = name;
@@ -33,6 +37,7 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
         this.floor_num = floor_num;
         this.directory_tag = directory_tag;
         this.description = description;
+        this.url = url;
     }
 
     public String getId() {
@@ -72,6 +77,9 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
         return description;
     }
 
+    public HashMap<String, String> getUrl() {
+        return url;
+    }
 
     @Override
     public <T> boolean isSameModelAs(T item) {
@@ -103,6 +111,7 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
         floor_num = in.readLong();
         directory_tag = in.readString();
         description = in.readString();
+        url = in.readHashMap(HashMap.class.getClassLoader());
     }
 
     @Override
@@ -120,6 +129,7 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
         dest.writeLong(floor_num);
         dest.writeString(directory_tag);
         dest.writeString(description);
+        dest.writeMap(url);
     }
 
     @SuppressWarnings("unused")
@@ -134,4 +144,5 @@ public class PointOfInterest implements SortedListAdapter.ViewModel, Parcelable 
             return new PointOfInterest[size];
         }
     };
+
 }

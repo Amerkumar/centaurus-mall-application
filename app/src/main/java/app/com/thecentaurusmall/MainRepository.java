@@ -81,6 +81,11 @@ public class MainRepository {
 
                             HashMap<String, Double> geoPoint = (HashMap<String, Double>) documentSnapshot.get("_geoloc");
                             LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
+                            HashMap<String, String> url;
+                            if (documentSnapshot.contains("url"))
+                                url = (HashMap<String, String>) documentSnapshot.get("url");
+                            else
+                                url = null;
                             PointOfInterest pointOfInterest = new PointOfInterest(
                                     rank, documentSnapshot.getId(),
                                     documentSnapshot.getString("name"),
@@ -88,7 +93,8 @@ public class MainRepository {
                                     latLng,
                                     (Long) documentSnapshot.get("floor_num"),
                                     documentSnapshot.getString("directory_tag"),
-                                    documentSnapshot.getString("description")
+                                    documentSnapshot.getString("description"),
+                                    url
                             );
                             pointOfInterests.add(pointOfInterest);
 
@@ -153,6 +159,11 @@ public class MainRepository {
 
                             HashMap<String, Double> geoPoint = (HashMap<String, Double>) documentSnapshot.get("_geoloc");
                             LatLng latLng = new LatLng(geoPoint.get("lat"), geoPoint.get("lng"));
+                            HashMap<String, String> url;
+                            if (documentSnapshot.contains("url"))
+                                 url = (HashMap<String, String>) documentSnapshot.get("url");
+                            else
+                                url = null;
                             PointOfInterest pointOfInterest = new PointOfInterest(
                                     rank, documentSnapshot.getId(),
                                     documentSnapshot.getString("name"),
@@ -160,7 +171,8 @@ public class MainRepository {
                                     latLng,
                                     (Long) documentSnapshot.get("floor_num"),
                                     documentSnapshot.getString("directory_tag"),
-                                    documentSnapshot.getString("description")
+                                    documentSnapshot.getString("description"),
+                                    url
                             );
                             pointOfInterests.add(pointOfInterest);
 

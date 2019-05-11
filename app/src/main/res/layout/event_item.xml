@@ -4,6 +4,11 @@
 
     <data>
 
+
+        <variable
+            name="listener"
+            type="app.com.thecentaurusmall.home.EventsFragment.Listener" />
+
         <variable
             name="model"
             type="app.com.thecentaurusmall.model.Event" />
@@ -25,8 +30,10 @@
             android:background="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{view -> listener.onEventItemClicked(model)}"
             android:scaleType="centerCrop"
-            android:src="@drawable/trophy" />
+            android:src="@drawable/trophy"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
