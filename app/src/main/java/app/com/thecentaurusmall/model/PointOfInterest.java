@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 

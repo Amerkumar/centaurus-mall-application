@@ -16,10 +16,11 @@ public class Event implements Parcelable {
     private Timestamp start_date;
     private Timestamp end_date;
     private LatLng _geoloc;
+    private long floor;
     private HashMap<String, String> url;
 
 
-    public Event(String name, String host, String category, String description, Timestamp start_date, Timestamp end_date, LatLng _geoloc, HashMap<String, String> url) {
+    public Event(String name, String host, String category, String description, Timestamp start_date, Timestamp end_date, LatLng _geoloc, long floor, HashMap<String, String> url) {
         this.name = name;
         this.host = host;
         this.category = category;
@@ -27,8 +28,10 @@ public class Event implements Parcelable {
         this.start_date = start_date;
         this.end_date = end_date;
         this._geoloc = _geoloc;
+        this.floor = floor;
         this.url = url;
     }
+
 
     public Event() {
     }
@@ -73,6 +76,7 @@ public class Event implements Parcelable {
         start_date = (Timestamp) in.readValue(Timestamp.class.getClassLoader());
         end_date = (Timestamp) in.readValue(Timestamp.class.getClassLoader());
         _geoloc = (LatLng) in.readValue(LatLng.class.getClassLoader());
+        floor = in.readLong();
         url = (HashMap) in.readValue(HashMap.class.getClassLoader());
     }
 
@@ -90,6 +94,7 @@ public class Event implements Parcelable {
         dest.writeValue(start_date);
         dest.writeValue(end_date);
         dest.writeValue(_geoloc);
+        dest.writeLong(floor);
         dest.writeValue(url);
     }
 
@@ -105,4 +110,12 @@ public class Event implements Parcelable {
             return new Event[size];
         }
     };
+
+    public long getFloor() {
+        return floor;
+    }
+
+    public void setFloor(long floor) {
+        this.floor = floor;
+    }
 }

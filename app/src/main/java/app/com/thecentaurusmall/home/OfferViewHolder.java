@@ -58,7 +58,8 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
                 .error(R.drawable.error_placeholder)
                 .into(mBinding.offerImageView);
 
-        mBinding.daysLeftTextView.setText(String.format("Only %d Days left!", getNumberOfDaysLeft(item.getEnd_date().toDate().toString())));
+        mBinding.daysLeftTextView.setText(String.format("Only %d Days left!",
+                Utils.numberOfDaysBetweenTwoDates(item.getEnd_date().toDate())));
 
 //        ViewCompat.setTransitionName(mBinding.offerImageView, item.getId());
 

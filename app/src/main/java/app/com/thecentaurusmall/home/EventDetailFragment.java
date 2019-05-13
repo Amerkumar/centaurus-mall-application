@@ -15,11 +15,9 @@ import com.squareup.picasso.Picasso;
 
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
-import app.com.thecentaurusmall.databinding.EventsFragmentBinding;
 import app.com.thecentaurusmall.databinding.FragmentEventDetailBinding;
-import app.com.thecentaurusmall.databinding.FragmentOfferDetailBinding;
 import app.com.thecentaurusmall.model.Event;
-import app.com.thecentaurusmall.model.Offer;
+import app.com.thecentaurusmall.model.PointOfInterest;
 
 
 public class EventDetailFragment extends Fragment {
@@ -123,6 +121,19 @@ public class EventDetailFragment extends Fragment {
         mFragmentEventDetailBinding.datesTextViewEvent.setText(Utils.timestampToSimpleDateFormat(event.getStart_date().toDate()) + " - " +
                 Utils.timestampToSimpleDateFormat(event.getEnd_date().toDate()));
         mFragmentEventDetailBinding.contentTextViewEvent.setText(event.getDescription());
+
+        mFragmentEventDetailBinding.fabTakeMeThere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventDetailFragmentDirections.ActionEventDetailFragmentToIndoorMapFragment actionEventDetailFragmentToIndoorMapFragment =
+                        EventDetailFragmentDirections.actionEventDetailFragmentToIndoorMapFragment();
+                PointOfInterest pointOfInterest = new PointOfInterest(0, event.getName(), event.getHost(),
+                        event.getCategory(), event.get_geoloc(), event.getFloor(), null,
+                        event.getDescription(), event.getUrl());
+                actionEventDetailFragmentToIndoorMapFragment.setPointOfInterestObject(pointOfInterest);
+                Navigation.findNavController(v).navigate(actionEventDetailFragmentToIndoorMapFragment);
+            }
+        });
 
     }
 }

@@ -116,7 +116,7 @@ public class DirectoryFragment extends Fragment implements
         mFeaturedSlider = (SliderLayout) view.findViewById(R.id.slider);
 
         HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://static2.hypable.com/wp-content/uploads/2013/12/hannibal-season-2-release-date.jpg");
+        url_maps.put("Hannibal", "http://assets1.ignimgs.com/2014/09/13/hannibal0117141280jpg-3a4be4_1280w.jpg");
         url_maps.put("Big Bang Theory", "https://media.comicbook.com/2017/04/big-bang-theory-cast-kaley-cuoco-jim-parsons-992959.png");
         url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
         url_maps.put("Game of Thrones", "https://ksassets.timeincuk.net/wp/uploads/sites/55/2017/08/2017_GameOfThrones_HBO_220817-920x584.jpg");

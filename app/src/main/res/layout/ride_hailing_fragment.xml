@@ -41,8 +41,8 @@
                     android:id="@+id/toolbar_services"
                     android:layout_width="fill_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    android:alpha="0.8"
+                    android:background="@android:color/black"
+                    android:alpha="0.5"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Widget.Design.CollapsingToolbar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -62,12 +62,82 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Ride Hailing"
-                    android:textSize="24sp"
-                    />
+
+                <!-- Careem Text View -->
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/spacing_xxlarge"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingRight="@dimen/spacing_large"
+                    >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/careem"
+                        android:layout_gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="14"
+                        android:layout_height="wrap_content"
+                        android:text="Careem"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/colorPrimaryText"
+                        />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_navigate_next_black"
+                        />
+
+                </LinearLayout>
+
+                <!-- Uber Text View -->
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/spacing_xxlarge"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingRight="@dimen/spacing_large"
+                    >
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_uber"
+                        android:layout_gravity="center"
+                        />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="14"
+                        android:layout_height="wrap_content"
+                        android:text="Uber"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/colorPrimaryText"
+                        />
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_navigate_next_black"
+                        />
+
+                </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

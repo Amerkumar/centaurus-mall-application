@@ -1,32 +1,27 @@
 package app.com.thecentaurusmall.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.FragmentNavigator;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.Query;
 
-import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.databinding.OfferFragmentBinding;
 import app.com.thecentaurusmall.databinding.OfferItemBinding;
 import app.com.thecentaurusmall.home.viewmodels.OfferViewModel;
-import app.com.thecentaurusmall.model.Category;
 import app.com.thecentaurusmall.model.Offer;
 
 public class OfferFragment extends Fragment {
@@ -95,6 +90,7 @@ public class OfferFragment extends Fragment {
 
 //                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
 //                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment();
+                Log.d("Offer Fragment", String.valueOf(offerModel.get_geoloc().getLat()));
                 HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
                         HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment(offerModel);
                 Navigation.findNavController(mOfferFragmentBinding.getRoot()).navigate(actionHomeViewPagerFragmentToOfferDetailFragment);

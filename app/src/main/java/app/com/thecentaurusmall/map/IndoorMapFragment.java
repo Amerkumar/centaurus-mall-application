@@ -312,7 +312,8 @@ public class IndoorMapFragment extends Fragment implements
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
-        // TODO: Use the ViewModel
+
+
 
 //        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
@@ -341,6 +342,8 @@ public class IndoorMapFragment extends Fragment implements
                 mSelectedPoi = pointOfInterest;
             }
         });
+
+
 
         //            Point of Interest Search Bar TextView
         mIndoorMapFragmentBinding
@@ -471,6 +474,13 @@ public class IndoorMapFragment extends Fragment implements
         );
 //        mMap.addMarker(new MarkerOptions().position(centaurus).title("The Centaurus Mall"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centaurus, 16.0f));
+
+        PointOfInterest pointOfInterestDestination = IndoorMapFragmentArgs.fromBundle(getArguments()).getPointOfInterestObject();
+        if (pointOfInterestDestination != null) {
+            mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterestDestination.getName());
+            mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
+            onPoiClick(pointOfInterestDestination);
+        }
     }
 
 
@@ -499,6 +509,7 @@ public class IndoorMapFragment extends Fragment implements
 //        ((MainActivity) getActivity()).hideToolbar();
         mapView.onResume();
         startLocationUpdates();
+
 
     }
 
@@ -817,8 +828,8 @@ public class IndoorMapFragment extends Fragment implements
 //            } else {
 //                mDestinationMarker.setPosition(point);
 //            }
-//            Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLatitude() + ", " +
-//                    mWayfindingDestination.getLongitude() + "), floor=" +
+//            Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLat() + ", " +
+//                    mWayfindingDestination.getLng() + "), floor=" +
 //                    mWayfindingDestination.getFloor());
 //        }
 //    }
@@ -890,18 +901,19 @@ public class IndoorMapFragment extends Fragment implements
 
             mWayfindingDestination = new IAWayfindingRequest.Builder()
                     .withFloor((int) point.getFloor_num())
-                    .withLatitude(point.get_geoloc().latitude)
-                    .withLongitude(point.get_geoloc().longitude)
+                    .withLatitude(point.get_geoloc().getLat())
+                    .withLongitude(point.get_geoloc().getLng())
                     .build();
 
             mIALocationManager.requestWayfindingUpdates(mWayfindingDestination, mWayfindingListener);
 
             if (mDestinationMarker == null) {
                 mDestinationMarker = mMap.addMarker(new MarkerOptions()
-                        .position(point.get_geoloc())
+                        .position(new LatLng(point.get_geoloc().getLat(), point.get_geoloc().getLng()))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             } else {
-                mDestinationMarker.setPosition(point.get_geoloc());
+                mDestinationMarker
+                        .setPosition(new LatLng(point.get_geoloc().getLat(), point.get_geoloc().getLng()));
             }
             Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLatitude() + ", " +
                     mWayfindingDestination.getLongitude() + "), floor=" +

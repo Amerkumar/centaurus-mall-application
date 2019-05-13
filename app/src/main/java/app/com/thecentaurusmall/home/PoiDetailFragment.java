@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.databinding.PoiDetailFragmentBinding;
+import app.com.thecentaurusmall.map.IndoorMapFragmentDirections;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
 public class PoiDetailFragment extends Fragment {
@@ -99,6 +100,16 @@ public class PoiDetailFragment extends Fragment {
         mPoiDetailFragmentBinding.categoryTextViewPoi.setText(pointOfInterest.getCategory());
         mPoiDetailFragmentBinding.titleTextViewPoi.setText(pointOfInterest.getName());
         mPoiDetailFragmentBinding.contentTextViewPoi.setText(pointOfInterest.getDescription());
+
+        mPoiDetailFragmentBinding.fabTakeMeThere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PoiDetailFragmentDirections.ActionPoiDetailFragmentToIndoorMapFragment actionPoiDetailFragmentToIndoorMapFragment =
+                        PoiDetailFragmentDirections.actionPoiDetailFragmentToIndoorMapFragment();
+                actionPoiDetailFragmentToIndoorMapFragment.setPointOfInterestObject(pointOfInterest);
+                Navigation.findNavController(v).navigate(actionPoiDetailFragmentToIndoorMapFragment);
+            }
+        });
 
         // TODO: Use the ViewModel
     }

@@ -41,8 +41,8 @@
                     android:id="@+id/toolbar_services"
                     android:layout_width="fill_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    android:alpha="0.8"
+                    android:background="@android:color/black"
+                    android:alpha="0.5"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Widget.Design.CollapsingToolbar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>

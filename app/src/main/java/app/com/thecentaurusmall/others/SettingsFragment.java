@@ -34,6 +34,21 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+//        mSettingsFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigateUp();
+//            }
+//        });
+
+        mSettingsFragmentBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigateUp();
+            }
+        });
+
         mSettingsFragmentBinding.aboutDeveloperTeamContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

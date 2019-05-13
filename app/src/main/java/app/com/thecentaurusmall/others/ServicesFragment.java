@@ -1,5 +1,6 @@
 package app.com.thecentaurusmall.others;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +36,13 @@ public class ServicesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mServicesFragmentBinding.collapsingToolbarLayout.setTitle("Services at Centaurus Mall");
-        mServicesFragmentBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.black));
+        mServicesFragmentBinding.collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getResources().getColor(android.R.color.white)));
+
+        mServicesFragmentBinding.collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(android.R.color.white));
 //        mPoiDetailFragmentBinding.toolbarPoiDetail
 
 //        mPoiDetailFragmentBinding.appBarLayout.
-        mServicesFragmentBinding.toolbarServices.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
+        mServicesFragmentBinding.toolbarServices.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white));
 
         mServicesFragmentBinding.toolbarServices.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

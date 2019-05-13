@@ -6,14 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.ItemKeyedDataSource;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -21,23 +18,17 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
 
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.model.Category;
+import app.com.thecentaurusmall.model.LatLng;
 import app.com.thecentaurusmall.model.Offer;
 import app.com.thecentaurusmall.model.PointOfInterest;
 
@@ -289,8 +280,8 @@ public class MainRepository {
 
 
             app.com.thecentaurusmall.model.LatLng _geoloc = new app.com.thecentaurusmall.model.LatLng();
-            _geoloc.setLatitude(0.0);
-            _geoloc.setLongitude(0.0);
+            _geoloc.setLat(0.0);
+            _geoloc.setLng(0.0);
 
             Timestamp date = Timestamp.now();
 

@@ -17,4 +17,5 @@
 
   <color name="colorEventItemDate">#FF5722</color>
   <color name="colorOthersOptionsBackground">#333333</color>
+  <color name="colorLink">#0000EE</color>
 </resources>

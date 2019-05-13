@@ -19,6 +19,7 @@ import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.databinding.FragmentOfferDetailBinding;
 import app.com.thecentaurusmall.model.Offer;
+import app.com.thecentaurusmall.model.PointOfInterest;
 
 
 public class OfferDetailFragment extends Fragment {
@@ -107,6 +108,20 @@ public class OfferDetailFragment extends Fragment {
         mFragmentOfferDetailBinding.datesTextViewOffer.setText(Utils.timestampToSimpleDateFormat(offer.getStart_date().toDate()) +
                     " - " + Utils.timestampToSimpleDateFormat(offer.getEnd_date().toDate()));
         mFragmentOfferDetailBinding.contentTextViewOffer.setText(offer.getDescription());
+
+        mFragmentOfferDetailBinding.fabTakeMeThere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OfferDetailFragmentDirections.ActionOfferDetailFragmentToIndoorMapFragment actionOfferDetailFragmentToIndoorMapFragment =
+                        OfferDetailFragmentDirections.actionOfferDetailFragmentToIndoorMapFragment();
+                PointOfInterest pointOfInterest = new PointOfInterest(offer.getRank(), offer.getId(), offer.getName(),
+                        offer.getCategory(), offer.get_geoloc(), offer.getFloor_num(), null,
+                        offer.getDescription(), offer.getUrl());
+                actionOfferDetailFragmentToIndoorMapFragment.setPointOfInterestObject(pointOfInterest);
+
+                Navigation.findNavController(v).navigate(actionOfferDetailFragmentToIndoorMapFragment);
+            }
+        });
 
     }
 }

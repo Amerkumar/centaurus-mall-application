@@ -1,25 +1,30 @@
 package app.com.thecentaurusmall.model;
 
 public class LatLng {
-    private Double latitude;
-    private Double longitude;
+    private Double lat;
+    private Double lng;
 
     public LatLng() {}
 
-
-    public Double getLatitude() {
-        return latitude;
+    public LatLng(Double latitude, Double longitude) {
+        this.lat = latitude;
+        this.lng = longitude;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+
+    public Double getLat() {
+        return lat;
     }
 
-    public Double getLongitude() {
-        return longitude;
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 }

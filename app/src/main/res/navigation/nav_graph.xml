@@ -28,6 +28,11 @@
         <action
             android:id="@+id/action_indoorMapFragment_to_pointOfInterestFragment"
             app:destination="@id/pointOfInterestFragment" />
+        <argument
+            android:name="PointOfInterestObject"
+            app:argType="app.com.thecentaurusmall.model.PointOfInterest"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/parkingFragment"
@@ -62,6 +67,10 @@
         tools:layout="@layout/poi_detail_fragment" >
         <argument android:name="PoiObject"
             app:argType="app.com.thecentaurusmall.model.PointOfInterest" />
+        <action
+            android:id="@+id/action_poiDetailFragment_to_indoorMapFragment"
+            app:destination="@id/indoorMapFragment"
+            app:popUpTo="@+id/indoorMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/othersOptionsFragment"
@@ -143,6 +152,9 @@
         <argument
             android:name="OfferObj"
             app:argType="app.com.thecentaurusmall.model.Offer" />
+        <action
+            android:id="@+id/action_offerDetailFragment_to_indoorMapFragment"
+            app:destination="@id/indoorMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
@@ -151,6 +163,9 @@
         <argument
             android:name="EventObj"
             app:argType="app.com.thecentaurusmall.model.Event" />
+        <action
+            android:id="@+id/action_eventDetailFragment_to_indoorMapFragment"
+            app:destination="@id/indoorMapFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"

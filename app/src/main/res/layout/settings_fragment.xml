@@ -2,335 +2,360 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="none"
-        android:scrollingCache="true">
+        android:background="@android:color/white"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0.0dip">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="fill_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@android:color/white"
+                app:contentInsetStartWithNavigation="0.0dip"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:navigationIcon="@drawable/ic_back"
+                />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@android:color/white"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/spacing_large">
+            android:scrollbars="none"
+            android:scrollingCache="true">
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_large"
-                android:text="Settings"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@android:color/white"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/spacing_middle" />
 
-                <!-- Push Notifications -->
-                <LinearLayout
+                <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/spacing_middle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_large"
-                        android:layout_marginTop="@dimen/spacing_large"
-                        android:layout_marginBottom="@dimen/spacing_middle"
-                        android:text="Push Notifications"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.0"
-                            android:text="Deals &amp; Offers"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-
-                        <Switch
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            app:thumbTint="@color/colorAccent" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.0"
-                            android:text="Events"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-
-                        <Switch
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            app:thumbTint="@color/colorAccent" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.0"
-                            android:text="Occasional Promo"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-
-                        <Switch
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            app:thumbTint="@android:color/darker_gray" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
-
-                        <TextView
-                            android:layout_width="0.0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.0"
-                            android:text="Lost &amp; Found"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-
-                        <Switch
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            app:thumbTint="@color/colorAccent" />
-
-                        <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/spacing_middle" />
+                    android:layout_margin="@dimen/spacing_large"
+                    android:text="Settings"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/spacing_middle">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_large"
-                        android:layout_marginTop="@dimen/spacing_large"
-                        android:layout_marginBottom="@dimen/spacing_middle"
-                        android:text="More"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textStyle="bold" />
-
-                    <!--<LinearLayout-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="?selectableItemBackground"-->
-                    <!--android:clickable="true"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:minHeight="@dimen/spacing_xxlarge"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:paddingLeft="@dimen/spacing_large"-->
-                    <!--android:paddingRight="@dimen/spacing_large">-->
-
-                    <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="Ask a Question"-->
-                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-                    <!--android:textColor="@color/" />-->
-                    <!--</LinearLayout>-->
+                    android:orientation="vertical">
 
                     <View
                         android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
+                        android:layout_height="@dimen/spacing_middle" />
 
+                    <!-- Push Notifications -->
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/spacing_middle">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="F A Q"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
+                            android:layout_marginLeft="@dimen/spacing_large"
+                            android:layout_marginTop="@dimen/spacing_large"
+                            android:layout_marginBottom="@dimen/spacing_middle"
+                            android:text="Push Notifications"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:text="Deals &amp; Offers"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                app:thumbTint="@color/colorAccent" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:text="Events"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                app:thumbTint="@color/colorAccent" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:text="Occasional Promo"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="false"
+                                app:thumbTint="@android:color/darker_gray" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="0.0dip"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.0"
+                                android:text="Lost &amp; Found"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+
+                            <Switch
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="false"
+                                app:thumbTint="@color/colorAccent" />
+
+                            <View
+                                android:layout_width="@dimen/spacing_middle"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
+                        android:layout_height="@dimen/spacing_middle" />
 
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/spacing_middle">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Privacy Policy"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
-                    </LinearLayout>
+                            android:layout_marginLeft="@dimen/spacing_large"
+                            android:layout_marginTop="@dimen/spacing_large"
+                            android:layout_marginBottom="@dimen/spacing_middle"
+                            android:text="More"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textStyle="bold" />
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
+                        <!--<LinearLayout-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:background="?selectableItemBackground"-->
+                        <!--android:clickable="true"-->
+                        <!--android:gravity="center_vertical"-->
+                        <!--android:minHeight="@dimen/spacing_xxlarge"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:paddingLeft="@dimen/spacing_large"-->
+                        <!--android:paddingRight="@dimen/spacing_large">-->
 
-                    <LinearLayout
-                        android:id="@+id/about_developer_team_container"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:clickable="true"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/spacing_xxlarge"
-                        android:orientation="horizontal"
-                        android:paddingLeft="@dimen/spacing_large"
-                        android:paddingRight="@dimen/spacing_large">
+                        <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Ask a Question"-->
+                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+                        <!--android:textColor="@color/" />-->
+                        <!--</LinearLayout>-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="About Developer Team"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@android:color/darker_gray" />
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="F A Q"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Privacy Policy"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:id="@+id/about_developer_team_container"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?selectableItemBackground"
+                            android:clickable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xxlarge"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/spacing_large"
+                            android:paddingRight="@dimen/spacing_large">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="About Developer Team"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/darker_gray" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1.0px"
+                            android:background="@android:color/darker_gray" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="fill_parent"
-                        android:layout_height="1.0px"
-                        android:background="@android:color/darker_gray" />
+                        android:layout_height="@dimen/spacing_middle" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/spacing_middle" />
             </LinearLayout>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 </layout>

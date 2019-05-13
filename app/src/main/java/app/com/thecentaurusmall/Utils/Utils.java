@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
@@ -126,5 +128,23 @@ public class Utils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String format = simpleDateFormat.format(date);
         return format;
+    }
+
+    public static long numberOfDaysBetweenTwoDates(Date date) {
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+        String inputString1 = myFormat.format(new Date());
+        String inputString2 = myFormat.format(date);
+
+        long diff = 0;
+        try {
+            Date date1 = myFormat.parse(inputString1);
+            Date date2 = myFormat.parse(inputString2);
+            diff = date2.getTime() - date1.getTime();
+            System.out.println ("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 }

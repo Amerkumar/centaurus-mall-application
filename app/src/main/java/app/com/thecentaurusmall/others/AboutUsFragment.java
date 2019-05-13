@@ -8,10 +8,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import app.com.thecentaurusmall.R;
+import app.com.thecentaurusmall.databinding.AboutUsFragmentBinding;
 
 public class AboutUsFragment extends Fragment {
+
+    private AboutUsFragmentBinding mAboutUsFragmentBinding;
 
     public static AboutUsFragment newInstance() {
         return new AboutUsFragment();
@@ -20,12 +24,26 @@ public class AboutUsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.about_us_fragment, container, false);
+        mAboutUsFragmentBinding = AboutUsFragmentBinding.inflate(inflater, container, false);
+        return mAboutUsFragmentBinding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+//        mAboutUsFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Navigation.findNavController(v).navigateUp();
+//            }
+//        });
+        mAboutUsFragmentBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigateUp();
+            }
+        });
 
     }
 
