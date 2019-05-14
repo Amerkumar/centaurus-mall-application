@@ -12,13 +12,25 @@
         tools:layout="@layout/home_view_pager_fragment" >
         <action
             android:id="@+id/action_homeViewPagerFragment_to_directoryListFragment"
-            app:destination="@id/directoryListFragment" />
+            app:destination="@id/directoryListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_homeViewPagerFragment_to_offerDetailFragment"
-            app:destination="@id/offerDetailFragment" />
+            app:destination="@id/offerDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_homeViewPagerFragment_to_eventDetailFragment"
-            app:destination="@id/eventDetailFragment" />
+            app:destination="@id/eventDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/indoorMapFragment"
@@ -27,7 +39,11 @@
         tools:layout="@layout/indoor_map_fragment" >
         <action
             android:id="@+id/action_indoorMapFragment_to_pointOfInterestFragment"
-            app:destination="@id/pointOfInterestFragment" />
+            app:destination="@id/pointOfInterestFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="PointOfInterestObject"
             app:argType="app.com.thecentaurusmall.model.PointOfInterest"
@@ -58,7 +74,11 @@
             app:argType="string" />
         <action
             android:id="@+id/action_directoryListFragment_to_poiDetailFragment"
-            app:destination="@id/poiDetailFragment" />
+            app:destination="@id/poiDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/poiDetailFragment"
@@ -70,6 +90,10 @@
         <action
             android:id="@+id/action_poiDetailFragment_to_indoorMapFragment"
             app:destination="@id/indoorMapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
             app:popUpTo="@+id/indoorMapFragment" />
     </fragment>
     <fragment
@@ -80,17 +104,33 @@
         <action
             android:id="@+id/action_othersOptionsFragment_to_homeViewPagerFragment"
             app:destination="@id/homeViewPagerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
             app:popUpTo="@+id/homeViewPagerFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_othersOptionsFragment_to_servicesFragment"
-            app:destination="@id/servicesFragment" />
+            app:destination="@id/servicesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_othersOptionsFragment_to_accountFragment"
-            app:destination="@id/accountFragment" />
+            app:destination="@id/accountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_othersOptionsFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/servicesFragment"
@@ -99,16 +139,32 @@
         tools:layout="@layout/services_fragment" >
         <action
             android:id="@+id/action_servicesFragment_to_serviceDetailFragment"
-            app:destination="@id/serviceDetailFragment" />
+            app:destination="@id/serviceDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_servicesFragment_to_lostAndFoundFragment"
-            app:destination="@id/lostAndFoundFragment" />
+            app:destination="@id/lostAndFoundFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_servicesFragment_to_rideHailingFragment"
-            app:destination="@id/rideHailingFragment" />
+            app:destination="@id/rideHailingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_servicesFragment_to_mallInfoFragment"
-            app:destination="@id/mallInfoFragment" />
+            app:destination="@id/mallInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -117,7 +173,11 @@
         tools:layout="@layout/settings_fragment" >
         <action
             android:id="@+id/action_settingsFragment_to_aboutUsFragment"
-            app:destination="@id/aboutUsFragment" />
+            app:destination="@id/aboutUsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -154,7 +214,11 @@
             app:argType="app.com.thecentaurusmall.model.Offer" />
         <action
             android:id="@+id/action_offerDetailFragment_to_indoorMapFragment"
-            app:destination="@id/indoorMapFragment" />
+            app:destination="@id/indoorMapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
@@ -165,7 +229,11 @@
             app:argType="app.com.thecentaurusmall.model.Event" />
         <action
             android:id="@+id/action_eventDetailFragment_to_indoorMapFragment"
-            app:destination="@id/indoorMapFragment" />
+            app:destination="@id/indoorMapFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"

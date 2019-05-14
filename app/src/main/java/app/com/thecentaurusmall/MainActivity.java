@@ -7,12 +7,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -35,12 +39,20 @@ public class MainActivity extends AppCompatActivity implements
     private BottomNavigationView mBottomNavigationView;
     private AppBarLayout mAppBarLayout;
     private Toolbar mToolbar;
+    private NavOptions navOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        navOptions = new NavOptions.Builder()
+                .setEnterAnim(R.anim.fade_in)
+                .setExitAnim(R.anim.fade_out)
+                .setPopEnterAnim(R.anim.slide_in_left)
+                .setPopExitAnim(R.anim.slide_out_right)
+                .build();
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mAppBarLayout = findViewById(R.id.appBar);
@@ -62,6 +74,28 @@ public class MainActivity extends AppCompatActivity implements
 
         mNavController.addOnDestinationChangedListener(this);
 
+//        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//
+//                int id = menuItem.getItemId();
+//                switch (id) {
+//                    case R.id.home_nav_item:
+//                       mNavController.navigate(R.id.homeViewPagerFragment, null,navOptions);
+//                       break;
+//                    case R.id.indoor_nav_item:
+//                        mNavController.navigate(R.id.indoorMapFragment, null, navOptions);
+//                        break;
+//                    case R.id.parking_nav_item:
+//                        mNavController.navigate(R.id.parkingFragment, null, navOptions);
+//                        break;
+//                    case R.id.others_nav_item:
+//                        mNavController.navigate(R.id.othersOptionsFragment, null, navOptions);
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
     }
 
 
@@ -74,11 +108,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void hideBottomNavigationView() {
-        mBottomNavigationView.setVisibility(View.GONE);
+        hideView(mBottomNavigationView);
     }
 
+
     public void showBottomNavigationView() {
-        mBottomNavigationView.setVisibility(View.VISIBLE);
+        showView(mBottomNavigationView);
     }
 
     @Override
@@ -120,5 +155,37 @@ public class MainActivity extends AppCompatActivity implements
                 break;
 
         }
+    }
+
+
+    private void hideView(View view) {
+        view.animate()
+                .translationY(view.getHeight())
+                .alpha(0.0f)
+                .setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        view.setVisibility(View.GONE);
+                    }
+                });
+
+    }
+
+    private void showView (View view) {
+        view.setVisibility(View.VISIBLE);
+        view.animate()
+                .translationY(0)
+                .alpha(1.0f)
+                .setDuration(500)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                    }
+                });
+
     }
 }

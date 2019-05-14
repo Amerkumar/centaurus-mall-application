@@ -36,6 +36,8 @@ import app.com.thecentaurusmall.poi.PointOfInterestAdapter;
 
 public class PointOfInterestFragment extends Fragment implements SortedListAdapter.Callback {
 
+
+
     private PointOfInterestViewModel mViewModel;
     private PointOfInterestAdapter mPointOfInterestAdapter;
     private PointOfInterestFragmentBinding mPointOfInterestFragmentBinding;
@@ -80,6 +82,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
         mPointOfInterestAdapter = new PointOfInterestAdapter(getContext(), COMPARATOR_POI, poiModel -> {
 
             sharedViewModel.searchBarPoi(poiModel);
+//            sharedViewModel.setSelectedFieldPoiCode(IndoorMapFragment.);
             Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot()).navigateUp();
 //            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });
@@ -89,6 +92,8 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
         mPointOfInterestFragmentBinding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                sharedViewModel.setSelectedFieldPoiCode(SharedViewModel.TYPE_NONE);
                 Navigation.findNavController(v).navigateUp();
             }
         });

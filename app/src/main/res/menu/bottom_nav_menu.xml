@@ -14,11 +14,11 @@
         android:icon="@drawable/ic_parking_sign"
         android:title="Parking"
         />
-    <item
-        android:id="@+id/shareOnboardingFragment"
-        android:icon="@drawable/ic_share"
-        android:title="Share"
-        />
+    <!--<item-->
+        <!--android:id="@+id/shareOnboardingFragment"-->
+        <!--android:icon="@drawable/ic_share"-->
+        <!--android:title="Share"-->
+        <!--/>-->
     <item
         android:id="@+id/othersOptionsFragment"
         android:icon="@drawable/ic_unfold_more"

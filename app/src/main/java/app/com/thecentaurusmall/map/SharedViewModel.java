@@ -11,6 +11,7 @@ public class SharedViewModel extends ViewModel {
 
 
 
+    public static final int TYPE_NONE = 3;
 
 
     private final MutableLiveData<Integer> selectedFieldPoiCode = new MutableLiveData<>();

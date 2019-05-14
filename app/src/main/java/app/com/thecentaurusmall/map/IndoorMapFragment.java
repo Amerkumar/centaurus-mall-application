@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -307,14 +308,6 @@ public class IndoorMapFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-    }
-
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
@@ -355,8 +348,13 @@ public class IndoorMapFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 msharedViewModel.setSelectedFieldPoiCode(TYPE_SEARCH_BAR_POI);
-
-                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment, null,
+                        new NavOptions.Builder()
+                            .setEnterAnim(R.anim.slide_in_right)
+                            .setExitAnim(R.anim.slide_out_left)
+                            .setPopEnterAnim(R.anim.slide_in_left)
+                            .setPopExitAnim(R.anim.slide_out_right)
+                            .build());
             }
         });
 
@@ -437,6 +435,8 @@ public class IndoorMapFragment extends Fragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        mMap = googleMap;
+
 
         googleMap.getUiSettings().setCompassEnabled(true);
         ViewGroup parent = (ViewGroup) mapView.findViewById(Integer.parseInt("1")).getParent();
@@ -454,11 +454,7 @@ public class IndoorMapFragment extends Fragment implements
 //        px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, r.getDisplayMetrics());
 //        rlp.((int)Utils.convertDpToPixel(160,getContext()));
         compassButton.setLayoutParams(rlp);
-
-        mMap = googleMap;
         mMap.getUiSettings().setMapToolbarEnabled(false);
-
-
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
@@ -472,8 +468,7 @@ public class IndoorMapFragment extends Fragment implements
         } catch (Resources.NotFoundException e) {
             Log.e("MapsActivityRaw", "Can't find style.", e);
         }
-
-        mMap.setPadding(64, 64, 64, 64);
+//        mMap.setPadding(64, 64, 64, 64);
 
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng centaurus = new LatLng(33.707991, 73.050229
@@ -487,7 +482,6 @@ public class IndoorMapFragment extends Fragment implements
             mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
             onPoiClick(pointOfInterestDestination);
         }
-
         onDialogFloorClick(Utils.floorNumberToSwitchCase(0));
     }
 
