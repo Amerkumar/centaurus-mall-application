@@ -8,6 +8,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,6 +74,7 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.com.thecentaurusmall.ApplicationManager;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.databinding.IndoorMapFragmentBinding;
@@ -109,6 +112,8 @@ public class IndoorMapFragment extends Fragment implements
     private LatLng mUserLocation;
     private PointOfInterest mSelectedPoi;
     private IndoorMapFragmentBinding mIndoorMapFragmentBinding;
+    private Bitmap mOfflineGroundOverlayBitmap;
+    private BitmapDescriptor mOfflineGroundOverlayBitmapDescriptor;
 
 
     private static final int TYPE_SEARCH_BAR_POI = 0;
@@ -117,6 +122,7 @@ public class IndoorMapFragment extends Fragment implements
     private static final int TYPE_NONE = 3;
     private SharedViewModel msharedViewModel;
     private Marker mDestinationMarker;
+    private GroundOverlay mOverlayGroundOverlay;
 
     public static IndoorMapFragment newInstance() {
         return new IndoorMapFragment();
@@ -289,7 +295,7 @@ public class IndoorMapFragment extends Fragment implements
                     if (mUserLocation != null) {
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 19.0f));
                     } else {
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.707991, 73.050229), 16.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.707991, 73.050229), 18.0f));
                     }
                 }
             });
@@ -314,7 +320,6 @@ public class IndoorMapFragment extends Fragment implements
         mViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
 
 
-
 //        SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager()
 //                .findFragmentById(R.id.map);
         msharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
@@ -331,10 +336,10 @@ public class IndoorMapFragment extends Fragment implements
                         onPoiClick(pointOfInterest);
                         break;
                     case TYPE_DIRECTION_BAR_FROM_POI:
-                        mIndoorMapFragmentBinding.poiDirectionsFrom.setText(pointOfInterest.getName());
+//                        mIndoorMapFragmentBinding.poiDirectionsFrom.setText(pointOfInterest.getName());
                         break;
                     case TYPE_DIRECTION_BAR_TO_POI:
-                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(pointOfInterest.getName());
+//                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(pointOfInterest.getName());
                         break;
                     case TYPE_NONE:
                         break;
@@ -342,7 +347,6 @@ public class IndoorMapFragment extends Fragment implements
                 mSelectedPoi = pointOfInterest;
             }
         });
-
 
 
         //            Point of Interest Search Bar TextView
@@ -378,49 +382,49 @@ public class IndoorMapFragment extends Fragment implements
         // 3.Put my location in from field in directions bar
         // 4.Put Navigate Button
 
-
-        mIndoorMapFragmentBinding
-                .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
-                if (mSelectedPoi != null) {
-                    mIndoorMapFragmentBinding.poiDirectionsTo.setText(mSelectedPoi.getName());
-                }
-                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
-            }
-        });
-
-
-        mIndoorMapFragmentBinding
-                .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
-            }
-        });
-
-        mIndoorMapFragmentBinding
-                .poiDirectionsFrom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_FROM_POI);
-                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
-            }
-        });
+//
+//        mIndoorMapFragmentBinding
+//                .poiSearchBarDirectionsImageview.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.GONE);
+//                if (mSelectedPoi != null) {
+//                    mIndoorMapFragmentBinding.poiDirectionsTo.setText(mSelectedPoi.getName());
+//                }
+//                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.VISIBLE);
+//            }
+//        });
 
 
-        mIndoorMapFragmentBinding
-                .poiDirectionsTo.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_TO_POI);
-                        Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
-                    }
-                }
-        );
+//        mIndoorMapFragmentBinding
+//                .poiDirectionsBarBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mIndoorMapFragmentBinding.poiDirectionsBarContainer.setVisibility(View.GONE);
+//                mIndoorMapFragmentBinding.poiSearchBarContainer.setVisibility(View.VISIBLE);
+//            }
+//        });
+//
+//        mIndoorMapFragmentBinding
+//                .poiDirectionsFrom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_FROM_POI);
+//                Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+//            }
+//        });
+//
+//
+//        mIndoorMapFragmentBinding
+//                .poiDirectionsTo.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        msharedViewModel.setSelectedFieldPoiCode(TYPE_DIRECTION_BAR_TO_POI);
+//                        Navigation.findNavController(v).navigate(R.id.pointOfInterestFragment);
+//                    }
+//                }
+//        );
 
 //        This is for directions bar from poi here
 
@@ -452,6 +456,8 @@ public class IndoorMapFragment extends Fragment implements
         compassButton.setLayoutParams(rlp);
 
         mMap = googleMap;
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+
 
         try {
             // Customise the styling of the base map using a JSON object defined
@@ -481,6 +487,8 @@ public class IndoorMapFragment extends Fragment implements
             mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
             onPoiClick(pointOfInterestDestination);
         }
+
+        onDialogFloorClick(Utils.floorNumberToSwitchCase(0));
     }
 
 
@@ -643,6 +651,13 @@ public class IndoorMapFragment extends Fragment implements
 //
 //    };
     public void onDialogFloorClick(int which) {
+        GroundOverlayOptions overlay_floor = null;
+        if (mOverlayGroundOverlay != null) {
+            mOverlayGroundOverlay.remove();
+            mOverlayGroundOverlay = null;
+        }
+
+        BitmapFactory.Options o2;
         switch (which) {
             case 0:
                 mIALocationManager.unlockFloor();
@@ -652,42 +667,110 @@ public class IndoorMapFragment extends Fragment implements
                 startLocationUpdates();
                 break;
             case 1:
-                mIALocationManager.lockFloor(4);
+//                mIALocationManager.lockFloor(4);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("4");
-//                mIALocationManager.removeLocationUpdates(this);
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
-                hideMyLocation();
+////                mIALocationManager.removeLocationUpdates(this);
+//                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+//                hideMyLocation();
+
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.fourth_floor);
+                o2 = new BitmapFactory.Options();
+                o2.inSampleSize = 4;
+                mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
+
+
+                overlay_floor = new GroundOverlayOptions()
+                        .image(mOfflineGroundOverlayBitmapDescriptor)
+                        .position(new LatLng(33.70789678, 73.0498445), 191.1164389f, 76.78040342f)
+                        .anchor(0.5f, 0.5f)
+                        .bearing(328.3299596499965f)
+                ;
                 break;
             case 2:
-                mIALocationManager.lockFloor(3);
+//                mIALocationManager.lockFloor(3);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("3");
-//                mIALocationManager.removeLocationUpdates(this);
+////                mIALocationManager.removeLocationUpdates(this);
+//
+//                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+//                hideMyLocation();
 
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
-                hideMyLocation();
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.third_floor);
+                o2 = new BitmapFactory.Options();
+                o2.inSampleSize = 4;
+                mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
+
+
+                overlay_floor = new GroundOverlayOptions()
+                        .image(mOfflineGroundOverlayBitmapDescriptor)
+                        .position(new LatLng(33.70789678, 73.0498445), 191.1164389f, 76.78040342f)
+                        .anchor(0.5f, 0.5f)
+                        .bearing(328.3299596499965f)
+                ;
+//                mMap.addGroundOverlay(thirdFloor);
                 break;
             case 3:
-                mIALocationManager.lockFloor(2);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("2");
 //                mIALocationManager.removeLocationUpdates(this);
 
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
-                hideMyLocation();
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.second_floor);
+                o2 = new BitmapFactory.Options();
+                o2.inSampleSize = 4;
+                mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
+
+
+                overlay_floor = new GroundOverlayOptions()
+                        .image(mOfflineGroundOverlayBitmapDescriptor)
+                        .position(new LatLng(33.70789678, 73.0498445), 191.1164389f, 76.78040342f)
+                        .anchor(0.5f, 0.5f)
+                        .bearing(328.3299596499965f)
+                ;
                 break;
             case 4:
-                mIALocationManager.lockFloor(1);
+
+
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
-                hideMyLocation();
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.first_floor);
+                o2 = new BitmapFactory.Options();
+                o2.inSampleSize = 4;
+                mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
+                overlay_floor = new GroundOverlayOptions()
+                        .image(mOfflineGroundOverlayBitmapDescriptor)
+                        .position(new LatLng(33.70792355, 73.0498901), 200.8679411f, 69.96443941f)
+                        .anchor(0.5f, 0.5f)
+                        .bearing(328.70147253782875f)
+                ;
                 break;
             case 5:
-                mIALocationManager.lockFloor(0);
+//                mIALocationManager.lockFloor(0);
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("G");
-                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
-                hideMyLocation();
+//                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
+//                hideMyLocation();
+//                mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.first_floor);
+                o2 = new BitmapFactory.Options();
+                o2.inSampleSize = 4;
+                mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
+                overlay_floor = new GroundOverlayOptions()
+                        .image(mOfflineGroundOverlayBitmapDescriptor)
+                        .position(new LatLng(33.70792355, 73.0498901), 200.8679411f, 69.96443941f)
+                        .anchor(0.5f, 0.5f)
+                        .bearing(328.70147253782875f)
+                ;
+
+                Toast.makeText(getContext(), "TODO : Wrong Floor", Toast.LENGTH_SHORT).show();
                 break;
 
         }
+
+//        if (mOverlayGroundOverlay != null)
+        mOverlayGroundOverlay = mMap.addGroundOverlay(overlay_floor);
+
+//        if (mOfflineGroundOverlayBitmap != null)
+        mOfflineGroundOverlayBitmap.recycle();
+        mOfflineGroundOverlayBitmap = null;
+        System.gc();
+        Runtime.getRuntime().gc();
+
     }
 
     private void startLocationUpdates() {
@@ -741,6 +824,7 @@ public class IndoorMapFragment extends Fragment implements
                     .bearing(floorPlan.getBearing());
 
             mGroundOverlay = mMap.addGroundOverlay(fpOverlay);
+
         }
     }
 
@@ -918,6 +1002,11 @@ public class IndoorMapFragment extends Fragment implements
             Log.d(TAG, "Set destination: (" + mWayfindingDestination.getLatitude() + ", " +
                     mWayfindingDestination.getLongitude() + "), floor=" +
                     mWayfindingDestination.getFloor());
+
+            // for floor plan image
+
+            onDialogFloorClick(Utils.floorNumberToSwitchCase((int) point.getFloor_num()));
+
         }
     }
 
@@ -960,7 +1049,23 @@ public class IndoorMapFragment extends Fragment implements
 
     @Override
     public void onEnterRegion(IARegion region) {
+
+        // @TODO give user a dialog that he must keep on walking
+        if (region.getType() == IARegion.TYPE_VENUE) {
+//            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext())
+//                    .setTitle("Locate your Favorite Retail Shop")
+//                    .setMessage("Exprience indoor ")
+//                    ;
+
+        }
+
         if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
+
+            if (mOverlayGroundOverlay != null) {
+                mOverlayGroundOverlay.remove();
+                mOverlayGroundOverlay = null;
+            }
+
             Log.d(TAG, "enter floor plan " + region.getId());
             mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
             if (mGroundOverlay != null) {
@@ -969,12 +1074,20 @@ public class IndoorMapFragment extends Fragment implements
             }
             mOverlayFloorPlan = region; // overlay will be this (unless error in loading)
             fetchFloorPlanBitmap(region.getFloorPlan());
+            ((ApplicationManager) this.getActivity().getApplication()).setIndoor(true);
         }
     }
 
     @Override
     public void onExitRegion(IARegion region) {
+
+        //@TODO Ask about user experience
+        if (region.getType() == IARegion.TYPE_VENUE) {
+            ((ApplicationManager) this.getActivity().getApplication()).setIndoor(false);
+            stopLocationUpdates();
+        }
     }
+
 
     private void clearWayFindingRoute() {
 

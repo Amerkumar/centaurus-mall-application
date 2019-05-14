@@ -43,16 +43,22 @@
         />
 
 
-    <TextView
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="16dp"-->
+        <!--android:text="Coming Soon!"-->
+        <!--android:textSize="32sp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--/>-->
+    <com.airbnb.lottie.LottieAnimationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Coming Soon!"
-        android:textSize="32sp"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textColor="@color/colorAccent"
-        />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/coming_soon_animation"/>
     <!--<com.google.android.material.button.MaterialButton-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

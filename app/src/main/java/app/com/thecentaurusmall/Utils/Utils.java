@@ -147,4 +147,21 @@ public class Utils {
 
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
+
+    public static int floorNumberToSwitchCase(int floorNumber) {
+        switch (floorNumber){
+            case 4:
+                return 1;
+            case 3:
+                return 2;
+            case 2:
+                return 3;
+            case 1:
+                return 4;
+            case 0:
+                return 5;
+        }
+
+        return 5;
+    }
 }

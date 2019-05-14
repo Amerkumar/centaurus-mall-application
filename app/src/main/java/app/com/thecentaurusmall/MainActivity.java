@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements
                 hideBottomNavigationView();
                 break;
             case R.id.indoorMapFragment:
-                hideToolbar();
                 showBottomNavigationView();
+                hideToolbar();
                 break;
             case R.id.pointOfInterestFragment:
                 hideToolbar();
