@@ -3,6 +3,7 @@ package app.com.thecentaurusmall.map;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -10,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,6 +117,8 @@ public class IndoorMapFragment extends Fragment implements
     private IndoorMapFragmentBinding mIndoorMapFragmentBinding;
     private Bitmap mOfflineGroundOverlayBitmap;
     private BitmapDescriptor mOfflineGroundOverlayBitmapDescriptor;
+
+    private boolean isIndoor;
 
 
     private static final int TYPE_SEARCH_BAR_POI = 0;
@@ -324,7 +328,8 @@ public class IndoorMapFragment extends Fragment implements
 
                 switch (msharedViewModel.getSelectedFieldPoiCode().getValue()) {
                     case TYPE_SEARCH_BAR_POI:
-                        mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName());
+                        mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterest.getName() + " (" +
+                                Utils.floorNumberToName((int) pointOfInterest.getFloor_num()) + ")");
                         mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
                         onPoiClick(pointOfInterest);
                         break;
@@ -372,6 +377,12 @@ public class IndoorMapFragment extends Fragment implements
                 clearWayFindingRoute();
             }
         });
+
+
+
+//         Open wifi programmatically
+        WifiManager wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager.setWifiEnabled(true);
 
 
         // Directions toolbar must be shown here
@@ -477,12 +488,16 @@ public class IndoorMapFragment extends Fragment implements
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centaurus, 16.0f));
 
         PointOfInterest pointOfInterestDestination = IndoorMapFragmentArgs.fromBundle(getArguments()).getPointOfInterestObject();
-        if (pointOfInterestDestination != null) {
-            mIndoorMapFragmentBinding.poiSearchBarTextview.setText(pointOfInterestDestination.getName());
+        if (pointOfInterestDestination != null
+                ) {
+            mIndoorMapFragmentBinding.poiSearchBarTextview.setText(String.format("%s (%s)",
+                    pointOfInterestDestination.getName(),
+                    Utils.floorNumberToName((int) pointOfInterestDestination.getFloor_num())));
             mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
             onPoiClick(pointOfInterestDestination);
         }
-        onDialogFloorClick(Utils.floorNumberToSwitchCase(0));
+        if (!isIndoor)
+            onDialogFloorClick(Utils.floorNumberToSwitchCase(0));
     }
 
 
@@ -654,11 +669,8 @@ public class IndoorMapFragment extends Fragment implements
         BitmapFactory.Options o2;
         switch (which) {
             case 0:
-                mIALocationManager.unlockFloor();
+//                mIALocationManager.unlockFloor();
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("A");
-//                showMyLocation();
-                mIALocationManager.unregisterRegionListener(this);
-                startLocationUpdates();
                 break;
             case 1:
 //                mIALocationManager.lockFloor(4);
@@ -1046,19 +1058,29 @@ public class IndoorMapFragment extends Fragment implements
 
         // @TODO give user a dialog that he must keep on walking
         if (region.getType() == IARegion.TYPE_VENUE) {
-//            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext())
-//                    .setTitle("Locate your Favorite Retail Shop")
-//                    .setMessage("Exprience indoor ")
-//                    ;
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setTitle("Locate your Favorite Retail Shop")
+                    .setMessage("Everything takes time, so keep on walking, your location will become accurate automatically.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-        }
-
-        if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
-
+                        }
+                    })
+                    .show()
+                    ;
+            mIndoorMapFragmentBinding.floorMaterialButton.setText("A");
             if (mOverlayGroundOverlay != null) {
                 mOverlayGroundOverlay.remove();
                 mOverlayGroundOverlay = null;
             }
+
+            isIndoor = true;
+        }
+
+        if (region.getType() == IARegion.TYPE_FLOOR_PLAN) {
+
+
 
             Log.d(TAG, "enter floor plan " + region.getId());
             mCameraPositionNeedsUpdating = true; // entering new fp, need to move camera
@@ -1077,8 +1099,9 @@ public class IndoorMapFragment extends Fragment implements
 
         //@TODO Ask about user experience
         if (region.getType() == IARegion.TYPE_VENUE) {
-            ((ApplicationManager) this.getActivity().getApplication()).setIndoor(false);
-            stopLocationUpdates();
+
+            isIndoor = false;
+//            stopLocationUpdates();
         }
     }
 

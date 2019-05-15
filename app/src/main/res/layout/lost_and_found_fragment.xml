@@ -21,7 +21,9 @@
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?colorPrimary"
-                app:layout_scrollFlags="exitUntilCollapsed|scroll">
+                app:layout_scrollFlags="exitUntilCollapsed|scroll"
+                app:expandedTitleGravity="center"
+                >
 
                 <ImageView
                     android:id="@+id/image"
@@ -41,51 +43,88 @@
                     android:id="@+id/toolbar_services"
                     android:layout_width="fill_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/black"
                     android:alpha="0.5"
+                    android:background="@android:color/black"
+                    android:text="Lost and Found"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/Widget.Design.CollapsingToolbar" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@android:color/white"
-            android:clipToPadding="false"
-            android:scrollbars="none"
-            android:scrollingCache="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <!--<ScrollView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@android:color/white"-->
+            <!--android:clipToPadding="false"-->
+            <!--android:scrollbars="none"-->
+            <!--android:scrollingCache="true"-->
+            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
+                android:layout_height="match_parent"
+                android:layout_marginTop="250dp"
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing_large"
-                    android:layout_marginTop="@dimen/spacing_large"
-                    android:layout_marginBottom="@dimen/spacing_middle"
-                    android:text="Lost something in the mall?"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textStyle="bold" />
+                    android:layout_alignParentTop="true"
+                    android:orientation="vertical">
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing_large"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:layout_marginBottom="@dimen/spacing_middle"
+                        android:text="Lost something in the mall?"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing_large"
+                        android:layout_marginRight="@dimen/spacing_large"
+                        android:text="Let the mall team help you."
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/colorPrimaryText" />
+
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing_large"
-                    android:layout_marginRight="@dimen/spacing_large"
-                    android:text="Let the mall team help you. Contact Reception for further information."
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@color/colorPrimaryText"
-                    />
+                    android:orientation="vertical"
+                    android:layout_alignParentBottom="true"
+                    >
+                    <!--<com.google.android.material.button.MaterialButton-->
+                        <!--android:id="@+id/take_me_there_button"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Take me there"-->
+                        <!--android:textAllCaps="true"-->
+                        <!--app:backgroundTint="@android:color/black"-->
+                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Subhead"-->
+                        <!--android:layout_margin="8dp"-->
+                        <!--android:padding="8dp"-->
+                        <!--/>-->
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/call_reception_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Call Reception"
+                        android:textAllCaps="true"
+                        app:backgroundTint="@android:color/black"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        />
 
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+            </RelativeLayout>
+        <!--</ScrollView>-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

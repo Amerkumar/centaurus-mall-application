@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -136,9 +137,12 @@ public class OfferFragment extends Fragment {
                             case LOADING_INITIAL:
                             case LOADING_MORE:
 //                                mProgressBar.setVisibility(View.VISIBLE);
+//                                showToast("Loading More");
                                 break;
                             case LOADED:
 //                                mProgressBar.setVisibility(View.GONE);
+//                                showToast("Loaded");
+
                                 break;
                             case FINISHED:
 //                                mProgressBar.setVisibility(View.GONE);
@@ -154,6 +158,11 @@ public class OfferFragment extends Fragment {
 
         mOfferFragmentBinding.offerRecyclerView.setAdapter(adapter);
 
+    }
+
+
+    private void showToast(String s) {
+        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
     }
 
 }

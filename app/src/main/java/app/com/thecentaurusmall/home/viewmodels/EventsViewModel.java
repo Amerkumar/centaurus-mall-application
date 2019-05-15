@@ -33,4 +33,8 @@ public class EventsViewModel extends ViewModel {
     public Query geLastMonthEvents() {
         return mainRepository.getLastMonthEvents();
     }
+
+    public Query getPastEvents() { return mainRepository.getPastEvents();}
+
+    public Query getUpcomingEvents() { return mainRepository.getUpcomingEvents(); }
 }

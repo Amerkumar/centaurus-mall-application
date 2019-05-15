@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.model.Category;
+import app.com.thecentaurusmall.model.FeaturedSlideModel;
 import app.com.thecentaurusmall.model.LatLng;
 import app.com.thecentaurusmall.model.Offer;
 import app.com.thecentaurusmall.model.PointOfInterest;
@@ -119,6 +120,45 @@ public class MainRepository {
             }
         });
         return pointOfInterestList;
+    }
+
+    /**
+     * Deals view model
+     */
+    public LiveData<List<FeaturedSlideModel>> getFeaturedSlides() {
+
+        String path = "indoors/" + VENUE_ID + "/featured";
+
+        MutableLiveData<List<FeaturedSlideModel>> featuredSlideModelList = new MutableLiveData<>();
+        CollectionReference collectionReference = mFirestoredb.collection(path);
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.d(TAG, "Listen failed");
+                    return;
+                }
+
+                List<FeaturedSlideModel> featuredSliders = new ArrayList<>();
+                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(queryDocumentSnapshots)) {
+                    if (documentSnapshot.exists()) {
+
+                        HashMap<String, String> url;
+                        if (documentSnapshot.contains("url"))
+                            url = (HashMap<String, String>) documentSnapshot.get("url");
+                        else
+                            url = null;
+                        FeaturedSlideModel featuredSlideModel = new FeaturedSlideModel(documentSnapshot.getId(),
+                                documentSnapshot.getString("name"), url);
+                        featuredSliders.add(featuredSlideModel);
+                    }
+                }
+
+                featuredSlideModelList.postValue(featuredSliders);
+            }
+        });
+
+        return featuredSlideModelList;
     }
 
     public LiveData<List<PointOfInterest>> getAllPoisByDirectoryTag(String directoryTag) {
@@ -318,7 +358,7 @@ public class MainRepository {
         String path = "indoors/" + VENUE_ID + "/events";
 
         return  mFirestoredb.collection(path)
-                .whereGreaterThan("start_date", new Date())
+                .whereGreaterThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(-1))
                 .whereLessThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(30))
                 .orderBy("start_date")
                 ;
@@ -330,7 +370,7 @@ public class MainRepository {
         String path = "indoors/" + VENUE_ID + "/events";
 
         return  mFirestoredb.collection(path)
-                .whereGreaterThan("start_date", new Date())
+                .whereGreaterThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(-1))
                 .whereLessThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(7))
                 .orderBy("start_date")
                 ;
@@ -362,5 +402,21 @@ public class MainRepository {
         return mFirestoredb.collection(path)
                 .whereGreaterThanOrEqualTo("start_date", Utils.addOrSubtractDaysFromCurrent(-30))
                 .whereLessThan("start_date", new Date());
+    }
+
+    public Query getPastEvents() {
+        String path = "indoors/" + VENUE_ID + "/events";
+        return mFirestoredb.collection(path)
+                .whereLessThan("end_date", Utils.addOrSubtractDaysFromCurrent(0))
+                .orderBy("end_date", Query.Direction.DESCENDING);
+    }
+
+    public Query getUpcomingEvents() {
+        String path = "indoors/" + VENUE_ID + "/events";
+        return mFirestoredb.collection(path)
+                .whereGreaterThanOrEqualTo("end_date", Utils.addOrSubtractDaysFromCurrent(0))
+                .orderBy("end_date", Query.Direction.DESCENDING)
+                .orderBy("start_date", Query.Direction.ASCENDING)
+                ;
     }
 }

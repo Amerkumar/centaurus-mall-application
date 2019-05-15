@@ -150,6 +150,10 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.settingsFragment:
             case R.id.offerDetailFragment:
             case R.id.eventDetailFragment:
+            case R.id.serviceDetailFragment:
+            case R.id.lostAndFoundFragment:
+            case R.id.rideHailingFragment:
+            case R.id.mallInfoFragment:
                 hideToolbar();
                 hideBottomNavigationView();
                 break;

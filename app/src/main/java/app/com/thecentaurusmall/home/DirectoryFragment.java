@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
@@ -22,15 +23,19 @@ import com.potyvideo.slider.library.SliderTypes.BaseSliderView;
 import com.potyvideo.slider.library.SliderTypes.TextSliderView;
 
 import java.util.HashMap;
+import java.util.List;
 
 import app.com.thecentaurusmall.R;
+import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.home.viewmodels.DirectoryViewModel;
+import app.com.thecentaurusmall.model.FeaturedSlideModel;
 
 public class DirectoryFragment extends Fragment implements
         BaseSliderView.OnSliderClickListener {
 
     private DirectoryViewModel mViewModel;
     private SliderLayout mFeaturedSlider;
+    private View rootView;
 
     public static DirectoryFragment newInstance() {
         return new DirectoryFragment();
@@ -40,7 +45,7 @@ public class DirectoryFragment extends Fragment implements
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.directory_fragment, container, false);
+        rootView = inflater.inflate(R.layout.directory_fragment, container, false);
 
 //        ImageView backButton = rootView.findViewById(R.id.back_button);
 //
@@ -103,42 +108,31 @@ public class DirectoryFragment extends Fragment implements
 //        Shop and Dine Click Listeners
 
 //        DirectoryFragmentDirection
+        mFeaturedSlider = (SliderLayout) rootView.findViewById(R.id.slider);
+
+//        HashMap<String, String> url_maps = new HashMap<String, String>();
+//        url_maps.put("Hannibal", "http://assets1.ignimgs.com/2014/09/13/hannibal0117141280jpg-3a4be4_1280w.jpg");
+//        url_maps.put("Big Bang Theory", "https://media.comicbook.com/2017/04/big-bang-theory-cast-kaley-cuoco-jim-parsons-992959.png");
+//        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
+//        url_maps.put("Game of Thrones", "https://ksassets.timeincuk.net/wp/uploads/sites/55/2017/08/2017_GameOfThrones_HBO_220817-920x584.jpg");
+        TextSliderView textSliderView = new TextSliderView(getContext());
+        // initialize a SliderLayout
+        textSliderView
+                .description("MapIn")
+                .image(R.drawable.error_placeholder)
+                .empty(android.R.color.darker_gray)
+                .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                .setOnSliderClickListener(DirectoryFragment.this::onSliderClick)
+        ;
+
+        //add your extra information
+        textSliderView.bundle(new Bundle());
+        textSliderView.getBundle()
+                .putString("extra", "Connect to internet to get current sliders.");
 
 
-        mViewModel = ViewModelProviders.of(this).get(DirectoryViewModel.class);
+        mFeaturedSlider.addSlider(textSliderView);
 
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        mFeaturedSlider = (SliderLayout) view.findViewById(R.id.slider);
-
-        HashMap<String, String> url_maps = new HashMap<String, String>();
-        url_maps.put("Hannibal", "http://assets1.ignimgs.com/2014/09/13/hannibal0117141280jpg-3a4be4_1280w.jpg");
-        url_maps.put("Big Bang Theory", "https://media.comicbook.com/2017/04/big-bang-theory-cast-kaley-cuoco-jim-parsons-992959.png");
-        url_maps.put("House of Cards", "http://cdn3.nflximg.net/images/3093/2043093.jpg");
-        url_maps.put("Game of Thrones", "https://ksassets.timeincuk.net/wp/uploads/sites/55/2017/08/2017_GameOfThrones_HBO_220817-920x584.jpg");
-
-        for (String name : url_maps.keySet()) {
-            TextSliderView textSliderView = new TextSliderView(getContext());
-            // initialize a SliderLayout
-            textSliderView
-                    .description(name)
-                    .image(url_maps.get(name))
-                    .empty(android.R.color.darker_gray)
-                    .setScaleType(BaseSliderView.ScaleType.CenterCrop)
-                    .setOnSliderClickListener(this)
-            ;
-
-            //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
-
-            mFeaturedSlider.addSlider(textSliderView);
-        }
         mFeaturedSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         mFeaturedSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mFeaturedSlider.setCustomAnimation(new DescriptionAnimation());
@@ -146,6 +140,34 @@ public class DirectoryFragment extends Fragment implements
         mFeaturedSlider.startAutoCycle();
 
 
+        mViewModel = ViewModelProviders.of(this).get(DirectoryViewModel.class);
+
+        mViewModel.getFeaturedSlides().observe(this, new Observer<List<FeaturedSlideModel>>() {
+            @Override
+            public void onChanged(List<FeaturedSlideModel> featuredSlideModels) {
+                Log.d("Directory", String.valueOf(featuredSlideModels.size()));
+
+                mFeaturedSlider.removeAllSliders();
+                for (FeaturedSlideModel featuredSlideModel : featuredSlideModels) {
+                    TextSliderView textSliderView = new TextSliderView(getContext());
+                    // initialize a SliderLayout
+                    textSliderView
+                            .description(featuredSlideModel.getName())
+                            .image(featuredSlideModel.getUrl().get(Utils.getDensityName(getContext())))
+                            .empty(android.R.color.darker_gray)
+                            .setScaleType(BaseSliderView.ScaleType.CenterCrop)
+                            .setOnSliderClickListener(DirectoryFragment.this::onSliderClick)
+                    ;
+
+                    //add your extra information
+                    textSliderView.bundle(new Bundle());
+                    textSliderView.getBundle()
+                            .putString("extra", featuredSlideModel.getName());
+
+                    mFeaturedSlider.addSlider(textSliderView);
+                }
+            }
+        });
     }
 
     @Override
