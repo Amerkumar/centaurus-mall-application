@@ -111,6 +111,19 @@ public class PoiDetailFragment extends Fragment {
             }
         });
 
+        mPoiDetailFragmentBinding.locationTextView.setText(Utils.floorNumberToName((int) pointOfInterest.getFloor_num()));
+        mPoiDetailFragmentBinding.callTextView.setText("0800-12345(" + pointOfInterest.getName().toUpperCase().replaceAll(" ", "-") + ")");
+        mPoiDetailFragmentBinding.emailTextView.setText(pointOfInterest.getName().toLowerCase().replaceAll(" ", "_") + "@thecentaurusmall.com");
+        mPoiDetailFragmentBinding.getDirectionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PoiDetailFragmentDirections.ActionPoiDetailFragmentToIndoorMapFragment actionPoiDetailFragmentToIndoorMapFragment =
+                        PoiDetailFragmentDirections.actionPoiDetailFragmentToIndoorMapFragment();
+                actionPoiDetailFragmentToIndoorMapFragment.setPointOfInterestObject(pointOfInterest);
+                Navigation.findNavController(v).navigate(actionPoiDetailFragmentToIndoorMapFragment);
+            }
+        });
+
         // TODO: Use the ViewModel
     }
 

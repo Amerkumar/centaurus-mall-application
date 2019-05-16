@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
     private List<PointOfInterest> mPointOfInterestModels;
     private SharedViewModel sharedViewModel;
     private CategoryAdapter mCategoryAdapter;
+    private NavController mNavController;
 
     public static PointOfInterestFragment newInstance() {
         return new PointOfInterestFragment();
@@ -72,10 +74,11 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mNavController = Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot());
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         mCategoryAdapter = new CategoryAdapter(getContext(), COMPARATOR_CATEGORY, categoryModel -> {
-            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
             mPointOfInterestFragmentBinding.poiEditText.setText(categoryModel.getName());
         });
 
@@ -83,7 +86,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
 
             sharedViewModel.searchBarPoi(poiModel);
 //            sharedViewModel.setSelectedFieldPoiCode(IndoorMapFragment.);
-            Navigation.findNavController(mPointOfInterestFragmentBinding.getRoot()).navigateUp();
+            mNavController.navigateUp();
 //            Snackbar.make(mPointOfInterestFragmentBinding.getRoot(), poiModel.getName(), Snackbar.LENGTH_SHORT).show();
         });
 
@@ -94,7 +97,7 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
             public void onClick(View v) {
 
                 sharedViewModel.setSelectedFieldPoiCode(SharedViewModel.TYPE_NONE);
-                Navigation.findNavController(v).navigateUp();
+                mNavController.navigateUp();
             }
         });
 
@@ -104,32 +107,6 @@ public class PointOfInterestFragment extends Fragment implements SortedListAdapt
 
         mPointOfInterestFragmentBinding.poiRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mPointOfInterestFragmentBinding.poiRecyclerView.setAdapter(mPointOfInterestAdapter);
-
-
-//        mPointOfInterestFragmentBinding.poiRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//            }
-//
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                if (!recyclerView.canScrollVertically(-1)) {
-//                    // we have reached the top of the list
-//                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Top");
-////                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, 0);
-////                    mPointOfInterestFragmentBinding.toolbar.setElevation(0);
-//                } else {
-//                    // we are not at the top yet
-//
-//                    Log.d(PointOfInterestFragment.class.getSimpleName(), "Scroll");
-//
-////                    ViewCompat.setElevation(mPointOfInterestFragmentBinding.appbar, Utils.convertDpToPixel(64.0f, getContext()));
-////                    mPointOfInterestFragmentBinding.toolbar.setElevation(Utils.convertDpToPixel(8.0f, getContext()));
-//
-//                }
-//            }
-//        });
 
         mViewModel = ViewModelProviders.of(this).get(PointOfInterestViewModel.class);
         mViewModel.getAllPois().observe(this, new Observer<List<PointOfInterest>>() {

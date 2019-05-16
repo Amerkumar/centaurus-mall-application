@@ -59,6 +59,7 @@ public class EventsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
 
+
         if (mPagingAdapter == null) {
             mPagedListConfig = new PagedList.Config.Builder()
                     .setEnablePlaceholders(false)

@@ -4,13 +4,17 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
         
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.google.gms:google-services:4.2.0'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.1.0-alpha02"
-
+        // Add dependency
+        classpath 'io.fabric.tools:gradle:1.29.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -28,7 +32,9 @@ allprojects {
             url "http://indooratlas-ltd.bintray.com/mvn-public-alpha"
         }
         maven { url "https://dl.bintray.com/lion4ik/maven" }
-
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
 }
 

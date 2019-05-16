@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'io.fabric'
+
 
 
 android {
@@ -8,7 +10,7 @@ android {
         applicationId "app.com.thecentaurusmall"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
+        versionCode 3
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -87,6 +89,8 @@ dependencies {
 
     // firebase core
     implementation 'com.google.firebase:firebase-core:16.0.9'
+    // Add dependency
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.0'
 
 
     // firebase firestore

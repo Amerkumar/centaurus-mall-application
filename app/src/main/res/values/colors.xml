@@ -4,13 +4,13 @@
   <color name="colorPrimaryLight">#ffffff</color>
   <color name="colorPrimaryDark">#cccccc</color>
   <color name="colorPrimaryText">#000000</color>
-  <color name="colorAccent">#DB00FF</color>
+  <color name="colorAccent">#2196F3</color>
   <color name="colorParkingBackground">#4F90CC</color>
   <color name="colorShareLogin">#019AE8</color>
 
   <color name="colorShopCard">#52ACB1</color>
   <color name="colorDineCard">#FBAD2F</color>
-  <color name="colorEntertainmentCard">#ED2B2B</color>
+  <color name="colorEntertainmentCard">#BC4747</color>
   <color name="colorServicesCard">#06576A</color>
   <color name="colorEventCalenderButton">#00BCD4</color>
   <color name="colorEventCalenderLightButton">#9DD6F5</color>

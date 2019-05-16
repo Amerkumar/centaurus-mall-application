@@ -142,6 +142,7 @@ public class DirectoryFragment extends Fragment implements
 
         mViewModel = ViewModelProviders.of(this).get(DirectoryViewModel.class);
 
+        mViewModel.getFeaturedSlides().removeObservers(this);
         mViewModel.getFeaturedSlides().observe(this, new Observer<List<FeaturedSlideModel>>() {
             @Override
             public void onChanged(List<FeaturedSlideModel> featuredSlideModels) {

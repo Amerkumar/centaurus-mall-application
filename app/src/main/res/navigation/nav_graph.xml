@@ -12,11 +12,7 @@
         tools:layout="@layout/home_view_pager_fragment" >
         <action
             android:id="@+id/action_homeViewPagerFragment_to_directoryListFragment"
-            app:destination="@id/directoryListFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:destination="@id/directoryListFragment" />
         <action
             android:id="@+id/action_homeViewPagerFragment_to_offerDetailFragment"
             app:destination="@id/offerDetailFragment"

@@ -26,6 +26,8 @@
             android:layout_margin="8dp"
             android:background="@drawable/border"
             android:elevation="8dp">
+
+
             <TextView
                 android:id="@+id/poi_search_bar_textview"
                 android:layout_width="0dp"
@@ -43,7 +45,14 @@
                 android:src="@drawable/ic_clear"
                 android:visibility="gone"
                 />
-
+            <!--<ImageView-->
+                <!--android:id="@+id/directions_search_bar_imageview"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:src="@drawable/ic_directions"-->
+                <!--/>-->
             <ImageView
                 android:id="@+id/poi_search_bar_directions_imageview"
                 android:layout_width="0dp"
@@ -51,7 +60,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_directions"
-                android:visibility="gone"
                 />
 
 

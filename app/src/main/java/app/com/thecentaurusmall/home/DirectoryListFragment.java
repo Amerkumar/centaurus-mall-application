@@ -79,7 +79,7 @@ public class DirectoryListFragment extends Fragment implements SortedListAdapter
 
 
         mCategoryAdapter = new CategoryAdapter(getContext(), COMPARATOR_CATEGORY, categoryModel -> {
-            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(mDirectoryListFragmentBinding.getRoot(), categoryModel.getName(), Snackbar.LENGTH_SHORT).show();
             mDirectoryListFragmentBinding.poiEditText.setText(categoryModel.getName());
         });
 

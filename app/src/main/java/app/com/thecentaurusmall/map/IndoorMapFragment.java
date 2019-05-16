@@ -323,6 +323,7 @@ public class IndoorMapFragment extends Fragment implements
         msharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
 //        This is for search bar poi here
+        msharedViewModel.getSelectedSearchBarPoi().removeObservers(this);
         msharedViewModel.getSelectedSearchBarPoi().observe(this, new Observer<PointOfInterest>() {
             @Override
             public void onChanged(PointOfInterest pointOfInterest) {
@@ -341,6 +342,7 @@ public class IndoorMapFragment extends Fragment implements
 //                        mIndoorMapFragmentBinding.poiDirectionsTo.setText(pointOfInterest.getName());
                         break;
                     case TYPE_NONE:
+                        ((MainActivity)getActivity()).showBottomNavigationView();
                         break;
                 }
                 mSelectedPoi = pointOfInterest;
@@ -350,7 +352,7 @@ public class IndoorMapFragment extends Fragment implements
 
         //            Point of Interest Search Bar TextView
         mIndoorMapFragmentBinding
-                .poiSearchBarTextview.setOnClickListener(new View.OnClickListener() {
+                .poiSearchBarContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 msharedViewModel.setSelectedFieldPoiCode(TYPE_SEARCH_BAR_POI);
@@ -378,6 +380,7 @@ public class IndoorMapFragment extends Fragment implements
                 clearWayFindingRoute();
 
                 ((MainActivity)getActivity()).showBottomNavigationView();
+                mIndoorMapFragmentBinding.poiSearchBarDirectionsImageview.setVisibility(View.VISIBLE);
             }
         });
 
@@ -528,6 +531,9 @@ public class IndoorMapFragment extends Fragment implements
 //        ((MainActivity) getActivity()).hideToolbar();
         mapView.onResume();
         startLocationUpdates();
+
+        if (mIndoorMapFragmentBinding.poiSearchBarClearImageview.getVisibility() == View.VISIBLE)
+            ((MainActivity)getActivity()).hideBottomNavigationView();
 
 
     }
@@ -770,6 +776,7 @@ public class IndoorMapFragment extends Fragment implements
         if (which != 0) {
             mOverlayGroundOverlay = mMap.addGroundOverlay(overlay_floor);
 //        if (mOfflineGroundOverlayBitmap != null)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(overlay_floor.getLocation(), 18.0f));
             mOfflineGroundOverlayBitmap.recycle();
             mOfflineGroundOverlayBitmap = null;
             System.gc();
@@ -1016,6 +1023,7 @@ public class IndoorMapFragment extends Fragment implements
                     19.0F));
 
             ((MainActivity)getActivity()).hideBottomNavigationView();
+            mIndoorMapFragmentBinding.poiSearchBarDirectionsImageview.setVisibility(View.GONE);
         }
     }
 
