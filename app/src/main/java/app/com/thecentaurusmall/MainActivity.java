@@ -18,6 +18,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.map.FloorSelectionDialog;
 import app.com.thecentaurusmall.map.IndoorMapFragment;
 
@@ -46,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        Utils.hideKeyboard(MainActivity.this);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)‌​;
 
         navOptions = new NavOptions.Builder()
                 .setEnterAnim(R.anim.fade_in)

@@ -42,6 +42,9 @@ public class SettingsFragment extends Fragment {
 //            }
 //        });
 
+
+        mSettingsFragmentBinding.toolbar.setTitle("Settings");
+
         mSettingsFragmentBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

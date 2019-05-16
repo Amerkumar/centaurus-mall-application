@@ -1,6 +1,9 @@
 package app.com.thecentaurusmall.model;
 
-public class LatLng {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class LatLng implements Parcelable {
     private Double lat;
     private Double lng;
 
@@ -27,4 +30,43 @@ public class LatLng {
     public void setLng(Double lng) {
         this.lng = lng;
     }
+
+    protected LatLng(Parcel in) {
+        lat = in.readByte() == 0x00 ? null : in.readDouble();
+        lng = in.readByte() == 0x00 ? null : in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (lat == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(lat);
+        }
+        if (lng == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(lng);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<LatLng> CREATOR = new Parcelable.Creator<LatLng>() {
+        @Override
+        public LatLng createFromParcel(Parcel in) {
+            return new LatLng(in);
+        }
+
+        @Override
+        public LatLng[] newArray(int size) {
+            return new LatLng[size];
+        }
+    };
 }

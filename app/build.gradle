@@ -102,6 +102,11 @@ dependencies {
 //    implementation "com.github.lion4ik:arch-navigation-shared-elements:0.1"
 
 
+    implementation 'com.uber.sdk:rides-android:0.5.3'
+
+
+
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     testImplementation 'junit:junit:4.12'

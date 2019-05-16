@@ -78,6 +78,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.com.thecentaurusmall.ApplicationManager;
+import app.com.thecentaurusmall.MainActivity;
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.Utils.Utils;
 import app.com.thecentaurusmall.databinding.IndoorMapFragmentBinding;
@@ -118,7 +119,7 @@ public class IndoorMapFragment extends Fragment implements
     private Bitmap mOfflineGroundOverlayBitmap;
     private BitmapDescriptor mOfflineGroundOverlayBitmapDescriptor;
 
-    private boolean isIndoor;
+    private boolean isIndoor = false;
 
 
     private static final int TYPE_SEARCH_BAR_POI = 0;
@@ -375,6 +376,8 @@ public class IndoorMapFragment extends Fragment implements
                         .poiSearchBarClearImageview.setVisibility(View.GONE);
                 msharedViewModel.setSelectedFieldPoiCode(TYPE_NONE);
                 clearWayFindingRoute();
+
+                ((MainActivity)getActivity()).showBottomNavigationView();
             }
         });
 
@@ -488,15 +491,14 @@ public class IndoorMapFragment extends Fragment implements
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(centaurus, 16.0f));
 
         PointOfInterest pointOfInterestDestination = IndoorMapFragmentArgs.fromBundle(getArguments()).getPointOfInterestObject();
-        if (pointOfInterestDestination != null
-                ) {
+        if (pointOfInterestDestination != null) {
             mIndoorMapFragmentBinding.poiSearchBarTextview.setText(String.format("%s (%s)",
                     pointOfInterestDestination.getName(),
                     Utils.floorNumberToName((int) pointOfInterestDestination.getFloor_num())));
             mIndoorMapFragmentBinding.poiSearchBarClearImageview.setVisibility(View.VISIBLE);
             onPoiClick(pointOfInterestDestination);
         }
-        if (!isIndoor)
+        if (!isIndoor && pointOfInterestDestination == null)
             onDialogFloorClick(Utils.floorNumberToSwitchCase(0));
     }
 
@@ -716,26 +718,21 @@ public class IndoorMapFragment extends Fragment implements
                 break;
             case 3:
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("2");
-//                mIALocationManager.removeLocationUpdates(this);
 
-                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.second_floor);
+                mOfflineGroundOverlayBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.second_floor);
                 o2 = new BitmapFactory.Options();
                 o2.inSampleSize = 4;
                 mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
 
-
                 overlay_floor = new GroundOverlayOptions()
                         .image(mOfflineGroundOverlayBitmapDescriptor)
-                        .position(new LatLng(33.70789678, 73.0498445), 191.1164389f, 76.78040342f)
+                        .position(new LatLng(33.70789678, 73.0498445), 205.0188091f, 80.77590573f)
                         .anchor(0.5f, 0.5f)
-                        .bearing(328.3299596499965f)
-                ;
+                        .bearing(328.3299596499965f);
                 break;
             case 4:
-
-
                 mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
-                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.first_floor);
+                mOfflineGroundOverlayBitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.first_floor);
                 o2 = new BitmapFactory.Options();
                 o2.inSampleSize = 4;
                 mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
@@ -752,30 +749,32 @@ public class IndoorMapFragment extends Fragment implements
 //                mIndoorMapFragmentBinding.poiSearchBarContainer.setClickable(false);
 //                hideMyLocation();
 //                mIndoorMapFragmentBinding.floorMaterialButton.setText("1");
-                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.first_floor);
+                mOfflineGroundOverlayBitmap = (Bitmap) BitmapFactory.decodeResource(this.getResources(), R.drawable.ground_floor);
                 o2 = new BitmapFactory.Options();
                 o2.inSampleSize = 4;
                 mOfflineGroundOverlayBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(mOfflineGroundOverlayBitmap);
                 overlay_floor = new GroundOverlayOptions()
                         .image(mOfflineGroundOverlayBitmapDescriptor)
-                        .position(new LatLng(33.70792355, 73.0498901), 200.8679411f, 69.96443941f)
+                        .position(new LatLng(33.70792802,73.04987669), 205.0188091f, 80.77590573f)
                         .anchor(0.5f, 0.5f)
                         .bearing(328.70147253782875f)
                 ;
 
-                Toast.makeText(getContext(), "TODO : Wrong Floor", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "TODO : Wrong Floor", Toast.LENGTH_SHORT).show();
                 break;
 
         }
 
 //        if (mOverlayGroundOverlay != null)
-        mOverlayGroundOverlay = mMap.addGroundOverlay(overlay_floor);
 
+        if (which != 0) {
+            mOverlayGroundOverlay = mMap.addGroundOverlay(overlay_floor);
 //        if (mOfflineGroundOverlayBitmap != null)
-        mOfflineGroundOverlayBitmap.recycle();
-        mOfflineGroundOverlayBitmap = null;
-        System.gc();
-        Runtime.getRuntime().gc();
+            mOfflineGroundOverlayBitmap.recycle();
+            mOfflineGroundOverlayBitmap = null;
+            System.gc();
+            Runtime.getRuntime().gc();
+        }
 
     }
 
@@ -1009,10 +1008,14 @@ public class IndoorMapFragment extends Fragment implements
                     mWayfindingDestination.getLongitude() + "), floor=" +
                     mWayfindingDestination.getFloor());
 
-            // for floor plan image
+            // for indoor navigation this must check whether user is indoors or outdoor
+            if (!isIndoor)
+                onDialogFloorClick(Utils.floorNumberToSwitchCase((int) point.getFloor_num()));
 
-            onDialogFloorClick(Utils.floorNumberToSwitchCase((int) point.getFloor_num()));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(point.get_geoloc().getLat(), point.get_geoloc().getLng()),
+                    19.0F));
 
+            ((MainActivity)getActivity()).hideBottomNavigationView();
         }
     }
 

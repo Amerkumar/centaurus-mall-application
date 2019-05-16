@@ -12,16 +12,18 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            app:elevation="0.0dip">
+            app:elevation="8dp"
+            android:elevation="8dp"
+            >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="fill_parent"
                 android:layout_height="?actionBarSize"
                 android:background="@android:color/white"
-                app:contentInsetStartWithNavigation="0.0dip"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:navigationIcon="@drawable/ic_back"
+                android:elevation="8dp"
                 />
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,30 +41,29 @@
                 android:orientation="vertical">
 
 
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/spacing_large"
-                    android:text="Settings"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="@dimen/spacing_large"-->
+                    <!--android:text="Settings"-->
+                    <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textStyle="bold" />-->
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="@dimen/spacing_middle" />
+                    <!--<View-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="@dimen/spacing_middle" />-->
 
                     <!-- Push Notifications -->
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="@dimen/spacing_middle">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"

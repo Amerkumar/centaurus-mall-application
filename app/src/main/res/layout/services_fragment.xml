@@ -67,6 +67,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     >
 
                     <ImageView
@@ -85,7 +88,7 @@
                         android:padding="@dimen/spacing_large"
                         android:text="Services"
                         android:textColor="@android:color/black"
-                        android:textSize="24sp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -103,6 +106,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     >
 
                     <ImageView
@@ -120,10 +126,8 @@
                         android:padding="@dimen/spacing_large"
                         android:text="Lost and Found"
                         android:textColor="@android:color/black"
-                        android:textSize="24sp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+
                         />
 
                     <View
@@ -138,6 +142,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
 
                     >
 
@@ -157,10 +164,7 @@
                         android:padding="@dimen/spacing_large"
                         android:text="Ride Hailing"
                         android:textColor="@android:color/black"
-                        android:textSize="24sp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         />
 
                     <View
@@ -175,7 +179,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-
+                    android:background="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
                     >
 
                     <ImageView
@@ -189,14 +195,12 @@
                         android:id="@+id/mall_info_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="start"
                         android:padding="@dimen/spacing_large"
                         android:text="Mall Info"
                         android:textColor="@android:color/black"
-                        android:textSize="24sp" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                         />
 
                     <View
                         android:layout_width="match_parent"
