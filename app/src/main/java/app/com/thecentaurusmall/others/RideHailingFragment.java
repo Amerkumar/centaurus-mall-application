@@ -1,5 +1,6 @@
 package app.com.thecentaurusmall.others;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.uber.sdk.android.rides.RequestDeeplink;
+import com.uber.sdk.android.rides.RideParameters;
+import com.uber.sdk.rides.client.SessionConfiguration;
 
 import app.com.thecentaurusmall.R;
 import app.com.thecentaurusmall.databinding.RideHailingFragmentBinding;
@@ -63,6 +67,41 @@ public class RideHailingFragment extends Fragment {
                     //careful there should a space between double quote otherwise it wont work
                     isShow = false;
                 }
+            }
+        });
+
+        mRideHailingFragmentBinding.uberCallContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SessionConfiguration config = new SessionConfiguration.Builder()
+                        .setClientId("ka6zVgvX53BFR0T1utr8ve7yYBXlABXg")
+                        .setClientSecret("CJcpWqxvmgPzQ5peBaS3I8t7jzQHxpjC3K0vxsKN")
+                        .setServerToken("PlE5fwfZQexwqoAjarENf9xYVwBph90BEaVdb-UT")
+                        .build();
+
+                RideParameters rideParams = new RideParameters.Builder()
+                        .setProductId("a1111c8c-c720-46c3-8534-2fcdd730040d")
+                        .setPickupLocation(33.707572, 73.050272
+                                , "The Centaurus Mall", "F8، The Centaurus, Jinnah Avenue, Islamabad")
+                        .build();
+
+
+
+                RequestDeeplink deeplink = new RequestDeeplink.Builder(getContext())
+                        .setSessionConfiguration(config)
+                        .setRideParameters(rideParams)
+                        .build();
+
+                deeplink.execute();
+            }
+        });
+
+        mRideHailingFragmentBinding.careemCallContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.careem.acma");
+                startActivity( launchIntent );
+
             }
         });
     }

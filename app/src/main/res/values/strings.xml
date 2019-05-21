@@ -7,4 +7,10 @@
     <string name="offers_fragment">Offers</string>
     <string name="events_fragment">Events</string>
     <string name="poi_search_bar_hint">Try Toilets, ATMs and Shops</string>
+    <string name="success">Successfully Subscribed</string>
+    <string name="failed">Failed to Subscribe.</string>
+    <string name="success_unsubscribed">Successfully unsubscribed.</string>
+    <string name="failed_unsubscribed">Failed to Unsubscribe.</string>
+    <string name="channel_name">Notification Channel</string>
+    <string name="channel_description">Generic Notification Channel</string>
 </resources>

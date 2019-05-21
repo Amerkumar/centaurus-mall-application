@@ -77,6 +77,7 @@
                             android:textStyle="bold" />
 
                         <LinearLayout
+
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:background="?selectableItemBackground"
@@ -93,13 +94,14 @@
                                 android:layout_weight="1.0"
                                 android:text="Deals &amp; Offers"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
 
                             <View
                                 android:layout_width="@dimen/spacing_middle"
                                 android:layout_height="wrap_content" />
 
-                            <Switch
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switch_deals"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
@@ -132,13 +134,14 @@
                                 android:layout_weight="1.0"
                                 android:text="Events"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
 
                             <View
                                 android:layout_width="@dimen/spacing_middle"
                                 android:layout_height="wrap_content" />
 
                             <Switch
+                                android:id="@+id/switch_events"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
@@ -171,13 +174,14 @@
                                 android:layout_weight="1.0"
                                 android:text="Occasional Promo"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
 
                             <View
                                 android:layout_width="@dimen/spacing_middle"
                                 android:layout_height="wrap_content" />
 
                             <Switch
+                                android:id="@+id/switch_promos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
@@ -210,13 +214,14 @@
                                 android:layout_weight="1.0"
                                 android:text="Lost &amp; Found"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
 
                             <View
                                 android:layout_width="@dimen/spacing_middle"
                                 android:layout_height="wrap_content" />
 
                             <Switch
+                                android:id="@+id/switch_lost_and_found"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checked="false"
@@ -294,7 +299,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="F A Q"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
                         </LinearLayout>
 
                         <View
@@ -303,6 +308,7 @@
                             android:background="@android:color/darker_gray" />
 
                         <LinearLayout
+                            android:id="@+id/privacy_policy_container"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:background="?selectableItemBackground"
@@ -318,7 +324,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Privacy Policy"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
                         </LinearLayout>
 
                         <View
@@ -343,7 +349,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="About Developer Team"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/darker_gray" />
+                                android:textColor="@android:color/black" />
                         </LinearLayout>
 
                         <View
