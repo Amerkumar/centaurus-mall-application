@@ -284,6 +284,7 @@
                             android:background="@android:color/darker_gray" />
 
                         <LinearLayout
+                            android:id="@+id/faq_container"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:background="?selectableItemBackground"

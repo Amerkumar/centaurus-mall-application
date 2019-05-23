@@ -51,7 +51,7 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
                     Utils.getDensityName(mContext), token);
         }
 
-        Log.d("Url", url);
+//        Log.d("Url", url);
         Picasso.get()
                 .load(url)
                 .placeholder(R.drawable.loading)
@@ -73,7 +73,7 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
         long result = 0;
         try {
             Date date1 = targetFormat.parse(parts[0]);
-            Log.d("Deal Adapter", date1.toString());
+//            Log.d("Deal Adapter", date1.toString());
             long diff = date1.getTime() - Calendar.getInstance().getTime().getTime();
             result = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         } catch (ParseException e1) {
