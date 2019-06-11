@@ -91,6 +91,32 @@ public class Utils {
         return urls.get("hdpi");
     }
 
+    public static String getUrlByDensity(HashMap<String,String> urls, String density) {
+
+        Log.d("Utils", density);
+        if (density.equals("ldpi")) {
+            return urls.get("ldpi");
+        }
+        if (density.equals("mdpi")) {
+            return urls.get("mdpi");
+        }
+        if (density.equals("hdpi")) {
+            return urls.get("hdpi");
+        }
+        if (density.equals("xhdpi")) {
+            return urls.get("xhdpi");
+        }
+        if (density.equals("xxhdpi")) {
+//                Log.d("Utils - token", urls.xxhdpi);
+            return urls.get("xxhdpi");
+        }
+        if (density.equals("xxxhdpi")) {
+            return urls.get("xxxhdpi");
+        }
+        return urls.get("hdpi");
+    }
+
+
 
     public static String getDensityName(Context context) {
         float density = context.getResources().getDisplayMetrics().density;

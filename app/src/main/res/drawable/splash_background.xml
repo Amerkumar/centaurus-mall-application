@@ -7,13 +7,13 @@
         <shape>
               <gradient
                    android:angle="315"
-                   android:endColor="#1a82ff"
-                   android:startColor="#2100d3"
+                   android:endColor="#5F5F5F"
+                   android:startColor="#FFFFFF"
                    android:type="linear"/>
         </shape>
     </item>
     <item>
-        <bitmap android:src="@drawable/logo_mapin"
+        <bitmap android:src="@drawable/logo_without_background"
             android:gravity="center"/>
     </item>
 </layer-list>

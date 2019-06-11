@@ -83,9 +83,9 @@ public class PoiDetailFragment extends Fragment {
 
         String url = null;
         if (pointOfInterest.getUrl() != null) {
-            String token = Utils.getTokenByDensity(pointOfInterest.getUrl(), Utils.getDensityName(getContext()));
-            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, pointOfInterest.getName(),
-                    Utils.getDensityName(getContext()), token);
+            url = Utils.getTokenByDensity(pointOfInterest.getUrl(), Utils.getDensityName(getContext()));
+//            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, pointOfInterest.getName(),
+//                    Utils.getDensityName(getContext()), token);
 
             Log.d("Poi Detail", url);
             Picasso.get()
