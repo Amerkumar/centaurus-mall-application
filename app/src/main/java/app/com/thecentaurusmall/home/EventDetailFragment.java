@@ -102,9 +102,8 @@ public class EventDetailFragment extends Fragment {
 
         String url = null;
         if (event.getUrl() != null) {
-            String token = Utils.getTokenByDensity(event.getUrl(), Utils.getDensityName(getContext()));
-            url = Utils.getUrlByToken(EVENTS_FOLDER, VENUE_ID, event.getName(),
-                    Utils.getDensityName(getContext()), token);
+//            String token = Utils.getTokenByDensity(event.getUrl(), Utils.getDensityName(getContext()));
+            url = Utils.getTokenByDensity(event.getUrl(), Utils.getDensityName(getContext()));
 
             Log.d("Poi Detail", url);
             Picasso.get()

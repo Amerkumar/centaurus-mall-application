@@ -10,7 +10,7 @@ android {
         applicationId "app.com.thecentaurusmall"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
+        versionCode 8
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -90,9 +90,8 @@ public class OfferDetailFragment extends Fragment {
 
         String url = null;
         if (offer.getUrl() != null) {
-            String token = Utils.getTokenByDensity(offer.getUrl(), Utils.getDensityName(getContext()));
-            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, offer.getName(),
-                    Utils.getDensityName(getContext()), token);
+//            String token = ;
+            url = Utils.getTokenByDensity(offer.getUrl(), Utils.getDensityName(getContext()));
 
             Log.d("Poi Detail", url);
             Picasso.get()

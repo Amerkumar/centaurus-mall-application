@@ -45,19 +45,19 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
         mBinding.setModel(item);
         String url = null;
         if (item.getUrl() != null) {
-            String token = Utils.getTokenByDensity(item.getUrl(), Utils.getDensityName(mContext));
-            url = Utils.getUrlByToken(EVENTS_FOLDER, VENUE_ID, item.getName(),
-                    Utils.getDensityName(mContext), token);
+//            String token = ;
+            url = Utils.getTokenByDensity(item.getUrl(), Utils.getDensityName(mContext));
         }
 
-        Log.d("Events", url);
-        Picasso.get()
-                .load(url)
-                .placeholder(R.drawable.loading_white)
-                .error(R.drawable.error_placeholder)
-                .into(mBinding.eventImageView);
+//        Log.d("Events", url);
+        if (url != null && !url.isEmpty()){
+            Picasso.get()
+                    .load(url)
+                    .placeholder(R.drawable.loading_white)
+                    .error(R.drawable.error_placeholder)
+                    .into(mBinding.eventImageView);
 
-
+        }
         mBinding.datesRange.setText(Utils.timestampToSimpleDateFormat(item.getStart_date().toDate())
                 + " - " + Utils.timestampToSimpleDateFormat(item.getEnd_date().toDate()));
 

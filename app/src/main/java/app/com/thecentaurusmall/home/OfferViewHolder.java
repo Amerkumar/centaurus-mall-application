@@ -46,18 +46,19 @@ public class OfferViewHolder extends RecyclerView.ViewHolder {
         String url = null;
 //        item.getUrl()
         if (item.getUrl() != null) {
-            String token = Utils.getTokenByDensity(item.getUrl(), Utils.getDensityName(mContext));
-            url = Utils.getUrlByToken(DEALS_FOLDER, VENUE_ID, item.getName(),
-                    Utils.getDensityName(mContext), token);
+//            String token = ;
+            url = Utils.getTokenByDensity(item.getUrl(), Utils.getDensityName(mContext));
+
+//            Log.d("Url", url);
+            if (url != null && !url.isEmpty()) {
+                Picasso.get()
+                        .load(url)
+                        .placeholder(R.drawable.loading)
+                        .error(R.drawable.error_placeholder)
+                        .into(mBinding.offerImageView);
+            }
+
         }
-
-        Log.d("Url", url);
-        Picasso.get()
-                .load(url)
-                .placeholder(R.drawable.loading)
-                .error(R.drawable.error_placeholder)
-                .into(mBinding.offerImageView);
-
         mBinding.daysLeftTextView.setText(String.format("Only %d Days left!",
                 Utils.numberOfDaysBetweenTwoDates(item.getEnd_date().toDate())));
 
