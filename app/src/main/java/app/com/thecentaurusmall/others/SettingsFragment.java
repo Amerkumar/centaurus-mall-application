@@ -193,6 +193,14 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        mSettingsFragmentBinding.faqContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://mapin.page.link/centaurus-mall-faq"));
+                startActivity(browserIntent);
+            }
+        });
+
         mSettingsFragmentBinding.privacyPolicyContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

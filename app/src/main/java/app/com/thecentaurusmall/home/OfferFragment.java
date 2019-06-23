@@ -91,7 +91,7 @@ public class OfferFragment extends Fragment {
 
 //                HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
 //                        HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment();
-                Log.d("Offer Fragment", String.valueOf(offerModel.get_geoloc().getLat()));
+//                Log.d("Offer Fragment", String.valueOf(offerModel.get_geoloc().getLat()));
                 HomeViewPagerFragmentDirections.ActionHomeViewPagerFragmentToOfferDetailFragment actionHomeViewPagerFragmentToOfferDetailFragment =
                         HomeViewPagerFragmentDirections.actionHomeViewPagerFragmentToOfferDetailFragment(offerModel);
                 Navigation.findNavController(mOfferFragmentBinding.getRoot()).navigate(actionHomeViewPagerFragmentToOfferDetailFragment);
