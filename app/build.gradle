@@ -3,7 +3,6 @@ apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'io.fabric'
 
 
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -117,7 +116,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:18.0.0'
 
 
-
+//    mapbox sdk
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.1.0'
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
