@@ -69,16 +69,6 @@ package="app.com.thecentaurusmall">
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
         android:resource="@color/colorAccent" />
-
-    <meta-data
-        android:name="com.indooratlas.android.sdk.API_KEY"
-        android:value="e213041a-733b-454d-8e15-15355c928731" />
-    <meta-data
-        android:name="com.indooratlas.android.sdk.API_SECRET"
-        android:value="2nVsjHRCcxolLhBXalL/8F0hLW5fmz5OsjgY7XRkqfF271BW5WCbGnC3O6Dznz/Fc9Uk0miXdL0asYFLylmHXnzerjji4NJ7TIhOfz5Anxl/bYio+SMxcoVODKGi8A==" />
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDqFqgdxXDCD2HC11ku6ArjdFjm53d6h8o" />
 </application>
 
 
