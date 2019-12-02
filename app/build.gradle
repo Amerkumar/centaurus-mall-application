@@ -74,7 +74,8 @@ dependencies {
 
     // ia location
 //    implementation 'com.indooratlas.android:indooratlas-android-sdk:3.0.0-beta-1037'
-    implementation 'com.indooratlas.android:indooratlas-android-sdk:3.0.0-alpha-998'
+      implementation 'com.indooratlas.android:indooratlas-android-sdk:3.1.0-beta-1115'
+
 
 
     // picasso library

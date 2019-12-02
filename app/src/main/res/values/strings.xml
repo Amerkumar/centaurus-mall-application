@@ -13,4 +13,6 @@
     <string name="failed_unsubscribed">Failed to Unsubscribe.</string>
     <string name="channel_name">Notification Channel</string>
     <string name="channel_description">Generic Notification Channel</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiYW1lcmt1bWFyIiwiYSI6ImNqbjcyazk5MTYzNWQzcG54c2VuNjBzNXAifQ.5ncQ6BW74yV7blF_DCfM9Q</string>
+
 </resources>

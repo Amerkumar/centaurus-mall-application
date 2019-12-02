@@ -91,7 +91,7 @@ public class LostAndFoundFragment extends Fragment {
 //
 //
 //                LostAndFoundFragmentDirections.ActionLostAndFoundFragmentToIndoorMapFragment actionLostAndFoundFragmentToIndoorMapFragment =
-//                        LostAndFoundFragmentDirections.actionLostAndFoundFragmentToIndoorMapFragment();
+//                        LostAndFoundFragmentDirections.actionLostAndFoundFragmentToIndoorMapFragment();z
 //                actionLostAndFoundFragmentToIndoorMapFragment.setPointOfInterestObject(pointOfInterest);
 //                Navigation.findNavController(v).navigate(actionLostAndFoundFragmentToIndoorMapFragment);
 //

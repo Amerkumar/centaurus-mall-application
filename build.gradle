@@ -29,7 +29,7 @@ allprojects {
         maven { url "https://maven.mapwize.io"}
 
         maven {
-            url "http://indooratlas-ltd.bintray.com/mvn-public-alpha"
+            url "http://indooratlas-ltd.bintray.com/mvn-public-beta"
         }
         maven { url "https://dl.bintray.com/lion4ik/maven" }
         maven {
